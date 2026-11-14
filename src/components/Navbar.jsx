@@ -50,66 +50,61 @@ export default function Navbar() {
     return location.pathname.startsWith(path)
   }
 
+  const navLinkClass = (active) =>
+    `px-3 py-2.5 text-sm font-semibold tracking-wide transition-colors duration-150 relative inline-flex items-center ${
+      active
+        ? 'text-selens-yellow after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:bg-selens-yellow'
+        : 'text-selens-white hover:text-selens-yellow'
+    }`
+
   return (
-    <header className="sticky top-0 z-50 w-full bg-selens-black border-b border-selens-line" ref={dropdownRef}>
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-20">
-          {/* Left: MSU-GSC seal + SELENS logo + single-line org name */}
-          <Link to="/" className="flex items-center gap-3 group">
+    <header
+      className="sticky top-0 z-50 w-full bg-selens-black/85 backdrop-blur-md border-b border-selens-line"
+      ref={dropdownRef}
+    >
+      <div className="selens-container">
+        <div className="flex items-center justify-between h-20 gap-3">
+          {/* Left: MSU-GSC seal + SELENS logo (plain, no glass tile) + org name */}
+          <Link to="/" className="flex items-center gap-3 group min-w-0">
             <div className="flex items-center gap-2 shrink-0">
               <img
                 src="/website-assets/university-seal.png"
                 alt="MSU-GSC Seal"
-                className="h-10 w-10 sm:h-11 sm:w-11 object-contain"
+                className="h-9 w-9 sm:h-10 sm:w-10 object-contain"
               />
               <img
                 src="/website-assets/selens-logo.png"
                 alt="SELENS Logo"
-                className="h-10 w-10 sm:h-11 sm:w-11 object-contain"
+                className="h-9 w-9 sm:h-10 sm:w-10 object-contain"
               />
             </div>
-            <div className="flex flex-col">
-              <span className="font-serif text-base sm:text-lg font-bold text-selens-white tracking-tight group-hover:text-selens-yellow transition leading-snug">
+            <div className="flex flex-col min-w-0">
+              <span className="font-serif text-sm sm:text-base lg:text-lg font-bold text-selens-white tracking-tight group-hover:text-selens-yellow transition-colors duration-150 leading-snug truncate">
                 Society of Electrical Engineering Students
               </span>
-              <span className="text-xs text-neutral-400 font-sans hidden sm:block">
+              <span className="text-xs text-neutral-400 font-sans hidden sm:block truncate">
                 Mindanao State University - General Santos
               </span>
             </div>
           </Link>
 
-          {/* Center: Nav Row */}
-          <nav className="hidden lg:flex items-center space-x-1 text-sm font-semibold tracking-wide">
+          {/* Center: Desktop Nav Row */}
+          <nav
+            aria-label="Primary navigation"
+            className="hidden lg:flex items-center space-x-1"
+          >
             <Link
               to="/"
-              className={`px-3 py-2 transition relative ${
-                isActive('/') && location.pathname === '/'
-                  ? 'text-selens-yellow after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:bg-selens-yellow'
-                  : 'text-selens-white hover:text-selens-yellow'
-              }`}
+              className={navLinkClass(isActive('/') && location.pathname === '/')}
             >
               Home
             </Link>
 
-            <Link
-              to="/about"
-              className={`px-3 py-2 transition relative ${
-                isActive('/about')
-                  ? 'text-selens-yellow after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:bg-selens-yellow'
-                  : 'text-selens-white hover:text-selens-yellow'
-              }`}
-            >
+            <Link to="/about" className={navLinkClass(isActive('/about'))}>
               About
             </Link>
 
-            <Link
-              to="/people"
-              className={`px-3 py-2 transition relative ${
-                isActive('/people')
-                  ? 'text-selens-yellow after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:bg-selens-yellow'
-                  : 'text-selens-white hover:text-selens-yellow'
-              }`}
-            >
+            <Link to="/people" className={navLinkClass(isActive('/people'))}>
               People
             </Link>
 
@@ -117,40 +112,45 @@ export default function Navbar() {
             <div className="relative">
               <button
                 type="button"
+                aria-expanded={servicesDropdownOpen}
                 onClick={() => {
                   setServicesDropdownOpen(!servicesDropdownOpen)
                   setNewsDropdownOpen(false)
                 }}
-                className={`px-3 py-2 flex items-center gap-1 transition relative ${
+                className={`${navLinkClass(
                   isActive('/portal') || isActive('/services')
-                    ? 'text-selens-yellow after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:bg-selens-yellow'
-                    : 'text-selens-white hover:text-selens-yellow'
-                }`}
+                )} gap-1 cursor-pointer`}
               >
                 <span>Services &amp; Portals</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${servicesDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  className={`w-3.5 h-3.5 transition-transform duration-150 ${
+                    servicesDropdownOpen ? 'rotate-180 text-selens-yellow' : ''
+                  }`}
+                />
               </button>
 
               {servicesDropdownOpen && (
-                <div className="absolute left-0 top-full mt-1 w-56 bg-selens-ink border border-selens-line rounded-[4px] py-1.5 shadow-none z-50">
-                  <Link
-                    to="/portal"
-                    className="block px-4 py-2 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition"
-                  >
-                    Student Portal
-                  </Link>
-                  <Link
-                    to="/portal/teechpoints"
-                    className="block px-4 py-2 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition"
-                  >
-                    TEEchPoints Tracking
-                  </Link>
-                  <Link
-                    to="/portal/documents"
-                    className="block px-4 py-2 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition"
-                  >
-                    Digital Document Requests
-                  </Link>
+                <div className="absolute left-0 top-full mt-1.5 w-60 bg-selens-ink border border-selens-line rounded-[4px] py-1.5 z-50 divide-y divide-selens-line/60">
+                  <div className="py-0.5">
+                    <Link
+                      to="/portal"
+                      className="block px-4 py-2.5 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition-colors"
+                    >
+                      Student Portal
+                    </Link>
+                    <Link
+                      to="/portal/teechpoints"
+                      className="block px-4 py-2.5 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition-colors"
+                    >
+                      TEEchPoints Tracking
+                    </Link>
+                    <Link
+                      to="/portal/documents"
+                      className="block px-4 py-2.5 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition-colors"
+                    >
+                      Digital Document Requests
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>
@@ -159,55 +159,62 @@ export default function Navbar() {
             <div className="relative">
               <button
                 type="button"
+                aria-expanded={newsDropdownOpen}
                 onClick={() => {
                   setNewsDropdownOpen(!newsDropdownOpen)
                   setServicesDropdownOpen(false)
                 }}
-                className={`px-3 py-2 flex items-center gap-1 transition relative ${
-                  isActive('/news') || isActive('/accomplishments') || isActive('/awards') || isActive('/topnotchers') || isActive('/faq')
-                    ? 'text-selens-yellow after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:bg-selens-yellow'
-                    : 'text-selens-white hover:text-selens-yellow'
-                }`}
+                className={`${navLinkClass(
+                  isActive('/news') ||
+                    isActive('/accomplishments') ||
+                    isActive('/awards') ||
+                    isActive('/topnotchers') ||
+                    isActive('/faq')
+                )} gap-1 cursor-pointer`}
               >
                 <span>News &amp; Info</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${newsDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  className={`w-3.5 h-3.5 transition-transform duration-150 ${
+                    newsDropdownOpen ? 'rotate-180 text-selens-yellow' : ''
+                  }`}
+                />
               </button>
 
               {newsDropdownOpen && (
-                <div className="absolute left-0 top-full mt-1 w-56 bg-selens-ink border border-selens-line rounded-[4px] py-1.5 shadow-none z-50">
+                <div className="absolute left-0 top-full mt-1.5 w-60 bg-selens-ink border border-selens-line rounded-[4px] py-1.5 z-50">
                   <Link
                     to="/news"
-                    className="block px-4 py-2 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition"
+                    className="block px-4 py-2.5 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition-colors"
                   >
                     News &amp; Events
                   </Link>
                   <Link
                     to="/news?category=student_activities"
-                    className="block px-4 py-2 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition"
+                    className="block px-4 py-2.5 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition-colors"
                   >
                     Student Activities
                   </Link>
                   <Link
                     to="/accomplishments"
-                    className="block px-4 py-2 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition"
+                    className="block px-4 py-2.5 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition-colors"
                   >
                     Accomplishments
                   </Link>
                   <Link
                     to="/topnotchers"
-                    className="block px-4 py-2 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition"
+                    className="block px-4 py-2.5 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition-colors"
                   >
                     Legion of Topnotchers
                   </Link>
                   <Link
                     to="/awards"
-                    className="block px-4 py-2 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition"
+                    className="block px-4 py-2.5 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition-colors"
                   >
                     Accreditations &amp; Awards
                   </Link>
                   <Link
                     to="/faq"
-                    className="block px-4 py-2 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition"
+                    className="block px-4 py-2.5 text-sm text-selens-white hover:bg-selens-black hover:text-selens-yellow transition-colors"
                   >
                     FAQ
                   </Link>
@@ -217,22 +224,18 @@ export default function Navbar() {
 
             <Link
               to="/projects"
-              className={`px-3 py-2 transition relative ${
-                isActive('/projects')
-                  ? 'text-selens-yellow after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:bg-selens-yellow'
-                  : 'text-selens-white hover:text-selens-yellow'
-              }`}
+              className={navLinkClass(isActive('/projects'))}
             >
               Projects &amp; Initiatives
             </Link>
           </nav>
 
           {/* Right Action: Accessibility + Student Portal CTA */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3 shrink-0">
             <button
               onClick={toggleContrast}
               title="Toggle high contrast"
-              className="p-2 text-neutral-400 hover:text-selens-yellow transition"
+              className="w-10 h-10 inline-flex items-center justify-center rounded-[4px] border border-transparent hover:border-selens-line text-neutral-400 hover:text-selens-yellow transition-colors cursor-pointer"
               aria-label="Toggle high contrast"
             >
               <Eye className="w-4 h-4" />
@@ -243,22 +246,22 @@ export default function Navbar() {
                 {isOfficer ? (
                   <Link
                     to="/dashboard"
-                    className="bg-selens-yellow text-selens-black font-bold text-xs px-3 py-1.5 rounded-[4px] hover:bg-selens-white transition"
+                    className="bg-selens-yellow text-selens-black font-bold text-xs px-3.5 py-2 rounded-[4px] hover:bg-selens-white transition-colors"
                   >
                     Dashboard
                   </Link>
                 ) : (
                   <Link
                     to="/portal"
-                    className="bg-selens-yellow text-selens-black font-bold text-xs px-3 py-1.5 rounded-[4px] hover:bg-selens-white transition"
+                    className="bg-selens-yellow text-selens-black font-bold text-xs px-3.5 py-2 rounded-[4px] hover:bg-selens-white transition-colors"
                   >
                     Student Portal
                   </Link>
                 )}
-                <div className="flex items-center gap-2 text-sm text-neutral-300">
+                <div className="flex items-center gap-2 text-sm text-neutral-300 pl-2 border-l border-selens-line">
                   <Link
                     to="/portal"
-                    className="flex items-center gap-2 hover:text-selens-yellow transition"
+                    className="flex items-center gap-2 hover:text-selens-yellow transition-colors"
                     title="Student Portal"
                   >
                     <User className="w-4 h-4 text-selens-yellow" />
@@ -267,7 +270,8 @@ export default function Navbar() {
                   <button
                     onClick={signOut}
                     title="Sign Out"
-                    className="text-neutral-400 hover:text-selens-yellow ml-1 transition cursor-pointer"
+                    aria-label="Sign Out"
+                    className="p-1.5 text-neutral-400 hover:text-selens-yellow transition-colors cursor-pointer"
                   >
                     <LogOut className="w-4 h-4" />
                   </button>
@@ -276,73 +280,176 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/portal"
-                className="bg-selens-yellow text-selens-black font-bold text-sm px-4 py-2 rounded-[4px] hover:bg-selens-white transition"
+                className="bg-selens-yellow text-selens-black font-bold text-sm px-4 py-2 rounded-[4px] hover:bg-selens-white transition-colors"
               >
                 Student Portal
               </Link>
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="lg:hidden flex items-center gap-2">
+          {/* Mobile Menu Controls (44px touch targets) */}
+          <div className="lg:hidden flex items-center gap-1 shrink-0">
             <button
               onClick={toggleContrast}
-              className="p-2 text-neutral-400 hover:text-selens-yellow"
+              className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-neutral-400 hover:text-selens-yellow transition-colors rounded-[4px]"
               aria-label="Toggle high contrast"
             >
               <Eye className="w-5 h-5" />
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-selens-white hover:text-selens-yellow"
+              className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-selens-white hover:text-selens-yellow transition-colors rounded-[4px]"
               aria-label="Toggle menu"
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer */}
+        {/* Polished Mobile Navigation Drawer with 44px touch targets */}
         {mobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-selens-line space-y-2 text-base font-semibold">
-            <Link to="/" className="block py-2 text-selens-white hover:text-selens-yellow">Home</Link>
-            <Link to="/about" className="block py-2 text-selens-white hover:text-selens-yellow">About</Link>
-            <Link to="/people" className="block py-2 text-selens-white hover:text-selens-yellow">People</Link>
-            <div className="pt-2 border-t border-selens-line">
-              <span className="text-xs uppercase text-neutral-400 block pb-1">Services &amp; Portals</span>
-              <Link to="/portal" className="block py-1.5 pl-2 text-selens-white hover:text-selens-yellow">Student Portal</Link>
-              <Link to="/portal/teechpoints" className="block py-1.5 pl-2 text-selens-white hover:text-selens-yellow">TEEchPoints Tracking</Link>
-              <Link to="/portal/documents" className="block py-1.5 pl-2 text-selens-white hover:text-selens-yellow">Digital Document Requests</Link>
+          <nav
+            aria-label="Mobile navigation"
+            className="lg:hidden py-4 border-t border-selens-line bg-selens-black/95 divide-y divide-selens-line text-sm font-semibold"
+          >
+            <div className="pb-3 space-y-0.5">
+              <Link
+                to="/"
+                className={`min-h-[44px] px-2 flex items-center rounded-[4px] transition-colors ${
+                  isActive('/') && location.pathname === '/'
+                    ? 'text-selens-yellow bg-selens-ink'
+                    : 'text-selens-white hover:text-selens-yellow'
+                }`}
+              >
+                Home
+              </Link>
+              <Link
+                to="/about"
+                className={`min-h-[44px] px-2 flex items-center rounded-[4px] transition-colors ${
+                  isActive('/about')
+                    ? 'text-selens-yellow bg-selens-ink'
+                    : 'text-selens-white hover:text-selens-yellow'
+                }`}
+              >
+                About
+              </Link>
+              <Link
+                to="/people"
+                className={`min-h-[44px] px-2 flex items-center rounded-[4px] transition-colors ${
+                  isActive('/people')
+                    ? 'text-selens-yellow bg-selens-ink'
+                    : 'text-selens-white hover:text-selens-yellow'
+                }`}
+              >
+                People
+              </Link>
+              <Link
+                to="/projects"
+                className={`min-h-[44px] px-2 flex items-center rounded-[4px] transition-colors ${
+                  isActive('/projects')
+                    ? 'text-selens-yellow bg-selens-ink'
+                    : 'text-selens-white hover:text-selens-yellow'
+                }`}
+              >
+                Projects &amp; Initiatives
+              </Link>
             </div>
-            <div className="pt-2 border-t border-selens-line">
-              <span className="text-xs uppercase text-neutral-400 block pb-1">News &amp; Info</span>
-              <Link to="/news" className="block py-1.5 pl-2 text-selens-white hover:text-selens-yellow">News &amp; Events</Link>
-              <Link to="/accomplishments" className="block py-1.5 pl-2 text-selens-white hover:text-selens-yellow">Accomplishments</Link>
-              <Link to="/topnotchers" className="block py-1.5 pl-2 text-selens-white hover:text-selens-yellow">Legion of Topnotchers</Link>
-              <Link to="/awards" className="block py-1.5 pl-2 text-selens-white hover:text-selens-yellow">Accreditations &amp; Awards</Link>
-              <Link to="/faq" className="block py-1.5 pl-2 text-selens-white hover:text-selens-yellow">FAQ</Link>
+
+            <div className="py-3 space-y-0.5">
+              <span className="px-2 pb-1 text-xs font-sans uppercase tracking-wider text-neutral-400 block">
+                Services &amp; Portals
+              </span>
+              <Link
+                to="/portal"
+                className="min-h-[44px] px-3 flex items-center text-selens-white hover:text-selens-yellow transition-colors"
+              >
+                Student Portal
+              </Link>
+              <Link
+                to="/portal/teechpoints"
+                className="min-h-[44px] px-3 flex items-center text-selens-white hover:text-selens-yellow transition-colors"
+              >
+                TEEchPoints Tracking
+              </Link>
+              <Link
+                to="/portal/documents"
+                className="min-h-[44px] px-3 flex items-center text-selens-white hover:text-selens-yellow transition-colors"
+              >
+                Digital Document Requests
+              </Link>
             </div>
-            <Link to="/projects" className="block py-2 text-selens-white hover:text-selens-yellow">Projects &amp; Initiatives</Link>
-            <div className="pt-4 border-t border-selens-line">
+
+            <div className="py-3 space-y-0.5">
+              <span className="px-2 pb-1 text-xs font-sans uppercase tracking-wider text-neutral-400 block">
+                News &amp; Info
+              </span>
+              <Link
+                to="/news"
+                className="min-h-[44px] px-3 flex items-center text-selens-white hover:text-selens-yellow transition-colors"
+              >
+                News &amp; Events
+              </Link>
+              <Link
+                to="/news?category=student_activities"
+                className="min-h-[44px] px-3 flex items-center text-selens-white hover:text-selens-yellow transition-colors"
+              >
+                Student Activities
+              </Link>
+              <Link
+                to="/accomplishments"
+                className="min-h-[44px] px-3 flex items-center text-selens-white hover:text-selens-yellow transition-colors"
+              >
+                Accomplishments
+              </Link>
+              <Link
+                to="/topnotchers"
+                className="min-h-[44px] px-3 flex items-center text-selens-white hover:text-selens-yellow transition-colors"
+              >
+                Legion of Topnotchers
+              </Link>
+              <Link
+                to="/awards"
+                className="min-h-[44px] px-3 flex items-center text-selens-white hover:text-selens-yellow transition-colors"
+              >
+                Accreditations &amp; Awards
+              </Link>
+              <Link
+                to="/faq"
+                className="min-h-[44px] px-3 flex items-center text-selens-white hover:text-selens-yellow transition-colors"
+              >
+                FAQ
+              </Link>
+            </div>
+
+            <div className="pt-4">
               {user ? (
-                <div className="space-y-3 py-2">
-                  <div className="flex items-center justify-between">
-                    <Link to="/portal" className="text-sm text-neutral-300 hover:text-selens-yellow">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between px-2">
+                    <Link
+                      to="/portal"
+                      className="min-h-[44px] inline-flex items-center text-sm text-neutral-300 hover:text-selens-yellow"
+                    >
                       Signed in as {profile?.full_name || 'Member'}
                     </Link>
-                    <button onClick={signOut} className="text-sm text-selens-yellow font-bold">Sign Out</button>
+                    <button
+                      onClick={signOut}
+                      className="min-h-[44px] px-3 text-sm text-selens-yellow font-bold cursor-pointer"
+                    >
+                      Sign Out
+                    </button>
                   </div>
                   {isOfficer ? (
                     <Link
                       to="/dashboard"
-                      className="block w-full text-center bg-selens-yellow text-selens-black font-bold text-sm px-4 py-2 rounded-[4px]"
+                      className="min-h-[44px] flex items-center justify-center w-full bg-selens-yellow text-selens-black font-bold text-sm px-4 rounded-[4px]"
                     >
                       Officer Dashboard
                     </Link>
                   ) : (
                     <Link
                       to="/portal"
-                      className="block w-full text-center bg-selens-yellow text-selens-black font-bold text-sm px-4 py-2 rounded-[4px]"
+                      className="min-h-[44px] flex items-center justify-center w-full bg-selens-yellow text-selens-black font-bold text-sm px-4 rounded-[4px]"
                     >
                       Student Portal
                     </Link>
@@ -351,13 +458,13 @@ export default function Navbar() {
               ) : (
                 <Link
                   to="/portal"
-                  className="block text-center bg-selens-yellow text-selens-black font-bold py-2.5 rounded-[4px] hover:bg-selens-white transition"
+                  className="min-h-[44px] flex items-center justify-center w-full bg-selens-yellow text-selens-black font-bold text-sm rounded-[4px] hover:bg-selens-white transition-colors"
                 >
                   Student Portal
                 </Link>
               )}
             </div>
-          </div>
+          </nav>
         )}
       </div>
     </header>

@@ -1,16 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  /* Student Org Palette: Black dominant (70%), White text (20%), Yellow accent (10%) */
+  /* Editorial University Org Palette: Black dominant, layered near-black surfaces, White text, SELENS Yellow accent */
   --color-selens-black: #000000;
+  --color-selens-surface: #080808;
   --color-selens-ink: #0F0F0F;
-  --color-selens-line: #2B2B2B;
+  --color-selens-elevated: #161616;
+  --color-selens-line: #262626;
+  --color-selens-line-subtle: #1A1A1A;
   --color-selens-yellow: #FFD100;
   --color-selens-white: #FFFFFF;
 
-  /* Typography: Serif for headlines, clean Sans for body/UI */
+  /* Existing Brand Typography: Serif for headlines, clean Sans for body/UI */
   --font-serif: "Merriweather", Georgia, "Times New Roman", serif;
   --font-sans: "Source Sans 3", Roboto, Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Motion Timing Tokens (web-motion-design) */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 }
 
 :root {
@@ -18,11 +26,21 @@
   background-color: var(--color-selens-black);
   color: var(--color-selens-white);
   color-scheme: dark;
+
+  /* Fluid Heading Sizes with clamp() */
+  --font-size-hero: clamp(2rem, 3.8vw + 0.9rem, 3.35rem);
+  --font-size-h1: clamp(1.75rem, 2.8vw + 0.75rem, 2.65rem);
+  --font-size-h2: clamp(1.45rem, 2.1vw + 0.65rem, 2.125rem);
+  --font-size-h3: clamp(1.0625rem, 0.9vw + 0.75rem, 1.25rem);
+
+  /* Layout Tokens */
+  --container-max: 1200px;
 }
 
 html {
   scroll-behavior: smooth;
   background-color: #000000;
+  overflow-x: hidden;
 }
 
 body {
@@ -32,39 +50,112 @@ body {
   color: var(--color-selens-white);
   font-size: 16px;
   line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* High contrast mode toggle support */
 html.contrast-high {
-  --color-selens-line: #555555;
+  --color-selens-line: #595959;
+  --color-selens-line-subtle: #404040;
   --color-selens-ink: #000000;
+  --color-selens-surface: #000000;
+  --color-selens-elevated: #0F0F0F;
 }
 
-/* Base button and card utilities conforming to 4px max radius */
+/* Accessible yellow focus rings */
+:where(a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--color-selens-yellow);
+  outline-offset: 2px;
+}
+
+/* Fluid Typography Helpers */
+.selens-fluid-hero {
+  font-size: var(--font-size-hero);
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+}
+
+.selens-fluid-h1 {
+  font-size: var(--font-size-h1);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.selens-fluid-h2 {
+  font-size: var(--font-size-h2);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.selens-fluid-h3 {
+  font-size: var(--font-size-h3);
+  line-height: 1.35;
+}
+
+/* Consistent Layout & Section Spacing (py-16 sm:py-24) */
+.selens-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .selens-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.selens-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 640px) {
+  .selens-section {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+/* Base card and button utilities: yellow-tinted border + 2px lift on hover */
 .selens-card {
   background-color: var(--color-selens-ink);
   border: 1px solid var(--color-selens-line);
   border-radius: 4px;
-  transition: border-color 150ms ease, color 150ms ease;
+  transition:
+    border-color 220ms var(--ease-standard),
+    background-color 220ms var(--ease-standard),
+    transform 220ms var(--ease-standard);
 }
 
 .selens-card:hover {
-  border-color: var(--color-selens-yellow);
+  border-color: rgba(255, 209, 0, 0.65);
+  transform: translateY(-2px);
 }
 
 .selens-btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   background-color: var(--color-selens-yellow);
   color: #000000;
   font-weight: 700;
   font-size: 0.9375rem;
-  padding: 0.625rem 1.25rem;
+  padding: 0.6875rem 1.375rem;
   border-radius: 4px;
   border: 1px solid var(--color-selens-yellow);
   text-decoration: none;
-  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+  transition:
+    background-color 180ms var(--ease-standard),
+    color 180ms var(--ease-standard),
+    border-color 180ms var(--ease-standard);
 }
 
 .selens-btn-primary:hover {
@@ -77,18 +168,56 @@ html.contrast-high {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   background-color: transparent;
   color: #FFFFFF;
   font-weight: 600;
   font-size: 0.9375rem;
-  padding: 0.625rem 1.25rem;
+  padding: 0.6875rem 1.375rem;
   border-radius: 4px;
-  border: 1px solid #FFFFFF;
+  border: 1px solid var(--color-selens-white);
   text-decoration: none;
-  transition: color 150ms ease, border-color 150ms ease;
+  transition:
+    color 180ms var(--ease-standard),
+    border-color 180ms var(--ease-standard),
+    background-color 180ms var(--ease-standard);
 }
 
 .selens-btn-secondary:hover {
   border-color: var(--color-selens-yellow);
   color: var(--color-selens-yellow);
+}
+
+/* Subtle radial glow allowed ONLY in hero and page headers */
+.selens-hero-glow {
+  background-image: radial-gradient(
+    ellipse 65% 55% at 50% 42%,
+    rgba(255, 209, 0, 0.10) 0%,
+    rgba(255, 255, 255, 0.03) 35%,
+    rgba(0, 0, 0, 0) 72%
+  );
+}
+
+.selens-header-glow {
+  background-image: radial-gradient(
+    ellipse 60% 50% at 50% 0%,
+    rgba(255, 209, 0, 0.07) 0%,
+    rgba(0, 0, 0, 0) 75%
+  );
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .selens-card:hover {
+    transform: none !important;
+  }
 }

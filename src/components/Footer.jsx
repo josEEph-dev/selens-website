@@ -24,11 +24,11 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="w-full bg-selens-black border-t border-selens-line text-neutral-300 text-sm">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 space-y-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
+    <footer className="w-full bg-selens-surface border-t border-selens-line text-neutral-300 text-sm">
+      <div className="selens-container py-12 sm:py-16 space-y-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 divide-y divide-selens-line md:divide-y-0">
           {/* Org Identity & Contact */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-4 pb-2 md:pb-0">
             <div className="flex items-center gap-3">
               <img
                 src="/website-assets/university-seal.png"
@@ -45,15 +45,18 @@ export default function Footer() {
               <h3 className="font-serif font-bold text-base text-selens-white">
                 Society of Electrical Engineering Students
               </h3>
-              <p className="text-sm text-neutral-400 mt-1">
+              <p className="text-sm text-neutral-400 mt-1.5 leading-relaxed">
                 College of Engineering, Mindanao State University - General Santos<br />
                 Fatima, General Santos City, 9500 Philippines
               </p>
             </div>
-            <div className="space-y-1.5 text-xs text-neutral-400 pt-1">
+            <div className="space-y-2 text-xs text-neutral-400 pt-1">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-selens-yellow shrink-0" />
-                <a href="mailto:iieeasteeg@msugensan.edu.ph" className="hover:text-selens-yellow transition">
+                <a
+                  href="mailto:iieeasteeg@msugensan.edu.ph"
+                  className="hover:text-selens-yellow transition-colors"
+                >
                   iieeasteeg@msugensan.edu.ph
                 </a>
               </div>
@@ -67,7 +70,7 @@ export default function Footer() {
                 href="https://www.facebook.com/selensmsugsc"
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 border border-selens-line rounded-[4px] text-neutral-300 hover:text-selens-yellow hover:border-selens-yellow transition"
+                className="w-10 h-10 inline-flex items-center justify-center border border-selens-line rounded-[4px] text-neutral-300 hover:text-selens-yellow hover:border-selens-yellow transition-colors"
                 aria-label="Facebook Page"
               >
                 <FacebookIcon />
@@ -76,7 +79,7 @@ export default function Footer() {
                 href="https://msugensan.edu.ph"
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 border border-selens-line rounded-[4px] text-neutral-300 hover:text-selens-yellow hover:border-selens-yellow transition"
+                className="w-10 h-10 inline-flex items-center justify-center border border-selens-line rounded-[4px] text-neutral-300 hover:text-selens-yellow hover:border-selens-yellow transition-colors"
                 aria-label="MSU-GSC Official Website"
               >
                 <Globe className="w-4 h-4" />
@@ -85,91 +88,124 @@ export default function Footer() {
           </div>
 
           {/* Col 1: About */}
-          <div className="space-y-3">
+          <div className="space-y-3 pt-6 md:pt-0 md:border-l md:border-selens-line md:pl-6">
             <h4 className="font-serif font-bold text-selens-white text-sm">
               About
             </h4>
-            <ul className="space-y-2 text-sm text-neutral-400">
+            <ul className="space-y-2.5 text-sm text-neutral-400">
               <li>
-                <Link to="/about" className="hover:text-selens-yellow transition">About SELENS</Link>
+                <Link to="/about" className="hover:text-selens-yellow transition-colors">
+                  About SELENS
+                </Link>
               </li>
               <li>
-                <Link to="/people" className="hover:text-selens-yellow transition">People &amp; Advisers</Link>
+                <Link to="/people" className="hover:text-selens-yellow transition-colors">
+                  People &amp; Advisers
+                </Link>
               </li>
               <li>
                 <a
                   href="/website-assets/constitution-and-by-laws-of-selens.pdf"
                   download
-                  className="hover:text-selens-yellow transition"
+                  className="hover:text-selens-yellow transition-colors"
                 >
                   Constitution (PDF)
                 </a>
               </li>
               <li>
-                <Link to="/about#mission" className="hover:text-selens-yellow transition">Mission &amp; Vision</Link>
+                <Link to="/about#mission" className="hover:text-selens-yellow transition-colors">
+                  Mission &amp; Vision
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* Col 2: Services & Portals */}
-          <div className="space-y-3">
+          <div className="space-y-3 pt-6 md:pt-0 lg:border-l lg:border-selens-line lg:pl-6">
             <h4 className="font-serif font-bold text-selens-white text-sm">
               Services &amp; Portals
             </h4>
-            <ul className="space-y-2 text-sm text-neutral-400">
+            <ul className="space-y-2.5 text-sm text-neutral-400">
               <li>
-                <Link to="/portal" className="hover:text-selens-yellow transition">Student Portal</Link>
+                <Link to="/portal" className="hover:text-selens-yellow transition-colors">
+                  Student Portal
+                </Link>
               </li>
               <li>
-                <Link to="/portal/teechpoints" className="hover:text-selens-yellow transition">TEEchPoints Tracking</Link>
+                <Link to="/portal/teechpoints" className="hover:text-selens-yellow transition-colors">
+                  TEEchPoints Tracking
+                </Link>
               </li>
               <li>
-                <Link to="/portal/documents" className="hover:text-selens-yellow transition">Document Requests</Link>
+                <Link to="/portal/documents" className="hover:text-selens-yellow transition-colors">
+                  Document Requests
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* Col 3: News & Info */}
-          <div className="space-y-3">
+          <div className="space-y-3 pt-6 md:pt-0 md:border-l md:border-selens-line md:pl-6">
             <h4 className="font-serif font-bold text-selens-white text-sm">
               News &amp; Info
             </h4>
-            <ul className="space-y-2 text-sm text-neutral-400">
+            <ul className="space-y-2.5 text-sm text-neutral-400">
               <li>
-                <Link to="/news" className="hover:text-selens-yellow transition">News &amp; Events</Link>
+                <Link to="/news" className="hover:text-selens-yellow transition-colors">
+                  News &amp; Events
+                </Link>
               </li>
               <li>
-                <Link to="/news?category=student_activities" className="hover:text-selens-yellow transition">Student Activities</Link>
+                <Link
+                  to="/news?category=student_activities"
+                  className="hover:text-selens-yellow transition-colors"
+                >
+                  Student Activities
+                </Link>
               </li>
               <li>
-                <Link to="/topnotchers" className="hover:text-selens-yellow transition">Legion of Topnotchers</Link>
+                <Link to="/topnotchers" className="hover:text-selens-yellow transition-colors">
+                  Legion of Topnotchers
+                </Link>
               </li>
               <li>
-                <Link to="/awards" className="hover:text-selens-yellow transition">Accreditations &amp; Awards</Link>
+                <Link to="/awards" className="hover:text-selens-yellow transition-colors">
+                  Accreditations &amp; Awards
+                </Link>
               </li>
               <li>
-                <Link to="/faq" className="hover:text-selens-yellow transition">FAQ</Link>
+                <Link to="/faq" className="hover:text-selens-yellow transition-colors">
+                  FAQ
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* Col 4: Projects & Initiatives */}
-          <div className="space-y-3">
+          <div className="space-y-3 pt-6 md:pt-0 lg:border-l lg:border-selens-line lg:pl-6">
             <h4 className="font-serif font-bold text-selens-white text-sm">
               Projects &amp; Initiatives
             </h4>
-            <ul className="space-y-2 text-sm text-neutral-400">
+            <ul className="space-y-2.5 text-sm text-neutral-400">
               <li>
-                <Link to="/projects#electrostock" className="hover:text-selens-yellow transition">ElectroStock</Link>
+                <Link to="/projects#electrostock" className="hover:text-selens-yellow transition-colors">
+                  ElectroStock
+                </Link>
               </li>
               <li>
-                <Link to="/projects#eengiquest" className="hover:text-selens-yellow transition">EEngiquest</Link>
+                <Link to="/projects#eengiquest" className="hover:text-selens-yellow transition-colors">
+                  EEngiquest
+                </Link>
               </li>
               <li>
-                <Link to="/projects#teechpoints" className="hover:text-selens-yellow transition">TEEchPoints Initiative</Link>
+                <Link to="/projects#teechpoints" className="hover:text-selens-yellow transition-colors">
+                  TEEchPoints Initiative
+                </Link>
               </li>
               <li>
-                <Link to="/projects#outreach" className="hover:text-selens-yellow transition">Community Outreach</Link>
+                <Link to="/projects#outreach" className="hover:text-selens-yellow transition-colors">
+                  Community Outreach
+                </Link>
               </li>
             </ul>
           </div>

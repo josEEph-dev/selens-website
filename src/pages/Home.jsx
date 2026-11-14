@@ -2,19 +2,110 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { CURRENT_ACADEMIC_YEAR, formatCommitteeLabel } from '../lib/config'
+import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot } from '../components/ui'
 import {
   ArrowRight,
-  Cpu,
-  Trophy,
-  Award,
-  Users,
   MapPin,
   Clock,
   Mail,
   ExternalLink,
-  Archive,
-  Calendar,
 } from 'lucide-react'
+
+const AFFILIATION_LOGOS = [
+  {
+    src: '/website-assets/university-seal.png',
+    alt: 'Mindanao State University - General Santos Seal',
+    label: 'Mindanao State University - General Santos',
+  },
+  {
+    src: '/website-assets/coe-logo.png',
+    alt: 'College of Engineering Logo',
+    label: 'College of Engineering',
+  },
+  {
+    src: '/website-assets/selens-logo.png',
+    alt: 'Society of Electrical Engineering Students Logo',
+    label: 'Society of Electrical Engineering Students',
+  },
+]
+
+function HeroWaveformBackground() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      {/* Subtle radial glow allowed in the hero */}
+      <div className="absolute inset-0 selens-hero-glow" />
+
+      {/* Original inline SVG of layered three-phase & harmonic AC sine-wave lines */}
+      <svg
+        className="absolute inset-0 w-full h-full object-cover"
+        viewBox="0 0 1440 800"
+        fill="none"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        {/* Subtle horizontal reference grid lines */}
+        <line x1="0" y1="400" x2="1440" y2="400" stroke="#FFFFFF" strokeOpacity="0.04" strokeWidth="1" />
+        <line x1="0" y1="260" x2="1440" y2="260" stroke="#FFFFFF" strokeOpacity="0.025" strokeDasharray="4 8" strokeWidth="1" />
+        <line x1="0" y1="540" x2="1440" y2="540" stroke="#FFFFFF" strokeOpacity="0.025" strokeDasharray="4 8" strokeWidth="1" />
+
+        {/* Phase A — primary yellow AC sine wave family */}
+        <path
+          d="M-60 400 C 180 170, 420 630, 660 400 C 900 170, 1140 630, 1380 400 C 1460 320, 1500 300, 1540 400"
+          stroke="#FFD100"
+          strokeOpacity="0.18"
+          strokeWidth="1.5"
+        />
+        <path
+          d="M-60 415 C 180 205, 420 625, 660 415 C 900 205, 1140 625, 1380 415"
+          stroke="#FFD100"
+          strokeOpacity="0.11"
+          strokeWidth="1"
+        />
+        <path
+          d="M-60 430 C 180 240, 420 620, 660 430 C 900 240, 1140 620, 1380 430"
+          stroke="#FFD100"
+          strokeOpacity="0.07"
+          strokeWidth="1"
+        />
+
+        {/* Phase B — shifted white AC sine wave family */}
+        <path
+          d="M-60 360 C 180 590, 420 130, 660 360 C 900 590, 1140 130, 1380 360"
+          stroke="#FFFFFF"
+          strokeOpacity="0.12"
+          strokeWidth="1.25"
+        />
+        <path
+          d="M-60 380 C 180 575, 420 185, 660 380 C 900 575, 1140 185, 1380 380"
+          stroke="#FFFFFF"
+          strokeOpacity="0.07"
+          strokeWidth="1"
+        />
+
+        {/* Phase C — harmonic envelope wave in faint yellow & white */}
+        <path
+          d="M-60 460 C 120 310, 300 570, 480 400 C 660 230, 840 570, 1020 400 C 1200 230, 1380 510, 1520 390"
+          stroke="#FFD100"
+          strokeOpacity="0.09"
+          strokeWidth="1"
+        />
+        <path
+          d="M-60 330 C 140 470, 340 240, 540 395 C 740 550, 940 245, 1140 395 C 1340 545, 1440 310, 1520 370"
+          stroke="#FFFFFF"
+          strokeOpacity="0.06"
+          strokeWidth="1"
+        />
+      </svg>
+
+      {/* Bottom fade to solid black */}
+      <div
+        className="absolute inset-x-0 bottom-0 h-32"
+        style={{
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, #000000 100%)',
+        }}
+      />
+    </div>
+  )
+}
 
 export default function Home() {
   const [news, setNews] = useState([])
@@ -188,126 +279,208 @@ export default function Home() {
   return (
     <div className="bg-selens-black text-selens-white">
       {/* 2. HERO */}
-      <section className="relative min-h-[500px] sm:min-h-[560px] flex items-center justify-center overflow-hidden border-b border-selens-line">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/website-assets/hero-background.jpg')" }}
-        />
-        <div className="absolute inset-0 bg-selens-black/80" />
+      <section className="relative lg:min-h-[80vh] flex items-center overflow-hidden border-b border-selens-line bg-selens-black">
+        <HeroWaveformBackground />
 
-        <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 py-20 text-center space-y-6">
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-selens-white max-w-3xl mx-auto leading-tight">
-            Society of Electrical Engineering Students
-          </h1>
-          <p className="text-base sm:text-lg text-neutral-300 max-w-2xl mx-auto leading-relaxed font-sans">
-            SELENS is the official student organization of Electrical Engineering students at MSU-General Santos. We organize academic events, build practical tools for our members, and celebrate our board exam topnotchers. Together, we empower students to excel in technical innovation and community leadership.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-3">
-            <Link
-              to="/portal"
-              className="bg-selens-yellow text-selens-black font-bold text-base px-6 py-3 rounded-[4px] hover:bg-selens-white transition"
-            >
-              Student Portal
-            </Link>
-            <a
-              href="#news-updates"
-              className="border border-selens-white text-selens-white font-semibold text-base px-6 py-3 rounded-[4px] hover:border-selens-yellow hover:text-selens-yellow transition"
-            >
-              See latest news
-            </a>
+        <div className="relative z-10 selens-container py-14 sm:py-20 lg:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* Left Column: Pill Badge, Existing Headline & Subtext, Primary & Secondary Buttons */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              <div>
+                <SectionBadge>WELCOME TO SELENS</SectionBadge>
+              </div>
+
+              <h1 className="font-serif selens-fluid-hero font-bold text-selens-white max-w-2xl">
+                Society of Electrical Engineering Students
+              </h1>
+
+              <p className="text-base sm:text-lg text-neutral-300 max-w-2xl leading-relaxed font-sans">
+                SELENS is the official student organization of Electrical Engineering students at MSU-General Santos. We organize academic events, build practical tools for our members, and celebrate our board exam topnotchers. Together, we empower students to excel in technical innovation and community leadership.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-4 pt-2">
+                <Link to="/portal" className="selens-btn-primary text-base px-6 py-3">
+                  Student Portal
+                </Link>
+                <a href="#news-updates" className="selens-btn-secondary text-base px-6 py-3">
+                  See latest news
+                </a>
+              </div>
+            </div>
+
+            {/* Right Column: Large PhotoSlot (4:3 on mobile, 16:10 on desktop) */}
+            <div className="lg:col-span-5">
+              <PhotoSlot
+                aspect="4/3"
+                className="lg:aspect-[16/10]"
+                caption="[CONFIRM: Hero photo of SELENS officers, general assembly, or College of Engineering]"
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 3. HIGHLIGHT BLOCKS */}
-      <section className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* (a) Student Portal */}
-          <div className="bg-selens-ink border border-selens-line rounded-[4px] p-6 space-y-4 hover:border-selens-yellow transition flex flex-col justify-between">
-            <div className="space-y-2">
-              <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
-                A.Y. {CURRENT_ACADEMIC_YEAR}
-              </div>
-              <h3 className="font-serif font-bold text-lg text-selens-white">
-                Student Portal
-              </h3>
-              <p className="text-sm text-neutral-300 leading-relaxed font-sans">
-                Access online student services, TEEchPoints tracking, and digital document requests.
-              </p>
-            </div>
-            <Link
-              to="/portal"
-              className="text-sm font-semibold text-selens-yellow hover:text-selens-white flex items-center gap-1.5 transition pt-2"
-            >
-              <span>Access Student Portal</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+      {/* AFFILIATIONS ROW */}
+      <section
+        aria-label="Institutional affiliations"
+        className="border-b border-selens-line bg-selens-surface py-6 sm:py-8"
+      >
+        <div className="selens-container flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-0.5">
+            <span className="text-xs font-sans font-semibold uppercase tracking-wider text-neutral-400 block">
+              Institutional Affiliations
+            </span>
+            <span className="text-xs text-neutral-500 font-sans block">
+              [CONFIRM: which affiliations to show]
+            </span>
           </div>
 
-          {/* (b) Legion of Topnotchers */}
-          <div className="bg-selens-ink border border-selens-line rounded-[4px] p-6 space-y-4 hover:border-selens-yellow transition flex flex-col justify-between">
-            <div className="space-y-2">
-              <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
-                {topnotchersCount}
+          <div className="flex flex-wrap items-center gap-6 sm:gap-10">
+            {AFFILIATION_LOGOS.map((logo) => (
+              <div
+                key={logo.src}
+                className="group flex items-center gap-3 grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition duration-200"
+              >
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  className="h-9 w-9 sm:h-10 sm:w-10 object-contain shrink-0"
+                />
+                <span className="text-xs sm:text-sm font-sans font-medium text-neutral-400 group-hover:text-selens-white transition-colors">
+                  {logo.label}
+                </span>
               </div>
-              <h3 className="font-serif font-bold text-lg text-selens-white">
-                Legion of Topnotchers
-              </h3>
-              <p className="text-sm text-neutral-300 leading-relaxed font-sans">
-                MSU-GSC Electrical Engineering alumni who ranked in the national Top 10 of the PRC Licensure Exams.
-              </p>
-            </div>
-            <Link
-              to="/topnotchers"
-              className="text-sm font-semibold text-selens-yellow hover:text-selens-white flex items-center gap-1.5 transition pt-2"
-            >
-              <span>View Hall of Topnotchers</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* (c) Programs & Initiatives */}
-          <div className="bg-selens-ink border border-selens-line rounded-[4px] p-6 space-y-4 hover:border-selens-yellow transition flex flex-col justify-between">
-            <div className="space-y-2">
-              <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
-                {programsCount > 0 ? `${programsCount} Active` : '0 Active'}
-              </div>
-              <h3 className="font-serif font-bold text-lg text-selens-white">
-                Programs &amp; Initiatives
-              </h3>
-              <p className="text-sm text-neutral-300 leading-relaxed font-sans">
-                Flagship academic, hardware lending, and community outreach projects led by student members.
-              </p>
-            </div>
-            <Link
-              to="/projects"
-              className="text-sm font-semibold text-selens-yellow hover:text-selens-white flex items-center gap-1.5 transition pt-2"
-            >
-              <span>Explore All Programs</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 4. NEWS & UPDATES */}
-      <section id="news-updates" className="border-t border-selens-line py-16 sm:py-20 bg-selens-ink">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-selens-line pb-4">
-            <div>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-selens-white">
-                News &amp; Updates
-              </h2>
-              <div className="w-12 h-1 bg-selens-yellow mt-2" />
-              <p className="text-sm text-neutral-300 mt-2">
-                Recent announcements, event advisories, and activities for A.Y. {CURRENT_ACADEMIC_YEAR}.
-              </p>
+      {/* 3. ABOUT INTRO & KEY HIGHLIGHTS (Two columns: text/highlights + PhotoSlot) */}
+      <section className="selens-section bg-selens-black">
+        <div className="selens-container space-y-12">
+          <SectionHeading
+            title="About SELENS"
+            description="Empowering Electrical Engineering students at MSU-General Santos through academic support, technical services, and student leadership."
+            action={
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-selens-yellow hover:text-selens-white transition-colors"
+              >
+                <span>About the organization</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            }
+          />
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+            {/* Left Column: Editorial Intro & Key Organization Pillars */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="divide-y divide-selens-line border border-selens-line rounded-[4px] bg-selens-ink">
+                {/* (a) Student Portal */}
+                <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1.5 max-w-lg">
+                    <div className="flex items-baseline gap-3">
+                      <span className="font-serif font-bold text-xl sm:text-2xl text-selens-yellow">
+                        A.Y. {CURRENT_ACADEMIC_YEAR}
+                      </span>
+                      <h3 className="font-serif font-bold text-lg text-selens-white">
+                        Student Portal
+                      </h3>
+                    </div>
+                    <p className="text-sm text-neutral-300 leading-relaxed font-sans">
+                      Access online student services, TEEchPoints tracking, and digital document requests.
+                    </p>
+                  </div>
+                  <Link
+                    to="/portal"
+                    className="text-sm font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1.5 transition-colors shrink-0"
+                  >
+                    <span>Access Student Portal</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+
+                {/* (b) Legion of Topnotchers */}
+                <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1.5 max-w-lg">
+                    <div className="flex items-baseline gap-3">
+                      <span className="font-serif font-bold text-xl sm:text-2xl text-selens-yellow">
+                        {topnotchersCount}
+                      </span>
+                      <h3 className="font-serif font-bold text-lg text-selens-white">
+                        Legion of Topnotchers
+                      </h3>
+                    </div>
+                    <p className="text-sm text-neutral-300 leading-relaxed font-sans">
+                      MSU-GSC Electrical Engineering alumni who ranked in the national Top 10 of the PRC Licensure Exams.
+                    </p>
+                  </div>
+                  <Link
+                    to="/topnotchers"
+                    className="text-sm font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1.5 transition-colors shrink-0"
+                  >
+                    <span>View Hall of Topnotchers</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+
+                {/* (c) Programs & Initiatives */}
+                <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1.5 max-w-lg">
+                    <div className="flex items-baseline gap-3">
+                      <span className="font-serif font-bold text-xl sm:text-2xl text-selens-yellow">
+                        {programsCount > 0 ? `${programsCount} Active` : '0 Active'}
+                      </span>
+                      <h3 className="font-serif font-bold text-lg text-selens-white">
+                        Programs &amp; Initiatives
+                      </h3>
+                    </div>
+                    <p className="text-sm text-neutral-300 leading-relaxed font-sans">
+                      Flagship academic, hardware lending, and community outreach projects led by student members.
+                    </p>
+                  </div>
+                  <Link
+                    to="/projects"
+                    className="text-sm font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1.5 transition-colors shrink-0"
+                  >
+                    <span>Explore All Programs</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: PhotoSlot */}
+            <div className="lg:col-span-5">
+              <PhotoSlot
+                aspect="4/3"
+                caption="[CONFIRM: Department of Electrical Engineering or student activity photo]"
+              />
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="divide-y divide-selens-line border-y border-selens-line bg-selens-black rounded-[4px]">
+      {/* 4. NEWS & UPDATES (List rows: date, headline, one-line excerpt) */}
+      <section id="news-updates" className="border-t border-selens-line selens-section bg-selens-surface">
+        <div className="selens-container space-y-10">
+          <SectionHeading
+            title="News & Updates"
+            description={`Recent announcements, event advisories, and activities for A.Y. ${CURRENT_ACADEMIC_YEAR}.`}
+            action={
+              <Link
+                to="/news"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-selens-yellow hover:text-selens-white transition-colors"
+              >
+                <span>Check out all news here</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            }
+          />
+
+          <div className="divide-y divide-selens-line border-y border-selens-line">
             {loadingNews ? (
-              <div className="p-6 space-y-4">
+              <div className="py-6 space-y-4">
                 <div className="h-16 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
                 <div className="h-16 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
               </div>
@@ -319,68 +492,47 @@ export default function Home() {
               news.map((item) => (
                 <article
                   key={item.id}
-                  className="p-5 sm:p-6 hover:bg-selens-ink transition flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+                  className="py-5 sm:py-6 px-2 sm:px-4 hover:bg-selens-ink/70 transition-colors flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-8 group"
                 >
-                  <div className="flex items-start gap-4 flex-grow">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-900 rounded-[4px] overflow-hidden shrink-0 hidden sm:flex items-center justify-center border border-selens-line">
-                      {item.thumbnail_url ? (
-                        <img
-                          src={item.thumbnail_url}
-                          alt=""
-                          className="w-full h-full object-cover group-hover:scale-105 transition duration-300 opacity-90"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-selens-ink flex items-center justify-center text-neutral-600">
-                          <Cpu className="w-6 h-6 text-neutral-600" />
-                        </div>
-                      )}
-                    </div>
+                  {/* Date & Committee column */}
+                  <div className="md:w-56 shrink-0 flex flex-wrap items-center gap-2 text-xs text-neutral-400 font-sans">
+                    {item.published_at ? (
+                      <time dateTime={item.published_at}>
+                        {new Date(item.published_at).toLocaleDateString('en-US', {
+                          month: 'long',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </time>
+                    ) : (
+                      <span>Recent announcement</span>
+                    )}
+                    {item.committee && (
+                      <span className="text-[11px] font-semibold text-selens-yellow bg-selens-black border border-selens-line px-1.5 py-0.5 rounded-[2px]">
+                        {formatCommitteeLabel(item.committee)}
+                      </span>
+                    )}
+                  </div>
 
-                    <div className="space-y-1.5">
-                      <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-400 font-sans">
-                        {item.committee && (
-                          <span className="text-[11px] font-semibold text-selens-yellow bg-selens-black border border-selens-line px-1.5 py-0.5 rounded-[2px]">
-                            {formatCommitteeLabel(item.committee)}
-                          </span>
-                        )}
-                        {item.published_at ? (
-                          <>
-                            <span>
-                              {new Date(item.published_at).toLocaleDateString('en-US', {
-                                month: 'long',
-                                day: 'numeric',
-                                year: 'numeric',
-                              })}
-                            </span>
-                            <span className="text-neutral-600">•</span>
-                            <span>
-                              {new Date(item.published_at).toLocaleTimeString('en-US', {
-                                hour: 'numeric',
-                                minute: '2-digit',
-                              })}
-                            </span>
-                          </>
-                        ) : (
-                          <span>Recent announcement</span>
-                        )}
-                      </div>
-
-                      <h3 className="font-serif text-lg font-bold text-selens-white group-hover:text-selens-yellow transition leading-snug">
-                        <Link to={`/news/${item.slug}`}>
-                          {item.title}
-                        </Link>
-                      </h3>
-
+                  {/* Headline & one-line excerpt */}
+                  <div className="flex-grow min-w-0 space-y-1">
+                    <h3 className="font-serif selens-fluid-h3 font-bold text-selens-white group-hover:text-selens-yellow transition-colors">
+                      <Link to={`/news/${item.slug}`}>
+                        {item.title}
+                      </Link>
+                    </h3>
+                    {item.excerpt && (
                       <p className="text-sm text-neutral-300 line-clamp-1 leading-relaxed">
                         {item.excerpt}
                       </p>
-                    </div>
+                    )}
                   </div>
 
-                  <div className="shrink-0 self-end sm:self-center">
+                  {/* Action link */}
+                  <div className="shrink-0">
                     <Link
                       to={`/news/${item.slug}`}
-                      className="text-xs font-semibold text-selens-yellow group-hover:text-selens-white flex items-center gap-1 transition"
+                      className="text-xs font-semibold text-selens-yellow group-hover:text-selens-white inline-flex items-center gap-1 transition-colors"
                     >
                       <span>Read update</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -394,45 +546,30 @@ export default function Home() {
               </div>
             )}
           </div>
-
-          <div className="text-center pt-2">
-            <Link
-              to="/news"
-              className="inline-flex items-center gap-2 text-sm font-bold text-selens-yellow hover:text-selens-white transition underline underline-offset-4"
-            >
-              <span>Check out all news here</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* LATEST ACCOMPLISHMENTS BLOCK */}
-      <section className="py-16 sm:py-20 border-t border-selens-line bg-selens-black">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-selens-line pb-4">
-            <div>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-selens-white">
-                Latest accomplishments
-              </h2>
-              <div className="w-12 h-1 bg-selens-yellow mt-2" />
-              <p className="text-sm text-neutral-300 mt-2">
-                Student achievements, competition honors, and chapter milestones for A.Y. {CURRENT_ACADEMIC_YEAR}.
-              </p>
-            </div>
-            <Link
-              to="/accomplishments"
-              className="text-sm font-semibold text-selens-yellow hover:text-selens-white flex items-center gap-1 transition"
-            >
-              <span>View all accomplishments</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
+      {/* LATEST ACCOMPLISHMENTS BLOCK (3-column equal-height cards with line-clamp) */}
+      <section className="selens-section border-t border-selens-line bg-selens-black">
+        <div className="selens-container space-y-10">
+          <SectionHeading
+            title="Latest accomplishments"
+            description={`Student achievements, competition honors, and chapter milestones for A.Y. ${CURRENT_ACADEMIC_YEAR}.`}
+            action={
+              <Link
+                to="/accomplishments"
+                className="text-sm font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1.5 transition-colors"
+              >
+                <span>View all accomplishments</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            }
+          />
 
           {loadingAccomplishments ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-44 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
+                <div key={i} className="h-48 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
               ))}
             </div>
           ) : accomplishmentsError ? (
@@ -440,12 +577,12 @@ export default function Home() {
               {accomplishmentsError}
             </div>
           ) : accomplishments.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
               {accomplishments.map((item) => (
                 <Link
                   key={item.id}
                   to={`/accomplishments/${item.slug}`}
-                  className="bg-selens-ink border border-selens-line rounded-[4px] p-6 hover:border-selens-yellow transition flex flex-col justify-between group space-y-4"
+                  className="selens-card p-6 h-full flex flex-col justify-between group space-y-4"
                 >
                   <div className="space-y-3">
                     <div className="flex flex-wrap items-center justify-between text-xs text-neutral-400 gap-2">
@@ -468,17 +605,17 @@ export default function Home() {
                         </span>
                       )}
                     </div>
-                    <h3 className="font-serif font-bold text-lg text-selens-white group-hover:text-selens-yellow transition leading-snug">
+                    <h3 className="font-serif selens-fluid-h3 font-bold text-selens-white group-hover:text-selens-yellow transition-colors line-clamp-2">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-neutral-300 line-clamp-2 leading-relaxed">
+                    <p className="text-sm text-neutral-300 line-clamp-3 leading-relaxed">
                       {item.summary}
                     </p>
                   </div>
 
                   <div className="pt-3 border-t border-selens-line text-xs font-semibold text-selens-yellow flex items-center justify-between">
                     <span>Read milestone</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </div>
                 </Link>
               ))}
@@ -491,124 +628,91 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. PROJECTS & INITIATIVES */}
-      <section className="py-16 sm:py-20 border-t border-selens-line">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-10">
-          <div>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-selens-white">
-              Projects &amp; Initiatives
-            </h2>
-            <div className="w-12 h-1 bg-selens-yellow mt-2" />
-            <p className="text-base text-neutral-300 mt-2 max-w-2xl">
-              Student-driven initiatives supporting academic problem-solving, laboratory exploration, and technical outreach for A.Y. {CURRENT_ACADEMIC_YEAR}.
-            </p>
-          </div>
+      {/* 5. PROJECTS & INITIATIVES (2-column grid of equal-height FeatureCards, distinct from 3-col Accomplishments) */}
+      <section className="selens-section border-t border-selens-line bg-selens-surface">
+        <div className="selens-container space-y-10">
+          <SectionHeading
+            title="Projects & Initiatives"
+            description={`Student-driven initiatives supporting academic problem-solving, laboratory exploration, and technical outreach for A.Y. ${CURRENT_ACADEMIC_YEAR}.`}
+            action={
+              <Link
+                to="/projects"
+                className="text-sm font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1.5 transition-colors"
+              >
+                <span>Explore all initiatives</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            }
+          />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-selens-ink border border-selens-line rounded-[4px] p-6 space-y-4 hover:border-selens-yellow transition">
-              <div className="w-12 h-12 rounded-[4px] bg-selens-black border border-selens-line flex items-center justify-center text-selens-yellow">
-                <Cpu className="w-6 h-6" />
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="font-serif text-lg font-bold text-selens-white">
-                  ElectroStock
-                </h3>
-                <p className="text-sm text-neutral-300 leading-relaxed">
-                  A hardware lending library providing multimeters, oscilloscope probes, microcontrollers, and circuit modules for laboratory experiments and capstone design projects.
-                </p>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+            <FeatureCard
+              title="ElectroStock"
+              text="A hardware lending library providing multimeters, oscilloscope probes, microcontrollers, and circuit modules for laboratory experiments and capstone design projects."
+              to="/projects#electrostock"
+              linkText="Learn about ElectroStock"
+            />
 
-            <div className="bg-selens-ink border border-selens-line rounded-[4px] p-6 space-y-4 hover:border-selens-yellow transition">
-              <div className="w-12 h-12 rounded-[4px] bg-selens-black border border-selens-line flex items-center justify-center text-selens-yellow">
-                <Trophy className="w-6 h-6" />
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="font-serif text-lg font-bold text-selens-white">
-                  EEngiquest
-                </h3>
-                <p className="text-sm text-neutral-300 leading-relaxed">
-                  The annual flagship academic showdown where students across all year levels test their problem-solving skills in circuits, mathematics, power systems, and engineering design.
-                </p>
-              </div>
-            </div>
+            <FeatureCard
+              title="EEngiquest"
+              text="The annual flagship academic showdown where students across all year levels test their problem-solving skills in circuits, mathematics, power systems, and engineering design."
+              to="/projects#eengiquest"
+              linkText="Learn about EEngiquest"
+            />
 
-            <div className="bg-selens-ink border border-selens-line rounded-[4px] p-6 space-y-4 hover:border-selens-yellow transition">
-              <div className="w-12 h-12 rounded-[4px] bg-selens-black border border-selens-line flex items-center justify-center text-selens-yellow">
-                <Award className="w-6 h-6" />
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="font-serif text-lg font-bold text-selens-white">
-                  TEEchPoints
-                </h3>
-                <p className="text-sm text-neutral-300 leading-relaxed">
-                  Our digital recognition system tracking active membership. Earn points by attending technical seminars, volunteering for community drives, and representing the department.
-                </p>
-              </div>
-            </div>
+            <FeatureCard
+              title="TEEchPoints"
+              text="Our digital recognition system tracking active membership. Earn points by attending technical seminars, volunteering for community drives, and representing the department."
+              to="/projects#teechpoints"
+              linkText="Learn about TEEchPoints"
+            />
 
-            <div className="bg-selens-ink border border-selens-line rounded-[4px] p-6 space-y-4 hover:border-selens-yellow transition">
-              <div className="w-12 h-12 rounded-[4px] bg-selens-black border border-selens-line flex items-center justify-center text-selens-yellow">
-                <Users className="w-6 h-6" />
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="font-serif text-lg font-bold text-selens-white">
-                  Community outreach
-                </h3>
-                <p className="text-sm text-neutral-300 leading-relaxed">
-                  Extending engineering beyond the campus through rural electrification assistance, energy conservation campaigns, and STEM workshops for local high schools.
-                </p>
-              </div>
-            </div>
+            <FeatureCard
+              title="Community outreach"
+              text="Extending engineering beyond the campus through rural electrification assistance, energy conservation campaigns, and STEM workshops for local high schools."
+              to="/projects#outreach"
+              linkText="Learn about outreach"
+            />
           </div>
         </div>
       </section>
 
-      {/* HIGHLIGHTS FROM PAST ACADEMIC YEAR STRIP */}
+      {/* HIGHLIGHTS FROM PAST ACADEMIC YEAR (Quiet Archive Strip) */}
       {pastYearHighlights && pastYearHighlights.items?.length > 0 && (
-        <section className="bg-selens-ink border-t border-selens-line py-12 sm:py-16">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-selens-line pb-4">
-              <div>
-                <span className="text-xs uppercase tracking-wider text-neutral-400 font-semibold block">
-                  Archived Milestones
-                </span>
-                <h2 className="font-serif text-xl sm:text-2xl font-bold text-selens-white mt-1 flex items-center gap-2">
-                  <Archive className="w-5 h-5 text-selens-yellow shrink-0" />
-                  <span>Highlights from A.Y. {pastYearHighlights.year}</span>
-                </h2>
-              </div>
-              <Link
-                to="/news"
-                className="text-xs font-semibold text-selens-yellow hover:text-selens-white flex items-center gap-1 transition self-start sm:self-auto"
-              >
-                <span>See the archive</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
+        <section className="bg-selens-black border-t border-selens-line py-12 sm:py-16">
+          <div className="selens-container space-y-8">
+            <SectionHeading
+              title={`Highlights from A.Y. ${pastYearHighlights.year}`}
+              description="Archived Milestones"
+              action={
+                <Link
+                  to="/news"
+                  className="text-xs font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1 transition-colors"
+                >
+                  <span>See the archive</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              }
+            />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-selens-line border border-selens-line rounded-[4px] bg-selens-ink">
               {pastYearHighlights.items.map((item) => (
                 <Link
                   key={item.id}
                   to={item.link}
-                  className="p-5 bg-selens-black border border-selens-line rounded-[4px] hover:border-selens-yellow transition flex flex-col justify-between group space-y-4"
+                  className="p-5 hover:bg-selens-elevated transition-colors flex flex-col justify-between group space-y-3"
                 >
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <span className="text-[11px] font-semibold text-selens-yellow uppercase tracking-wider block">
                       {item.type}
                     </span>
-                    <h3 className="font-serif font-bold text-base text-selens-white group-hover:text-selens-yellow transition leading-snug">
+                    <h3 className="font-serif font-bold text-base text-selens-white group-hover:text-selens-yellow transition-colors line-clamp-2 leading-snug">
                       {item.title}
                     </h3>
                   </div>
-                  <div className="text-xs text-neutral-400 flex items-center justify-between pt-3 border-t border-selens-line">
-                    <span className="text-[11px] bg-selens-ink px-2 py-0.5 rounded-[2px] border border-selens-line">
-                      Archive: A.Y. {pastYearHighlights.year}
-                    </span>
-                    <span className="text-selens-yellow font-semibold group-hover:translate-x-1 transition-transform">
-                      →
-                    </span>
+                  <div className="text-xs text-neutral-400 flex items-center justify-between pt-2">
+                    <span>Archive: A.Y. {pastYearHighlights.year}</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-selens-yellow" />
                   </div>
                 </Link>
               ))}
@@ -617,100 +721,92 @@ export default function Home() {
         </section>
       )}
 
-      {/* 6. MEET YOUR OFFICERS */}
-      <section className="max-w-[1200px] mx-auto px-4 sm:px-6 py-16 sm:py-20 space-y-10 border-t border-selens-line">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-selens-line pb-4">
-          <div>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-selens-white">
-              Meet your officers
-            </h2>
-            <div className="w-12 h-1 bg-selens-yellow mt-2" />
-            <p className="text-sm text-neutral-300 mt-2">
-              The Executive Board leading the organization for A.Y. {CURRENT_ACADEMIC_YEAR}.
-            </p>
-          </div>
-          <Link
-            to="/people"
-            className="text-sm font-semibold text-neutral-300 hover:text-selens-yellow flex items-center gap-1.5 transition"
-          >
-            <span>See full officer directory</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        {loadingOfficers ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-44 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
-            ))}
-          </div>
-        ) : officersError ? (
-          <div className="p-6 text-center text-sm text-red-400 bg-selens-ink border border-selens-line rounded-[4px]">
-            {officersError}
-          </div>
-        ) : officers.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {officers.map((officer) => (
+      {/* 6. MEET YOUR OFFICERS (Full-width band showing the Executive Board compactly) */}
+      <section className="w-full bg-selens-black border-t border-selens-line selens-section">
+        <div className="selens-container space-y-10">
+          <SectionHeading
+            title="Meet your officers"
+            description={`The Executive Board leading the organization for A.Y. ${CURRENT_ACADEMIC_YEAR}.`}
+            action={
               <Link
-                key={officer.id}
                 to="/people"
-                className="bg-selens-ink border border-selens-line rounded-[4px] overflow-hidden hover:border-selens-yellow transition flex flex-col group"
+                className="text-sm font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1.5 transition-colors"
               >
-                <div className="aspect-square w-full bg-neutral-900 flex items-center justify-center relative overflow-hidden">
-                  {officer.photo_url ? (
-                    <img
-                      src={officer.photo_url}
-                      alt={officer.full_name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-[4px] bg-selens-black border border-selens-line flex items-center justify-center text-selens-yellow font-serif font-bold text-lg">
-                      {officer.full_name
-                        ? officer.full_name
-                            .split(' ')
-                            .map((n) => n[0])
-                            .slice(0, 2)
-                            .join('')
-                        : 'EE'}
-                    </div>
-                  )}
-                </div>
-                <div className="p-3 text-center space-y-1 flex-grow flex flex-col justify-center">
-                  <h3 className="font-serif font-bold text-sm text-selens-white group-hover:text-selens-yellow transition leading-snug">
-                    {officer.full_name}
-                  </h3>
-                  <p className="text-xs text-neutral-400 font-sans leading-tight">
-                    {officer.position}
-                  </p>
-                </div>
+                <span>See full officer directory</span>
+                <ArrowRight className="w-4 h-4" />
               </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8 text-neutral-400 bg-selens-ink border border-selens-line rounded-[4px]">
-            Officer directory will be updated shortly.
-          </div>
-        )}
+            }
+          />
+
+          {loadingOfficers ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="h-24 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
+              ))}
+            </div>
+          ) : officersError ? (
+            <div className="p-6 text-center text-sm text-red-400 bg-selens-ink border border-selens-line rounded-[4px]">
+              {officersError}
+            </div>
+          ) : officers.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0 border border-selens-line rounded-[4px] bg-selens-ink overflow-hidden">
+              {officers.map((officer) => (
+                <Link
+                  key={officer.id}
+                  to="/people"
+                  className="p-4 sm:p-5 border-b sm:border-r border-selens-line hover:bg-selens-elevated transition-colors flex items-center gap-4 group"
+                >
+                  <div className="w-14 h-14 rounded-[4px] bg-selens-black border border-selens-line flex items-center justify-center shrink-0 overflow-hidden">
+                    {officer.photo_url ? (
+                      <img
+                        src={officer.photo_url}
+                        alt={officer.full_name}
+                        className="w-full h-full object-cover object-top"
+                      />
+                    ) : (
+                      <span className="text-selens-yellow font-serif font-bold text-sm">
+                        {officer.full_name
+                          ? officer.full_name
+                              .split(' ')
+                              .map((n) => n[0])
+                              .slice(0, 2)
+                              .join('')
+                          : 'EE'}
+                      </span>
+                    )}
+                  </div>
+                  <div className="min-w-0 space-y-0.5">
+                    <h3 className="font-serif font-bold text-sm sm:text-base text-selens-white group-hover:text-selens-yellow transition-colors truncate">
+                      {officer.full_name}
+                    </h3>
+                    <p className="text-xs text-neutral-400 font-sans truncate">
+                      {officer.position}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-neutral-400 bg-selens-ink border border-selens-line rounded-[4px]">
+              Officer directory will be updated shortly.
+            </div>
+          )}
+        </div>
       </section>
 
       {/* 7. FIND US */}
-      <section className="bg-selens-ink border-t border-selens-line py-16 sm:py-20">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-8">
-          <div>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-selens-white">
-              Find us
-            </h2>
-            <div className="w-12 h-1 bg-selens-yellow mt-2" />
-            <p className="text-sm text-neutral-300 mt-2 max-w-2xl">
-              Visit our headquarters at the College of Engineering complex on the MSU-General Santos campus.
-            </p>
-          </div>
+      <section className="bg-selens-surface border-t border-selens-line selens-section">
+        <div className="selens-container space-y-10">
+          <SectionHeading
+            title="Find us"
+            description="Visit our headquarters at the College of Engineering complex on the MSU-General Santos campus."
+          />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            <div className="lg:col-span-5 bg-selens-black border border-selens-line rounded-[4px] p-6 sm:p-8 space-y-6 flex flex-col justify-between">
+            <div className="lg:col-span-5 bg-selens-ink border border-selens-line rounded-[4px] p-6 sm:p-8 space-y-6 flex flex-col justify-between">
               <div className="space-y-5">
                 <div className="flex items-start gap-3.5">
-                  <div className="p-2.5 rounded-[4px] bg-selens-ink border border-selens-line text-selens-yellow shrink-0">
+                  <div className="p-2.5 rounded-[4px] bg-selens-black border border-selens-line text-selens-yellow shrink-0">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div className="space-y-1">
@@ -726,7 +822,7 @@ export default function Home() {
                 </div>
 
                 <div className="flex items-start gap-3.5">
-                  <div className="p-2.5 rounded-[4px] bg-selens-ink border border-selens-line text-selens-yellow shrink-0">
+                  <div className="p-2.5 rounded-[4px] bg-selens-black border border-selens-line text-selens-yellow shrink-0">
                     <Clock className="w-5 h-5" />
                   </div>
                   <div className="space-y-1">
@@ -741,7 +837,7 @@ export default function Home() {
                 </div>
 
                 <div className="flex items-start gap-3.5">
-                  <div className="p-2.5 rounded-[4px] bg-selens-ink border border-selens-line text-selens-yellow shrink-0">
+                  <div className="p-2.5 rounded-[4px] bg-selens-black border border-selens-line text-selens-yellow shrink-0">
                     <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <div className="space-y-1">
@@ -762,7 +858,7 @@ export default function Home() {
                   href="https://msugensan.edu.ph"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 text-xs font-bold text-selens-white hover:text-selens-yellow transition"
+                  className="inline-flex items-center gap-2 text-xs font-bold text-selens-white hover:text-selens-yellow transition-colors"
                 >
                   <span>Visit MSU-General Santos Main Campus Portal</span>
                   <ExternalLink className="w-3.5 h-3.5 text-selens-yellow" />
@@ -770,8 +866,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="lg:col-span-7 bg-selens-black border border-selens-line rounded-[4px] p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
-              <div className="space-y-3 relative z-10">
+            <div className="lg:col-span-7 bg-selens-ink border border-selens-line rounded-[4px] p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
+              <div className="space-y-2 relative z-10">
                 <span className="text-xs uppercase font-bold text-selens-yellow tracking-wider block">
                   Campus Location
                 </span>
@@ -783,19 +879,10 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="my-6 aspect-[16/9] w-full rounded-[4px] border border-selens-line bg-neutral-950 flex flex-col items-center justify-center p-6 relative group overflow-hidden">
-                <div
-                  className="absolute inset-0 opacity-15"
-                  style={{
-                    backgroundImage:
-                      'radial-gradient(circle at 1px 1px, #FFD100 1px, transparent 0)',
-                    backgroundSize: '24px 24px',
-                  }}
-                />
-
+              <div className="my-6 aspect-[16/9] w-full rounded-[4px] border border-selens-line bg-selens-black flex flex-col items-center justify-center p-6 relative overflow-hidden">
                 <div className="relative z-10 text-center space-y-3">
-                  <div className="w-12 h-12 rounded-[4px] bg-selens-yellow text-selens-black flex items-center justify-center mx-auto shadow-none">
-                    <MapPin className="w-6 h-6" />
+                  <div className="w-11 h-11 rounded-[4px] bg-selens-ink border border-selens-line text-selens-yellow flex items-center justify-center mx-auto">
+                    <MapPin className="w-5 h-5" />
                   </div>
                   <div>
                     <span className="font-serif font-bold text-sm text-selens-white block">
