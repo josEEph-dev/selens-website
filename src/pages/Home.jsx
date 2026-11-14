@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { CURRENT_ACADEMIC_YEAR, formatCommitteeLabel } from '../lib/config'
-import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Waveform } from '../components/ui'
+import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Waveform, Reveal } from '../components/ui'
 import {
   ArrowRight,
   MapPin,
@@ -227,19 +227,28 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             {/* Left Column: Pill Badge, Existing Headline & Subtext, Primary & Secondary Buttons */}
             <div className="lg:col-span-7 space-y-6 text-left">
-              <div>
+              <div className="selens-hero-item" style={{ animationDelay: '0ms' }}>
                 <SectionBadge>WELCOME TO SELENS</SectionBadge>
               </div>
 
-              <h1 className="font-serif selens-fluid-hero font-bold text-selens-white max-w-2xl">
+              <h1
+                className="font-serif selens-fluid-hero font-bold text-selens-white max-w-2xl selens-hero-item"
+                style={{ animationDelay: '70ms' }}
+              >
                 Society of Electrical Engineering Students
               </h1>
 
-              <p className="text-base sm:text-lg text-neutral-300 max-w-2xl leading-relaxed font-sans">
+              <p
+                className="text-base sm:text-lg text-neutral-300 max-w-2xl leading-relaxed font-sans selens-hero-item"
+                style={{ animationDelay: '140ms' }}
+              >
                 SELENS is the official student organization of Electrical Engineering students at MSU-General Santos. We organize academic events, build practical tools for our members, and celebrate our board exam topnotchers. Together, we empower students to excel in technical innovation and community leadership.
               </p>
 
-              <div className="flex flex-wrap items-center gap-4 pt-2">
+              <div
+                className="flex flex-wrap items-center gap-4 pt-2 selens-hero-item"
+                style={{ animationDelay: '210ms' }}
+              >
                 <Link to="/portal" className="selens-btn-primary text-base px-6 py-3">
                   Student Portal
                 </Link>
@@ -250,7 +259,7 @@ export default function Home() {
             </div>
 
             {/* Right Column: Large PhotoSlot (4:3 on mobile, 16:10 on desktop) */}
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-5 selens-hero-item" style={{ animationDelay: '280ms' }}>
               <PhotoSlot
                 aspect="4/3"
                 className="lg:aspect-[16/10]"
@@ -315,7 +324,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             {/* Left Column: Editorial Intro & Key Organization Pillars */}
-            <div className="lg:col-span-7 space-y-6">
+            <Reveal index={0} className="lg:col-span-7 space-y-6">
               <div className="divide-y divide-selens-line border border-selens-line rounded-[4px] bg-selens-ink">
                 {/* (a) Student Portal */}
                 <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -389,15 +398,15 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-            </div>
+            </Reveal>
 
             {/* Right Column: PhotoSlot */}
-            <div className="lg:col-span-5">
+            <Reveal index={1} className="lg:col-span-5">
               <PhotoSlot
                 aspect="4/3"
                 caption="[CONFIRM: Department of Electrical Engineering or student activity photo]"
               />
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -430,8 +439,10 @@ export default function Home() {
                 {newsError}
               </div>
             ) : news.length > 0 ? (
-              news.map((item) => (
-                <article
+              news.map((item, idx) => (
+                <Reveal
+                  as="article"
+                  index={idx}
                   key={item.id}
                   className="py-5 sm:py-6 px-2 sm:px-4 hover:bg-selens-ink/70 transition-colors flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-8 group"
                 >
@@ -479,7 +490,7 @@ export default function Home() {
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
-                </article>
+                </Reveal>
               ))
             ) : (
               <div className="text-center py-10 text-neutral-400">
@@ -519,46 +530,47 @@ export default function Home() {
             </div>
           ) : accomplishments.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-              {accomplishments.map((item) => (
-                <Link
-                  key={item.id}
-                  to={`/accomplishments/${item.slug}`}
-                  className="selens-card p-6 h-full flex flex-col justify-between group space-y-4"
-                >
-                  <div className="space-y-3">
-                    <div className="flex flex-wrap items-center justify-between text-xs text-neutral-400 gap-2">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-[11px] font-semibold text-selens-yellow uppercase tracking-wider">
-                          {item.category?.replace('_', ' ')}
-                        </span>
-                        {item.committee && (
-                          <span className="text-[11px] text-neutral-400">
-                            • {formatCommitteeLabel(item.committee)}
+              {accomplishments.map((item, idx) => (
+                <Reveal key={item.id} index={idx} className="h-full">
+                  <Link
+                    to={`/accomplishments/${item.slug}`}
+                    className="selens-card p-6 h-full flex flex-col justify-between group space-y-4"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap items-center justify-between text-xs text-neutral-400 gap-2">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-[11px] font-semibold text-selens-yellow uppercase tracking-wider">
+                            {item.category?.replace('_', ' ')}
+                          </span>
+                          {item.committee && (
+                            <span className="text-[11px] text-neutral-400">
+                              • {formatCommitteeLabel(item.committee)}
+                            </span>
+                          )}
+                        </div>
+                        {item.accomplished_on && (
+                          <span>
+                            {new Date(item.accomplished_on).toLocaleDateString('en-US', {
+                              month: 'short',
+                              year: 'numeric',
+                            })}
                           </span>
                         )}
                       </div>
-                      {item.accomplished_on && (
-                        <span>
-                          {new Date(item.accomplished_on).toLocaleDateString('en-US', {
-                            month: 'short',
-                            year: 'numeric',
-                          })}
-                        </span>
-                      )}
+                      <h3 className="font-serif selens-fluid-h3 font-bold text-selens-white group-hover:text-selens-yellow transition-colors line-clamp-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm text-neutral-300 line-clamp-3 leading-relaxed">
+                        {item.summary}
+                      </p>
                     </div>
-                    <h3 className="font-serif selens-fluid-h3 font-bold text-selens-white group-hover:text-selens-yellow transition-colors line-clamp-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-neutral-300 line-clamp-3 leading-relaxed">
-                      {item.summary}
-                    </p>
-                  </div>
 
-                  <div className="pt-3 border-t border-selens-line text-xs font-semibold text-selens-yellow flex items-center justify-between">
-                    <span>Read milestone</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </div>
-                </Link>
+                    <div className="pt-3 border-t border-selens-line text-xs font-semibold text-selens-yellow flex items-center justify-between">
+                      <span>Read milestone</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </div>
+                  </Link>
+                </Reveal>
               ))}
             </div>
           ) : (
@@ -587,33 +599,41 @@ export default function Home() {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-            <FeatureCard
-              title="ElectroStock"
-              text="A hardware lending library providing multimeters, oscilloscope probes, microcontrollers, and circuit modules for laboratory experiments and capstone design projects."
-              to="/projects#electrostock"
-              linkText="Learn about ElectroStock"
-            />
+            <Reveal index={0} className="h-full">
+              <FeatureCard
+                title="ElectroStock"
+                text="A hardware lending library providing multimeters, oscilloscope probes, microcontrollers, and circuit modules for laboratory experiments and capstone design projects."
+                to="/projects#electrostock"
+                linkText="Learn about ElectroStock"
+              />
+            </Reveal>
 
-            <FeatureCard
-              title="EEngiquest"
-              text="The annual flagship academic showdown where students across all year levels test their problem-solving skills in circuits, mathematics, power systems, and engineering design."
-              to="/projects#eengiquest"
-              linkText="Learn about EEngiquest"
-            />
+            <Reveal index={1} className="h-full">
+              <FeatureCard
+                title="EEngiquest"
+                text="The annual flagship academic showdown where students across all year levels test their problem-solving skills in circuits, mathematics, power systems, and engineering design."
+                to="/projects#eengiquest"
+                linkText="Learn about EEngiquest"
+              />
+            </Reveal>
 
-            <FeatureCard
-              title="TEEchPoints"
-              text="Our digital recognition system tracking active membership. Earn points by attending technical seminars, volunteering for community drives, and representing the department."
-              to="/projects#teechpoints"
-              linkText="Learn about TEEchPoints"
-            />
+            <Reveal index={2} className="h-full">
+              <FeatureCard
+                title="TEEchPoints"
+                text="Our digital recognition system tracking active membership. Earn points by attending technical seminars, volunteering for community drives, and representing the department."
+                to="/projects#teechpoints"
+                linkText="Learn about TEEchPoints"
+              />
+            </Reveal>
 
-            <FeatureCard
-              title="Community outreach"
-              text="Extending engineering beyond the campus through rural electrification assistance, energy conservation campaigns, and STEM workshops for local high schools."
-              to="/projects#outreach"
-              linkText="Learn about outreach"
-            />
+            <Reveal index={3} className="h-full">
+              <FeatureCard
+                title="Community outreach"
+                text="Extending engineering beyond the campus through rural electrification assistance, energy conservation campaigns, and STEM workshops for local high schools."
+                to="/projects#outreach"
+                linkText="Learn about outreach"
+              />
+            </Reveal>
           </div>
         </div>
       </section>
@@ -636,7 +656,7 @@ export default function Home() {
               }
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-selens-line border border-selens-line rounded-[4px] bg-selens-ink">
+            <Reveal className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-selens-line border border-selens-line rounded-[4px] bg-selens-ink">
               {pastYearHighlights.items.map((item) => (
                 <Link
                   key={item.id}
@@ -657,7 +677,7 @@ export default function Home() {
                   </div>
                 </Link>
               ))}
-            </div>
+            </Reveal>
           </div>
         </section>
       )}
@@ -690,7 +710,7 @@ export default function Home() {
               {officersError}
             </div>
           ) : officers.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0 border border-selens-line rounded-[4px] bg-selens-ink overflow-hidden">
+            <Reveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0 border border-selens-line rounded-[4px] bg-selens-ink overflow-hidden">
               {officers.map((officer) => (
                 <Link
                   key={officer.id}
@@ -726,7 +746,7 @@ export default function Home() {
                   </div>
                 </Link>
               ))}
-            </div>
+            </Reveal>
           ) : (
             <div className="text-center py-8 text-neutral-400 bg-selens-ink border border-selens-line rounded-[4px]">
               Officer directory will be updated shortly.
@@ -744,7 +764,7 @@ export default function Home() {
           />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            <div className="lg:col-span-5 bg-selens-ink border border-selens-line rounded-[4px] p-6 sm:p-8 space-y-6 flex flex-col justify-between">
+            <Reveal index={0} className="lg:col-span-5 bg-selens-ink border border-selens-line rounded-[4px] p-6 sm:p-8 space-y-6 flex flex-col justify-between">
               <div className="space-y-5">
                 <div className="flex items-start gap-3.5">
                   <div className="p-2.5 rounded-[4px] bg-selens-black border border-selens-line text-selens-yellow shrink-0">
@@ -805,9 +825,9 @@ export default function Home() {
                   <ExternalLink className="w-3.5 h-3.5 text-selens-yellow" />
                 </a>
               </div>
-            </div>
+            </Reveal>
 
-            <div className="lg:col-span-7 bg-selens-ink border border-selens-line rounded-[4px] p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
+            <Reveal index={1} className="lg:col-span-7 bg-selens-ink border border-selens-line rounded-[4px] p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
               <div className="space-y-2 relative z-10">
                 <span className="text-xs uppercase font-bold text-selens-yellow tracking-wider block">
                   Campus Location
@@ -840,7 +860,7 @@ export default function Home() {
                 <span>Mindanao State University - General Santos</span>
                 <span className="text-selens-yellow font-semibold">COE Hub</span>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>

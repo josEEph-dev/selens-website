@@ -66,7 +66,7 @@ html.contrast-high {
 }
 
 /* Accessible yellow focus rings */
-:where(a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+:where(a, button, input, select, textarea, summary, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible {
   outline: 2px solid var(--color-selens-yellow);
   outline-offset: 2px;
 }
@@ -130,9 +130,9 @@ html.contrast-high {
   border: 1px solid var(--color-selens-line);
   border-radius: 4px;
   transition:
-    border-color 220ms var(--ease-standard),
-    background-color 220ms var(--ease-standard),
-    transform 220ms var(--ease-standard);
+    border-color 180ms var(--ease-standard),
+    background-color 180ms var(--ease-standard),
+    transform 180ms var(--ease-standard);
 }
 
 .selens-card:hover {
@@ -153,16 +153,24 @@ html.contrast-high {
   border-radius: 4px;
   border: 1px solid var(--color-selens-yellow);
   text-decoration: none;
+  cursor: pointer;
   transition:
     background-color 180ms var(--ease-standard),
     color 180ms var(--ease-standard),
-    border-color 180ms var(--ease-standard);
+    border-color 180ms var(--ease-standard),
+    box-shadow 180ms var(--ease-standard),
+    transform 120ms var(--ease-standard);
 }
 
 .selens-btn-primary:hover {
   background-color: #FFFFFF;
   border-color: #FFFFFF;
   color: #000000;
+  box-shadow: 0 0 18px rgba(255, 209, 0, 0.32);
+}
+
+.selens-btn-primary:active {
+  transform: scale(0.98);
 }
 
 .selens-btn-secondary {
@@ -178,15 +186,61 @@ html.contrast-high {
   border-radius: 4px;
   border: 1px solid var(--color-selens-white);
   text-decoration: none;
+  cursor: pointer;
   transition:
     color 180ms var(--ease-standard),
     border-color 180ms var(--ease-standard),
-    background-color 180ms var(--ease-standard);
+    background-color 180ms var(--ease-standard),
+    box-shadow 180ms var(--ease-standard),
+    transform 120ms var(--ease-standard);
 }
 
 .selens-btn-secondary:hover {
   border-color: var(--color-selens-yellow);
   color: var(--color-selens-yellow);
+  box-shadow: 0 0 16px rgba(255, 209, 0, 0.22);
+}
+
+.selens-btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* Nav link underline wipe (scaleX only, 180ms) */
+.selens-nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  color: var(--color-selens-white);
+  transition: color 160ms var(--ease-standard);
+}
+
+.selens-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.2rem;
+  height: 2px;
+  background-color: var(--color-selens-yellow);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 180ms var(--ease-standard);
+}
+
+.selens-nav-link:hover,
+.selens-nav-link:focus-visible,
+.selens-nav-link[data-active="true"] {
+  color: var(--color-selens-yellow);
+}
+
+.selens-nav-link:hover::after,
+.selens-nav-link:focus-visible::after,
+.selens-nav-link[data-active="true"]::after {
+  transform: scaleX(1);
 }
 
 /* Subtle radial glow allowed ONLY in hero and page headers */
@@ -253,7 +307,26 @@ html.contrast-high {
     scroll-behavior: auto !important;
   }
 
-  .selens-card:hover {
+  .selens-card:hover,
+  .selens-btn-primary:active,
+  .selens-btn-secondary:active,
+  .selens-chip:active {
+    transform: none !important;
+  }
+
+  .selens-reveal,
+  .selens-reveal[data-reveal="pending"],
+  .selens-reveal[data-reveal="revealed"],
+  .selens-hero-item {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .selens-waveform-drift {
+    animation: none !important;
+    animation-play-state: paused !important;
     transform: none !important;
   }
 }
@@ -379,3 +452,57 @@ html.contrast-high {
   height: auto;
   border-radius: 4px;
 }
+
+/* STEP M1: Scroll Reveal (opacity + transform only, 320ms enter curve, visible by default) */
+.selens-reveal {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.selens-reveal[data-reveal="pending"] {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+}
+
+.selens-reveal[data-reveal="revealed"] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 320ms var(--ease-enter),
+    transform 320ms var(--ease-enter);
+}
+
+/* STEP M2: Hero Load-In (< 700ms total) & Slow Waveform Drift (36s loop) */
+@keyframes selens-hero-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.selens-hero-item {
+  animation: selens-hero-enter 340ms var(--ease-enter) both;
+}
+
+@keyframes selens-waveform-drift {
+  0% {
+    transform: scale(1.06) translate3d(-1.5%, -0.5%, 0);
+  }
+  50% {
+    transform: scale(1.06) translate3d(0.5%, 0.75%, 0);
+  }
+  100% {
+    transform: scale(1.06) translate3d(1.5%, -0.5%, 0);
+  }
+}
+
+.selens-waveform-drift {
+  transform: scale(1.06) translate3d(0, 0, 0);
+  transform-origin: center center;
+  animation: selens-waveform-drift 36s ease-in-out infinite alternate;
+}
+

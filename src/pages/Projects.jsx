@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { PageHeader } from '../components/SharedUI'
-import { ImageFrame } from '../components/ui'
+import { ImageFrame, Reveal } from '../components/ui'
 import YearSelector from '../components/YearSelector'
 import CommitteeFilter from '../components/CommitteeFilter'
 import { ExternalLink, Archive } from 'lucide-react'
@@ -175,8 +175,8 @@ export default function Projects() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 auto-rows-fr gap-5 sm:gap-6">
-            {filteredProjects.map((item) => (
-              <article key={item.id} className="selens-card h-full overflow-hidden flex flex-col">
+            {filteredProjects.map((item, idx) => (
+              <Reveal as="article" key={item.id} index={idx} className="selens-card h-full overflow-hidden flex flex-col">
                 <ImageFrame src={item.cover_image_url} alt={item.name} />
 
                 <div className="flex-1 p-5 sm:p-6 flex flex-col gap-3">
@@ -224,7 +224,7 @@ export default function Projects() {
                     </div>
                   )}
                 </div>
-              </article>
+              </Reveal>
             ))}
           </div>
         )}

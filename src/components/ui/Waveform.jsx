@@ -8,7 +8,7 @@ export default function Waveform({ intensity = 1, className = '' }) {
 
   return (
     <svg
-      className={`absolute inset-0 w-full h-full ${className}`}
+      className={`absolute inset-0 w-full h-full selens-waveform-drift ${className}`}
       viewBox="0 0 1440 800"
       fill="none"
       preserveAspectRatio="xMidYMid slice"

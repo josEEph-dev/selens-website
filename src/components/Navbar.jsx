@@ -50,12 +50,7 @@ export default function Navbar() {
     return location.pathname.startsWith(path)
   }
 
-  const navLinkClass = (active) =>
-    `px-3 py-2.5 text-sm font-semibold tracking-wide transition-colors duration-150 relative inline-flex items-center ${
-      active
-        ? 'text-selens-yellow after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:bg-selens-yellow'
-        : 'text-selens-white hover:text-selens-yellow'
-    }`
+  const navLinkClass = () => 'selens-nav-link'
 
   return (
     <header
@@ -95,16 +90,25 @@ export default function Navbar() {
           >
             <Link
               to="/"
-              className={navLinkClass(isActive('/') && location.pathname === '/')}
+              data-active={isActive('/') && location.pathname === '/'}
+              className={navLinkClass()}
             >
               Home
             </Link>
 
-            <Link to="/about" className={navLinkClass(isActive('/about'))}>
+            <Link
+              to="/about"
+              data-active={isActive('/about')}
+              className={navLinkClass()}
+            >
               About
             </Link>
 
-            <Link to="/people" className={navLinkClass(isActive('/people'))}>
+            <Link
+              to="/people"
+              data-active={isActive('/people')}
+              className={navLinkClass()}
+            >
               People
             </Link>
 
@@ -113,13 +117,12 @@ export default function Navbar() {
               <button
                 type="button"
                 aria-expanded={servicesDropdownOpen}
+                data-active={isActive('/portal') || isActive('/services')}
                 onClick={() => {
                   setServicesDropdownOpen(!servicesDropdownOpen)
                   setNewsDropdownOpen(false)
                 }}
-                className={`${navLinkClass(
-                  isActive('/portal') || isActive('/services')
-                )} gap-1 cursor-pointer`}
+                className={`${navLinkClass()} gap-1 cursor-pointer`}
               >
                 <span>Services &amp; Portals</span>
                 <ChevronDown
@@ -160,17 +163,18 @@ export default function Navbar() {
               <button
                 type="button"
                 aria-expanded={newsDropdownOpen}
+                data-active={
+                  isActive('/news') ||
+                  isActive('/accomplishments') ||
+                  isActive('/awards') ||
+                  isActive('/topnotchers') ||
+                  isActive('/faq')
+                }
                 onClick={() => {
                   setNewsDropdownOpen(!newsDropdownOpen)
                   setServicesDropdownOpen(false)
                 }}
-                className={`${navLinkClass(
-                  isActive('/news') ||
-                    isActive('/accomplishments') ||
-                    isActive('/awards') ||
-                    isActive('/topnotchers') ||
-                    isActive('/faq')
-                )} gap-1 cursor-pointer`}
+                className={`${navLinkClass()} gap-1 cursor-pointer`}
               >
                 <span>News &amp; Info</span>
                 <ChevronDown
@@ -224,7 +228,8 @@ export default function Navbar() {
 
             <Link
               to="/projects"
-              className={navLinkClass(isActive('/projects'))}
+              data-active={isActive('/projects')}
+              className={navLinkClass()}
             >
               Projects &amp; Initiatives
             </Link>
@@ -246,14 +251,14 @@ export default function Navbar() {
                 {isOfficer ? (
                   <Link
                     to="/dashboard"
-                    className="bg-selens-yellow text-selens-black font-bold text-xs px-3.5 py-2 rounded-[4px] hover:bg-selens-white transition-colors"
+                    className="selens-btn-primary text-xs px-3.5 py-2"
                   >
                     Dashboard
                   </Link>
                 ) : (
                   <Link
                     to="/portal"
-                    className="bg-selens-yellow text-selens-black font-bold text-xs px-3.5 py-2 rounded-[4px] hover:bg-selens-white transition-colors"
+                    className="selens-btn-primary text-xs px-3.5 py-2"
                   >
                     Student Portal
                   </Link>
@@ -280,7 +285,7 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/portal"
-                className="bg-selens-yellow text-selens-black font-bold text-sm px-4 py-2 rounded-[4px] hover:bg-selens-white transition-colors"
+                className="selens-btn-primary text-sm px-4 py-2"
               >
                 Student Portal
               </Link>
@@ -442,14 +447,14 @@ export default function Navbar() {
                   {isOfficer ? (
                     <Link
                       to="/dashboard"
-                      className="min-h-[44px] flex items-center justify-center w-full bg-selens-yellow text-selens-black font-bold text-sm px-4 rounded-[4px]"
+                      className="selens-btn-primary min-h-[44px] w-full text-sm"
                     >
                       Officer Dashboard
                     </Link>
                   ) : (
                     <Link
                       to="/portal"
-                      className="min-h-[44px] flex items-center justify-center w-full bg-selens-yellow text-selens-black font-bold text-sm px-4 rounded-[4px]"
+                      className="selens-btn-primary min-h-[44px] w-full text-sm"
                     >
                       Student Portal
                     </Link>
@@ -458,7 +463,7 @@ export default function Navbar() {
               ) : (
                 <Link
                   to="/portal"
-                  className="min-h-[44px] flex items-center justify-center w-full bg-selens-yellow text-selens-black font-bold text-sm rounded-[4px] hover:bg-selens-white transition-colors"
+                  className="selens-btn-primary min-h-[44px] w-full text-sm"
                 >
                   Student Portal
                 </Link>

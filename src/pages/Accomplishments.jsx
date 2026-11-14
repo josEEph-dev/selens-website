@@ -5,7 +5,7 @@ import { PageHeader } from '../components/SharedUI'
 import YearSelector from '../components/YearSelector'
 import CommitteeFilter from '../components/CommitteeFilter'
 import { ArrowRight, Archive } from 'lucide-react'
-import { ImageFrame } from '../components/ui'
+import { ImageFrame, Reveal } from '../components/ui'
 import { CURRENT_ACADEMIC_YEAR, getGroupForCommittee, formatCommitteeLabel } from '../lib/config'
 
 const CATEGORIES = [
@@ -205,12 +205,12 @@ export default function Accomplishments() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-5 sm:gap-6">
-            {filteredItems.map((item) => (
-              <Link
-                key={item.id}
-                to={`/accomplishments/${item.slug}`}
-                className="selens-card h-full overflow-hidden flex flex-col group"
-              >
+            {filteredItems.map((item, idx) => (
+              <Reveal key={item.id} index={idx} className="h-full">
+                <Link
+                  to={`/accomplishments/${item.slug}`}
+                  className="selens-card h-full overflow-hidden flex flex-col group"
+                >
                 <ImageFrame src={item.image_url} />
 
                 <div className="flex-1 p-5 flex flex-col gap-3">
@@ -256,7 +256,8 @@ export default function Accomplishments() {
                     </span>
                   </div>
                 </div>
-              </Link>
+                </Link>
+              </Reveal>
             ))}
           </div>
         )}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { PageHeader, Section } from '../components/SharedUI'
-import { ImageFrame } from '../components/ui'
+import { ImageFrame, Reveal } from '../components/ui'
 import YearSelector from '../components/YearSelector'
 import { Calendar, Building, Archive } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR } from '../lib/config'
@@ -134,8 +134,8 @@ export default function Awards() {
         ) : (
           <Section title="Institutional Honors &amp; Citations">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-5 sm:gap-6">
-              {awards.map((award) => (
-                <article key={award.id} className="selens-card h-full overflow-hidden flex flex-col">
+              {awards.map((award, idx) => (
+                <Reveal as="article" key={award.id} index={idx} className="selens-card h-full overflow-hidden flex flex-col">
                   <ImageFrame src={award.image_url} alt={award.title} fit="contain" />
 
                   <div className="flex-1 p-5 flex flex-col gap-2.5">
@@ -175,7 +175,7 @@ export default function Awards() {
                       </div>
                     )}
                   </div>
-                </article>
+                </Reveal>
               ))}
             </div>
           </Section>

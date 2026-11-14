@@ -336,7 +336,7 @@ export default function People() {
                   style={{ scrollMarginTop: 'calc(var(--nav-h, 80px) + 4.75rem)' }}
                   className="space-y-8"
                 >
-                  <SectionHeading title={group.heading} />
+                  <SectionHeading title={group.heading} reveal={false} />
 
                   <div className="space-y-10">
                     {group.subgroups.map((subgroup) => {

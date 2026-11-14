@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { PageHeader, Card, Section } from '../components/SharedUI'
-import { ImageFrame } from '../components/ui'
+import { ImageFrame, Reveal } from '../components/ui'
 import { CURRENT_ACADEMIC_YEAR } from '../lib/config'
 
 export default function Topnotchers() {
@@ -44,47 +44,53 @@ export default function Topnotchers() {
       <div className="selens-container py-12 sm:py-16 space-y-14">
         {/* Highlight Stats Strip */}
         <div className="grid grid-cols-1 md:grid-cols-3 auto-rows-fr gap-5 sm:gap-6">
-          <Card className="h-full p-6 flex flex-col justify-between space-y-2">
-            <div className="space-y-2">
-              <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
-                {loading ? '...' : topnotchers.length}
+          <Reveal index={0} className="h-full">
+            <Card className="h-full p-6 flex flex-col justify-between space-y-2">
+              <div className="space-y-2">
+                <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
+                  {loading ? '...' : topnotchers.length}
+                </div>
+                <h3 className="font-serif font-bold text-lg text-selens-white">
+                  Board topnotchers on record
+                </h3>
+                <p className="text-sm text-neutral-300 font-sans leading-relaxed">
+                  Alumni who placed among the top examinees in national licensure exams.
+                </p>
               </div>
-              <h3 className="font-serif font-bold text-lg text-selens-white">
-                Board topnotchers on record
-              </h3>
-              <p className="text-sm text-neutral-300 font-sans leading-relaxed">
-                Alumni who placed among the top examinees in national licensure exams.
-              </p>
-            </div>
-          </Card>
+            </Card>
+          </Reveal>
 
-          <Card className="h-full p-6 flex flex-col justify-between space-y-2">
-            <div className="space-y-2">
-              <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
-                Top 1
+          <Reveal index={1} className="h-full">
+            <Card className="h-full p-6 flex flex-col justify-between space-y-2">
+              <div className="space-y-2">
+                <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
+                  Top 1
+                </div>
+                <h3 className="font-serif font-bold text-lg text-selens-white">
+                  Highest national ranking
+                </h3>
+                <p className="text-sm text-neutral-300 font-sans leading-relaxed">
+                  Achieved in the PRC Registered Electrical Engineer Licensure Examination.
+                </p>
               </div>
-              <h3 className="font-serif font-bold text-lg text-selens-white">
-                Highest national ranking
-              </h3>
-              <p className="text-sm text-neutral-300 font-sans leading-relaxed">
-                Achieved in the PRC Registered Electrical Engineer Licensure Examination.
-              </p>
-            </div>
-          </Card>
+            </Card>
+          </Reveal>
 
-          <Card className="h-full p-6 flex flex-col justify-between space-y-2">
-            <div className="space-y-2">
-              <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
-                A.Y. {CURRENT_ACADEMIC_YEAR}
+          <Reveal index={2} className="h-full">
+            <Card className="h-full p-6 flex flex-col justify-between space-y-2">
+              <div className="space-y-2">
+                <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
+                  A.Y. {CURRENT_ACADEMIC_YEAR}
+                </div>
+                <h3 className="font-serif font-bold text-lg text-selens-white">
+                  Sustained academic legacy
+                </h3>
+                <p className="text-sm text-neutral-300 font-sans leading-relaxed">
+                  Continued peer mentorship and review sessions supporting each graduating cohort.
+                </p>
               </div>
-              <h3 className="font-serif font-bold text-lg text-selens-white">
-                Sustained academic legacy
-              </h3>
-              <p className="text-sm text-neutral-300 font-sans leading-relaxed">
-                Continued peer mentorship and review sessions supporting each graduating cohort.
-              </p>
-            </div>
-          </Card>
+            </Card>
+          </Reveal>
         </div>
 
         {/* Directory of Topnotchers */}
@@ -111,9 +117,11 @@ export default function Topnotchers() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-5 sm:gap-6">
-              {topnotchers.map((top) => (
-                <article
+              {topnotchers.map((top, idx) => (
+                <Reveal
+                  as="article"
                   key={top.id}
+                  index={idx}
                   className="selens-card h-full overflow-hidden flex flex-col"
                 >
                   <ImageFrame src={top.photo_url} alt={top.full_name} />
@@ -143,7 +151,7 @@ export default function Topnotchers() {
                       </p>
                     </div>
                   </div>
-                </article>
+                </Reveal>
               ))}
             </div>
           )}

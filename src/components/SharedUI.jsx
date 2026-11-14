@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Waveform } from './ui'
+import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Waveform, Reveal } from './ui'
 
-export { SectionBadge, SectionHeading, FeatureCard, PhotoSlot }
+export { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Reveal }
 
 /**
  * Standardized PageHeader for all inner pages:

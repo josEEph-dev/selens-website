@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { PageHeader } from '../components/SharedUI'
-import { ImageFrame } from '../components/ui'
+import { ImageFrame, Reveal } from '../components/ui'
 import YearSelector from '../components/YearSelector'
 import CommitteeFilter from '../components/CommitteeFilter'
 import { ArrowRight, Archive } from 'lucide-react'
@@ -204,8 +204,10 @@ export default function News({ initialCategory } = {}) {
           </div>
         ) : (
           <div className="divide-y divide-selens-line border-y border-selens-line">
-            {filteredNews.map((item) => (
-              <article
+            {filteredNews.map((item, idx) => (
+              <Reveal
+                as="article"
+                index={idx}
                 key={item.id}
                 className="py-5 sm:py-6 sm:px-3 hover:bg-selens-ink/70 transition-colors grid grid-cols-1 sm:grid-cols-[11rem_minmax(0,1fr)] md:grid-cols-[13rem_minmax(0,1fr)_auto] gap-4 sm:gap-6 items-start md:items-center group"
               >
@@ -270,7 +272,7 @@ export default function News({ initialCategory } = {}) {
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
-              </article>
+              </Reveal>
             ))}
           </div>
         )}

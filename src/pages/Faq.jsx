@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { PageHeader } from '../components/SharedUI'
+import { PageHeader, Reveal } from '../components/SharedUI'
 import { ChevronDown, Search } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR } from '../lib/config'
 
@@ -92,7 +92,7 @@ export default function Faq() {
               : `No questions match "${search}". Try searching another keyword.`}
           </div>
         ) : (
-          <div className="divide-y divide-selens-line border border-selens-line rounded-[4px] bg-selens-ink overflow-hidden">
+          <Reveal className="divide-y divide-selens-line border border-selens-line rounded-[4px] bg-selens-ink overflow-hidden">
             {filtered.map((faq) => {
               const isOpen = openId === faq.id
               return (
@@ -121,7 +121,7 @@ export default function Faq() {
                 </div>
               )
             })}
-          </div>
+          </Reveal>
         )}
       </div>
     </div>

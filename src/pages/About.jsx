@@ -1,4 +1,4 @@
-import { PageHeader, Section, Card, PrimaryButton, PhotoSlot } from '../components/SharedUI'
+import { PageHeader, Section, Card, PrimaryButton, PhotoSlot, Reveal } from '../components/SharedUI'
 import { Download } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR } from '../lib/config'
 
@@ -35,17 +35,17 @@ export default function About() {
         {/* Preamble + PhotoSlot (two-column editorial layout) */}
         <Section id="mission" title="Constitutional preamble">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            <div className="lg:col-span-7">
+            <Reveal index={0} className="lg:col-span-7">
               <blockquote className="font-serif italic text-base sm:text-lg text-selens-white border-l-4 border-selens-yellow pl-6 py-4 pr-6 leading-relaxed bg-selens-ink rounded-[4px] border border-selens-line border-l-selens-yellow">
                 &ldquo;We, the Electrical Engineering students of Mindanao State University - General Santos, in order to establish an organization that shall embody our ideals, foster academic excellence, promote technical innovation and ethical responsibility, protect member rights and welfare, and contribute to community development, do hereby establish this Constitution and By-Laws.&rdquo;
               </blockquote>
-            </div>
-            <div className="lg:col-span-5">
+            </Reveal>
+            <Reveal index={1} className="lg:col-span-5">
               <PhotoSlot
                 aspect="4/3"
                 caption="[CONFIRM: College of Engineering or SELENS general assembly photo]"
               />
-            </div>
+            </Reveal>
           </div>
         </Section>
 
@@ -55,20 +55,22 @@ export default function About() {
           description="Three central pillars guide our initiatives, events, and member programs throughout the academic year."
         >
           <div className="grid grid-cols-1 md:grid-cols-3 auto-rows-fr gap-6">
-            {objectives.map((obj) => (
-              <Card key={obj.numeral} className="h-full space-y-4 flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
-                    {obj.numeral}
+            {objectives.map((obj, idx) => (
+              <Reveal key={obj.numeral} index={idx} className="h-full">
+                <Card className="h-full space-y-4 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
+                      {obj.numeral}
+                    </div>
+                    <h3 className="font-serif font-bold text-lg text-selens-white">
+                      {obj.title}
+                    </h3>
+                    <p className="text-sm text-neutral-300 leading-relaxed font-sans">
+                      {obj.description}
+                    </p>
                   </div>
-                  <h3 className="font-serif font-bold text-lg text-selens-white">
-                    {obj.title}
-                  </h3>
-                  <p className="text-sm text-neutral-300 leading-relaxed font-sans">
-                    {obj.description}
-                  </p>
-                </div>
-              </Card>
+                </Card>
+              </Reveal>
             ))}
           </div>
         </Section>
@@ -78,24 +80,26 @@ export default function About() {
           title="Governing documents"
           description="Read our constitution and bylaws to understand organizational structure, membership rights, and election procedures."
         >
-          <Card className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-6 sm:p-8">
-            <div className="space-y-1.5 max-w-xl">
-              <h3 className="font-serif font-bold text-lg text-selens-white">
-                SELENS Constitution &amp; By-Laws
-              </h3>
-              <p className="text-sm text-neutral-300">
-                Official governing document outlining student organization policies, officer duties, and assembly operations for A.Y. {CURRENT_ACADEMIC_YEAR}.
-              </p>
-            </div>
-            <PrimaryButton
-              href="/website-assets/constitution-and-by-laws-of-selens.pdf"
-              download
-              className="gap-2 shrink-0 min-h-[44px]"
-            >
-              <Download className="w-4 h-4" />
-              <span>Download constitution (PDF)</span>
-            </PrimaryButton>
-          </Card>
+          <Reveal>
+            <Card className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-6 sm:p-8">
+              <div className="space-y-1.5 max-w-xl">
+                <h3 className="font-serif font-bold text-lg text-selens-white">
+                  SELENS Constitution &amp; By-Laws
+                </h3>
+                <p className="text-sm text-neutral-300">
+                  Official governing document outlining student organization policies, officer duties, and assembly operations for A.Y. {CURRENT_ACADEMIC_YEAR}.
+                </p>
+              </div>
+              <PrimaryButton
+                href="/website-assets/constitution-and-by-laws-of-selens.pdf"
+                download
+                className="gap-2 shrink-0 min-h-[44px]"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download constitution (PDF)</span>
+              </PrimaryButton>
+            </Card>
+          </Reveal>
         </Section>
       </div>
     </div>
