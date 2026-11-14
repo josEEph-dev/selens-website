@@ -1,27 +1,35 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot } from './ui'
+import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Waveform } from './ui'
 
 export { SectionBadge, SectionHeading, FeatureCard, PhotoSlot }
 
 /**
  * Standardized PageHeader for all inner pages:
- * - Serif H1 (sentence case)
- * - One-sentence white intro
- * - 1px selens-line divider
- * - Subtle radial header glow
+ * - Left-aligned serif H1 with short yellow bar
+ * - Description
+ * - Hairline bottom border
+ * - Faint waveform accent (hero SVG at low opacity) + subtle radial glow
+ * Props unchanged: { title, description, action }
  */
 export function PageHeader({ title, description, action }) {
   return (
-    <div className="border-b border-selens-line pb-8 pt-10 sm:pt-14 selens-header-glow">
-      <div className="selens-container flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div className="space-y-2.5">
-          <h1 className="font-serif selens-fluid-h1 font-bold text-selens-white tracking-tight">
+    <div className="relative overflow-hidden border-b border-selens-line bg-selens-black selens-header-glow">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <Waveform intensity={0.45} />
+        <div
+          className="absolute inset-x-0 bottom-0 h-16"
+          style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, #000000 100%)' }}
+        />
+      </div>
+      <div className="relative selens-container pt-12 pb-10 sm:pt-16 sm:pb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+        <div className="min-w-0 max-w-3xl">
+          <h1 className="font-serif selens-fluid-h1 font-bold text-selens-white break-words">
             {title}
           </h1>
-          <div className="w-12 h-1 bg-selens-yellow" aria-hidden="true" />
+          <div className="w-12 h-1 bg-selens-yellow mt-3" aria-hidden="true" />
           {description && (
-            <p className="text-base text-neutral-300 font-sans max-w-2xl leading-relaxed pt-1">
+            <p className="text-base sm:text-lg text-neutral-300 font-sans max-w-2xl leading-relaxed mt-4">
               {description}
             </p>
           )}

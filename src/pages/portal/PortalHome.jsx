@@ -64,8 +64,8 @@ export default function PortalHome() {
           description="Access your SELENS student account, services, and upcoming digital tools."
         />
 
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-14 flex justify-center">
-          <Card className="max-w-xl w-full space-y-6 p-8" hover={false}>
+        <div className="selens-container py-14 flex justify-center">
+          <Card className="max-w-xl w-full space-y-6 p-6 sm:p-8" hover={false}>
             <div className="space-y-3">
               <h2 className="font-serif text-2xl font-bold text-selens-white">
                 Welcome to the SELENS Student Portal
@@ -76,10 +76,10 @@ export default function PortalHome() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <PrimaryButton to="/portal/signin" className="justify-center">
+              <PrimaryButton to="/portal/signin" className="justify-center min-h-[44px]">
                 Sign in
               </PrimaryButton>
-              <SecondaryButton to="/portal/signup" className="justify-center">
+              <SecondaryButton to="/portal/signup" className="justify-center min-h-[44px]">
                 Create account
               </SecondaryButton>
             </div>
@@ -116,7 +116,7 @@ export default function PortalHome() {
             {isOfficer && (
               <Link
                 to="/dashboard"
-                className="inline-flex items-center justify-center rounded-[4px] bg-selens-yellow px-4 py-2 text-sm font-sans font-semibold text-selens-black hover:bg-selens-yellow/90 transition"
+                className="min-h-[44px] inline-flex items-center justify-center rounded-[4px] bg-selens-yellow px-4 py-2 text-sm font-sans font-bold text-selens-black hover:bg-selens-white transition-colors"
               >
                 Officer Dashboard
               </Link>
@@ -124,7 +124,7 @@ export default function PortalHome() {
             <button
               type="button"
               onClick={signOut}
-              className="inline-flex items-center justify-center rounded-[4px] border border-selens-line bg-selens-ink px-4 py-2 text-sm font-sans font-medium text-selens-white hover:border-selens-yellow transition cursor-pointer"
+              className="min-h-[44px] inline-flex items-center justify-center rounded-[4px] border border-selens-line bg-selens-ink px-4 py-2 text-sm font-sans font-semibold text-selens-white hover:border-selens-yellow hover:text-selens-yellow transition-colors cursor-pointer"
             >
               Sign out
             </button>
@@ -132,10 +132,10 @@ export default function PortalHome() {
         }
       />
 
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-10 space-y-8">
+      <div className="selens-container py-10 space-y-8">
         <Card hover={false} className="space-y-4">
           <div className="space-y-1">
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-selens-white">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-selens-white break-words">
               Welcome, {displayName}
             </h2>
             <div className="w-12 h-1 bg-selens-yellow" />
@@ -157,13 +157,13 @@ export default function PortalHome() {
           </div>
         </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 auto-rows-fr gap-6">
           {PORTAL_CARDS.map((item) => (
-            <Card key={item.title} hover={false} className="flex flex-col justify-between space-y-4">
+            <Card key={item.title} hover={false} className="h-full flex flex-col justify-between space-y-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between gap-2">
                   <h3 className="font-serif text-xl font-bold text-selens-white">{item.title}</h3>
-                  <span className="inline-block rounded-[4px] border border-selens-yellow px-2.5 py-0.5 text-xs font-sans font-semibold text-selens-yellow">
+                  <span className="inline-block shrink-0 rounded-[4px] border border-selens-yellow px-2.5 py-0.5 text-xs font-sans font-semibold text-selens-yellow">
                     {item.badge}
                   </span>
                 </div>

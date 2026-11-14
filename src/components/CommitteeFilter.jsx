@@ -28,80 +28,72 @@ export default function CommitteeFilter({
   const legislativeCommittees = COMMITTEE_GROUPS['Legislative'] || []
 
   return (
-    <div className={`space-y-3 ${className}`}>
+    <div className={`space-y-3 min-w-0 ${className}`}>
       {/* First row: Group chips */}
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs uppercase tracking-wider text-neutral-400 font-semibold mr-1">
-          Group:
+      <div className="space-y-1.5 sm:space-y-0 sm:flex sm:items-center sm:gap-3">
+        <span className="text-xs font-semibold text-neutral-400 block sm:inline shrink-0">
+          Group
         </span>
-        <button
-          onClick={() => {
-            onGroupChange('all')
-            onCommitteeChange('all')
-          }}
-          className={`px-3 py-1.5 text-xs font-semibold rounded-[4px] transition ${
-            selectedGroup === 'all'
-              ? 'bg-selens-yellow text-selens-black'
-              : 'bg-selens-ink border border-selens-line text-neutral-300 hover:border-selens-yellow hover:text-selens-yellow'
-          }`}
-        >
-          All ({items.length})
-        </button>
+        <div className="selens-chip-row" role="group" aria-label="Filter by group">
+          <button
+            type="button"
+            aria-pressed={selectedGroup === 'all'}
+            onClick={() => {
+              onGroupChange('all')
+              onCommitteeChange('all')
+            }}
+            className="selens-chip"
+          >
+            All ({items.length})
+          </button>
 
-        {visibleGroups.map((group) => {
-          const isActive = selectedGroup === group
-          return (
+          {visibleGroups.map((group) => (
             <button
               key={group}
+              type="button"
+              aria-pressed={selectedGroup === group}
               onClick={() => {
                 onGroupChange(group)
                 onCommitteeChange('all')
               }}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-[4px] transition ${
-                isActive
-                  ? 'bg-selens-yellow text-selens-black'
-                  : 'bg-selens-ink border border-selens-line text-neutral-300 hover:border-selens-yellow hover:text-selens-yellow'
-              }`}
+              className="selens-chip"
             >
               {group} ({groupCounts[group]})
             </button>
-          )
-        })}
+          ))}
+        </div>
       </div>
 
       {/* Second row: Legislative committees if Legislative is selected */}
       {selectedGroup === 'Legislative' && (
-        <div className="flex flex-wrap items-center gap-1.5 pl-2 sm:pl-4 border-l-2 border-selens-yellow/60 pt-1">
-          <span className="text-[11px] uppercase tracking-wider text-neutral-400 font-semibold mr-1">
-            Committees:
+        <div className="space-y-1.5 sm:space-y-0 sm:flex sm:items-center sm:gap-3 sm:pl-4 sm:border-l-2 sm:border-selens-yellow/60">
+          <span className="text-xs font-semibold text-neutral-400 block sm:inline shrink-0">
+            Committees
           </span>
-          <button
-            onClick={() => onCommitteeChange('all')}
-            className={`px-2.5 py-1 text-[11px] font-semibold rounded-[4px] transition ${
-              selectedCommittee === 'all'
-                ? 'bg-selens-yellow text-selens-black'
-                : 'bg-selens-ink border border-selens-line text-neutral-300 hover:border-selens-yellow hover:text-selens-yellow'
-            }`}
-          >
-            All Legislative
-          </button>
-          {legislativeCommittees.map((comm) => {
-            const count = items.filter((item) => item.committee === comm).length
-            const isCommActive = selectedCommittee === comm
-            return (
-              <button
-                key={comm}
-                onClick={() => onCommitteeChange(comm)}
-                className={`px-2.5 py-1 text-[11px] font-semibold rounded-[4px] transition ${
-                  isCommActive
-                    ? 'bg-selens-yellow text-selens-black'
-                    : 'bg-selens-ink border border-selens-line text-neutral-300 hover:border-selens-yellow hover:text-selens-yellow'
-                }`}
-              >
-                {comm} {count > 0 && `(${count})`}
-              </button>
-            )
-          })}
+          <div className="selens-chip-row" role="group" aria-label="Filter by committee">
+            <button
+              type="button"
+              aria-pressed={selectedCommittee === 'all'}
+              onClick={() => onCommitteeChange('all')}
+              className="selens-chip"
+            >
+              All Legislative
+            </button>
+            {legislativeCommittees.map((comm) => {
+              const count = items.filter((item) => item.committee === comm).length
+              return (
+                <button
+                  key={comm}
+                  type="button"
+                  aria-pressed={selectedCommittee === comm}
+                  onClick={() => onCommitteeChange(comm)}
+                  className="selens-chip"
+                >
+                  {comm} {count > 0 && `(${count})`}
+                </button>
+              )
+            })}
+          </div>
         </div>
       )}
     </div>

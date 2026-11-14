@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { PageHeader, Card } from '../components/SharedUI'
-import { ChevronDown, Search, HelpCircle } from 'lucide-react'
+import { PageHeader } from '../components/SharedUI'
+import { ChevronDown, Search } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR } from '../lib/config'
 
 export default function Faq() {
@@ -35,7 +35,9 @@ export default function Faq() {
       }
     }
     load()
-    return () => { ignore = true }
+    return () => {
+      ignore = true
+    }
   }, [])
 
   const filtered = faqs.filter((f) => {
@@ -52,16 +54,20 @@ export default function Faq() {
         description={`Find answers to common questions about membership, borrowing lab tools, requesting documents, and joining events for A.Y. ${CURRENT_ACADEMIC_YEAR}.`}
       />
 
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-8">
+      <div className="selens-container py-12 sm:py-16 space-y-8">
         {/* Search */}
-        <div className="relative">
-          <Search className="w-5 h-5 text-neutral-400 absolute left-4 top-1/2 -translate-y-1/2" />
+        <div className="relative max-w-2xl">
+          <Search
+            className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+            aria-hidden="true"
+          />
           <input
-            type="text"
+            type="search"
+            aria-label="Search questions"
             placeholder="Search questions (e.g., membership, documents, events)..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-selens-ink border border-selens-line rounded-[4px] text-sm text-selens-white placeholder:text-neutral-400 focus:outline-none focus:border-selens-yellow transition font-sans"
+            className="selens-input pl-10 bg-selens-ink"
           />
         </div>
 
@@ -69,7 +75,10 @@ export default function Faq() {
         {loading ? (
           <div className="space-y-3">
             {[1, 2, 3].map((n) => (
-              <div key={n} className="h-20 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
+              <div
+                key={n}
+                className="h-20 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse"
+              />
             ))}
           </div>
         ) : error ? (
@@ -83,24 +92,20 @@ export default function Faq() {
               : `No questions match "${search}". Try searching another keyword.`}
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="divide-y divide-selens-line border border-selens-line rounded-[4px] bg-selens-ink overflow-hidden">
             {filtered.map((faq) => {
               const isOpen = openId === faq.id
               return (
-                <Card
-                  key={faq.id}
-                  className="overflow-hidden transition p-0"
-                >
+                <div key={faq.id} className="transition-colors">
                   <button
+                    type="button"
+                    aria-expanded={isOpen}
                     onClick={() => setOpenId(isOpen ? null : faq.id)}
-                    className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-selens-ink/60 transition"
+                    className="w-full min-h-[56px] px-5 py-4 text-left flex items-center justify-between gap-4 hover:bg-selens-elevated transition-colors cursor-pointer"
                   >
-                    <div className="flex items-center gap-3">
-                      <HelpCircle className="w-5 h-5 text-selens-yellow shrink-0" />
-                      <span className="font-serif font-bold text-base sm:text-lg text-selens-white">
-                        {faq.question}
-                      </span>
-                    </div>
+                    <span className="font-serif font-bold text-base sm:text-lg text-selens-white break-words">
+                      {faq.question}
+                    </span>
                     <ChevronDown
                       className={`w-5 h-5 text-neutral-400 shrink-0 transition-transform duration-200 ${
                         isOpen ? 'rotate-180 text-selens-yellow' : ''
@@ -109,11 +114,11 @@ export default function Faq() {
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-sm text-neutral-300 font-sans leading-relaxed border-t border-selens-line whitespace-pre-line">
+                    <div className="px-5 pb-5 pt-3 text-sm sm:text-base text-neutral-300 font-sans leading-relaxed border-t border-selens-line/70 bg-selens-black/40 whitespace-pre-line max-w-prose">
                       {faq.answer}
                     </div>
                   )}
-                </Card>
+                </div>
               )
             })}
           </div>

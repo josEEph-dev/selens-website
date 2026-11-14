@@ -1,4 +1,4 @@
-import { PageHeader, Section, Card, PrimaryButton } from '../components/SharedUI'
+import { PageHeader, Section, Card, PrimaryButton, PhotoSlot } from '../components/SharedUI'
 import { Download } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR } from '../lib/config'
 
@@ -31,22 +31,32 @@ export default function About() {
         description="The Society of Electrical Engineering Students (SELENS) is the official student organization of Electrical Engineering at Mindanao State University - General Santos."
       />
 
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-16">
-        {/* Preamble */}
-        <Section title="Constitutional preamble">
-          <blockquote className="font-serif italic text-base sm:text-lg text-selens-white border-l-4 border-selens-yellow pl-6 py-3 leading-relaxed bg-selens-ink rounded-[4px] border border-selens-line border-l-selens-yellow">
-            &ldquo;We, the Electrical Engineering students of Mindanao State University - General Santos, in order to establish an organization that shall embody our ideals, foster academic excellence, promote technical innovation and ethical responsibility, protect member rights and welfare, and contribute to community development, do hereby establish this Constitution and By-Laws.&rdquo;
-          </blockquote>
+      <div className="selens-container py-12 sm:py-16 space-y-16">
+        {/* Preamble + PhotoSlot (two-column editorial layout) */}
+        <Section id="mission" title="Constitutional preamble">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+            <div className="lg:col-span-7">
+              <blockquote className="font-serif italic text-base sm:text-lg text-selens-white border-l-4 border-selens-yellow pl-6 py-4 pr-6 leading-relaxed bg-selens-ink rounded-[4px] border border-selens-line border-l-selens-yellow">
+                &ldquo;We, the Electrical Engineering students of Mindanao State University - General Santos, in order to establish an organization that shall embody our ideals, foster academic excellence, promote technical innovation and ethical responsibility, protect member rights and welfare, and contribute to community development, do hereby establish this Constitution and By-Laws.&rdquo;
+              </blockquote>
+            </div>
+            <div className="lg:col-span-5">
+              <PhotoSlot
+                aspect="4/3"
+                caption="[CONFIRM: College of Engineering or SELENS general assembly photo]"
+              />
+            </div>
+          </div>
         </Section>
 
-        {/* Objectives as Cards with 01, 02, 03 */}
+        {/* Objectives as Equal-Height Cards with 01, 02, 03 */}
         <Section
           title="Our core objectives"
           description="Three central pillars guide our initiatives, events, and member programs throughout the academic year."
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 auto-rows-fr gap-6">
             {objectives.map((obj) => (
-              <Card key={obj.numeral} className="space-y-4 flex flex-col justify-between">
+              <Card key={obj.numeral} className="h-full space-y-4 flex flex-col justify-between">
                 <div className="space-y-3">
                   <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
                     {obj.numeral}
@@ -68,7 +78,7 @@ export default function About() {
           title="Governing documents"
           description="Read our constitution and bylaws to understand organizational structure, membership rights, and election procedures."
         >
-          <Card className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-8">
+          <Card className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-6 sm:p-8">
             <div className="space-y-1.5 max-w-xl">
               <h3 className="font-serif font-bold text-lg text-selens-white">
                 SELENS Constitution &amp; By-Laws
@@ -80,7 +90,7 @@ export default function About() {
             <PrimaryButton
               href="/website-assets/constitution-and-by-laws-of-selens.pdf"
               download
-              className="gap-2 shrink-0"
+              className="gap-2 shrink-0 min-h-[44px]"
             >
               <Download className="w-4 h-4" />
               <span>Download constitution (PDF)</span>

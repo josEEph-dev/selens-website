@@ -46,7 +46,7 @@ export default function Login() {
         description="Sign in with your officer credentials to manage organization content and records."
       />
 
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16 flex justify-center">
+      <div className="selens-container py-12 sm:py-16 flex justify-center">
         <div className="w-full max-w-md space-y-6">
           <Card className="p-6 sm:p-8 space-y-6" hover={false}>
             {user ? (
@@ -58,7 +58,7 @@ export default function Login() {
                   <h2 className="font-serif font-bold text-xl text-selens-white">
                     Signed in as {profile?.full_name || 'Officer'}
                   </h2>
-                  <p className="text-sm text-neutral-300 font-sans">
+                  <p className="text-sm text-neutral-300 font-sans break-all">
                     {profile?.email}
                   </p>
                 </div>
@@ -73,13 +73,13 @@ export default function Login() {
                 <div className="flex flex-col gap-3 pt-2">
                   <PrimaryButton
                     onClick={() => navigate('/dashboard')}
-                    className="w-full"
+                    className="w-full min-h-[44px]"
                   >
                     Go to Dashboard
                   </PrimaryButton>
                   <SecondaryButton
                     onClick={signOut}
-                    className="w-full text-red-400 border-red-500/40 hover:border-red-400 hover:text-red-300"
+                    className="w-full min-h-[44px] text-red-400 border-red-500/40 hover:border-red-400 hover:text-red-300"
                   >
                     Sign out
                   </SecondaryButton>
@@ -88,7 +88,10 @@ export default function Login() {
             ) : (
               <div className="space-y-6">
                 {error && (
-                  <div className="p-4 bg-red-950/40 border border-red-700/50 rounded-[4px] flex items-start gap-3 text-sm text-red-200">
+                  <div
+                    role="alert"
+                    className="p-4 bg-red-950/30 border border-red-500/60 rounded-[4px] flex items-start gap-3 text-sm text-red-200 leading-relaxed"
+                  >
                     <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-red-400" />
                     <span>{error}</span>
                   </div>
@@ -96,37 +99,41 @@ export default function Login() {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-1.5">
-                    <label className="block text-sm font-semibold text-selens-white">
+                    <label htmlFor="officer-email" className="block text-sm font-semibold text-selens-white">
                       Officer email address
                     </label>
                     <input
+                      id="officer-email"
                       type="email"
                       required
+                      aria-invalid={Boolean(error)}
                       placeholder="e.g. officer@msugensan.edu.ph"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-selens-black border border-selens-line rounded-[4px] text-sm text-selens-white placeholder:text-neutral-500 focus:outline-none focus:border-selens-yellow transition font-sans"
+                      className="selens-input font-sans"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="block text-sm font-semibold text-selens-white">
+                    <label htmlFor="officer-password" className="block text-sm font-semibold text-selens-white">
                       Password
                     </label>
                     <input
+                      id="officer-password"
                       type="password"
                       required
+                      aria-invalid={Boolean(error)}
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-selens-black border border-selens-line rounded-[4px] text-sm text-selens-white placeholder:text-neutral-500 focus:outline-none focus:border-selens-yellow transition font-sans"
+                      className="selens-input font-sans"
                     />
                   </div>
 
                   <PrimaryButton
                     type="submit"
                     disabled={loading}
-                    className="w-full gap-2 mt-2"
+                    className="w-full min-h-[44px] gap-2 mt-2"
                   >
                     <LogIn className="w-4 h-4" />
                     <span>{loading ? 'Signing in...' : 'Sign in'}</span>

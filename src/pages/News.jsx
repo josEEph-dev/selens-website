@@ -2,9 +2,10 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { PageHeader } from '../components/SharedUI'
+import { ImageFrame } from '../components/ui'
 import YearSelector from '../components/YearSelector'
 import CommitteeFilter from '../components/CommitteeFilter'
-import { ArrowRight, Newspaper, Archive } from 'lucide-react'
+import { ArrowRight, Archive } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR, getGroupForCommittee, formatCommitteeLabel } from '../lib/config'
 
 // initialCategory prop is passed by the /news/student-activities route alias
@@ -118,27 +119,24 @@ export default function News({ initialCategory } = {}) {
         description="Latest announcements, academic events, and student activities from the Society of Electrical Engineering Students."
       />
 
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-8">
+      <div className="selens-container py-12 sm:py-16 space-y-8">
         {/* Filter tabs and Year Selector */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-selens-line pb-4">
-          <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-selens-line pb-5">
+          <nav className="selens-chip-row" aria-label="News categories">
             {TABS.map((tab) => {
               const isActive = currentCategory === tab.id
               return (
                 <Link
                   key={tab.id}
                   to={tab.path}
-                  className={`px-4 py-2 text-sm font-semibold rounded-[4px] transition ${
-                    isActive
-                      ? 'bg-selens-yellow text-selens-black'
-                      : 'bg-selens-ink border border-selens-line text-neutral-300 hover:border-selens-yellow hover:text-selens-yellow'
-                  }`}
+                  aria-current={isActive ? 'page' : undefined}
+                  className="selens-chip"
                 >
                   {tab.label}
                 </Link>
               )
             })}
-          </div>
+          </nav>
 
           <YearSelector
             years={availableYears}
@@ -158,14 +156,14 @@ export default function News({ initialCategory } = {}) {
 
         {/* Archive notice header if past year */}
         {isArchive && (
-          <div className="p-3.5 bg-selens-ink border border-selens-line rounded-[4px] flex items-center justify-between text-xs text-neutral-300">
+          <div className="p-3.5 bg-selens-ink border border-selens-line rounded-[4px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-neutral-300">
             <span className="flex items-center gap-2">
               <Archive className="w-4 h-4 text-selens-yellow shrink-0" />
               <span>Viewing archive records for <strong>A.Y. {selectedYear}</strong></span>
             </span>
             <button
               onClick={() => setSelectedYear(CURRENT_ACADEMIC_YEAR)}
-              className="text-selens-yellow hover:underline font-semibold"
+              className="min-h-[44px] sm:min-h-0 text-left text-selens-yellow hover:underline font-semibold"
             >
               Back to current A.Y. {CURRENT_ACADEMIC_YEAR}
             </button>
@@ -205,77 +203,68 @@ export default function News({ initialCategory } = {}) {
             No news items matching the selected committee filter.
           </div>
         ) : (
-          <div className="divide-y divide-selens-line border-y border-selens-line bg-selens-black rounded-[4px]">
+          <div className="divide-y divide-selens-line border-y border-selens-line">
             {filteredNews.map((item) => (
               <article
                 key={item.id}
-                className="p-5 sm:p-6 hover:bg-selens-ink transition flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+                className="py-5 sm:py-6 sm:px-3 hover:bg-selens-ink/70 transition-colors grid grid-cols-1 sm:grid-cols-[11rem_minmax(0,1fr)] md:grid-cols-[13rem_minmax(0,1fr)_auto] gap-4 sm:gap-6 items-start md:items-center group"
               >
-                <div className="flex items-start gap-4 flex-grow">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-900 rounded-[4px] overflow-hidden shrink-0 hidden sm:block border border-selens-line">
-                    {item.thumbnail_url ? (
-                      <img
-                        src={item.thumbnail_url}
-                        alt=""
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-300 opacity-90"
-                      />
+                <Link
+                  to={`/news/${item.slug}`}
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  className="hidden sm:block rounded-[4px] overflow-hidden border border-selens-line"
+                >
+                  <ImageFrame src={item.thumbnail_url} className="border-b-0" />
+                </Link>
+
+                <div className="min-w-0 space-y-1.5">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-400 font-sans">
+                    {item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR && (
+                      <span className="text-[11px] font-semibold text-neutral-400 bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px]">
+                        Archive: A.Y. {item.academic_year}
+                      </span>
+                    )}
+                    {item.committee && (
+                      <span className="text-[11px] font-semibold text-selens-yellow bg-selens-ink border border-selens-line px-2 py-0.5 rounded-[2px]">
+                        {formatCommitteeLabel(item.committee)}
+                      </span>
+                    )}
+                    {item.published_at ? (
+                      <time dateTime={item.published_at}>
+                        {new Date(item.published_at).toLocaleDateString('en-US', {
+                          month: 'long',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                        {' · '}
+                        {new Date(item.published_at).toLocaleTimeString('en-US', {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                        })}
+                      </time>
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-selens-black text-neutral-600">
-                        <Newspaper className="w-6 h-6 text-neutral-600" />
-                      </div>
+                      <span>Recent announcement</span>
                     )}
                   </div>
 
-                  <div className="space-y-1.5">
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-400 font-sans">
-                      {item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR && (
-                        <span className="text-[11px] font-semibold text-neutral-400 bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px]">
-                          Archive: A.Y. {item.academic_year}
-                        </span>
-                      )}
-                      {item.committee && (
-                        <span className="text-[11px] font-semibold text-selens-yellow bg-selens-ink border border-selens-line px-2 py-0.5 rounded-[2px]">
-                          {formatCommitteeLabel(item.committee)}
-                        </span>
-                      )}
-                      {item.published_at ? (
-                        <>
-                          <span>
-                            {new Date(item.published_at).toLocaleDateString('en-US', {
-                              month: 'long',
-                              day: 'numeric',
-                              year: 'numeric',
-                            })}
-                          </span>
-                          <span className="text-neutral-600">•</span>
-                          <span>
-                            {new Date(item.published_at).toLocaleTimeString('en-US', {
-                              hour: 'numeric',
-                              minute: '2-digit',
-                            })}
-                          </span>
-                        </>
-                      ) : (
-                        <span>Recent announcement</span>
-                      )}
-                    </div>
+                  <h2 className="font-serif selens-fluid-h3 font-bold text-selens-white group-hover:text-selens-yellow transition-colors line-clamp-2 break-words">
+                    <Link to={`/news/${item.slug}`}>
+                      {item.title}
+                    </Link>
+                  </h2>
 
-                    <h2 className="font-serif text-lg font-bold text-selens-white group-hover:text-selens-yellow transition leading-snug">
-                      <Link to={`/news/${item.slug}`}>
-                        {item.title}
-                      </Link>
-                    </h2>
-
-                    <p className="text-sm text-neutral-300 line-clamp-1 leading-relaxed">
+                  {item.excerpt && (
+                    <p className="text-sm text-neutral-300 line-clamp-2 leading-relaxed">
                       {item.excerpt}
                     </p>
-                  </div>
+                  )}
                 </div>
 
-                <div className="shrink-0 self-end sm:self-center">
+                <div className="sm:col-start-2 md:col-start-auto shrink-0">
                   <Link
                     to={`/news/${item.slug}`}
-                    className="text-xs font-semibold text-selens-yellow group-hover:text-selens-white flex items-center gap-1 transition"
+                    className="min-h-[44px] md:min-h-0 text-xs font-semibold text-selens-yellow group-hover:text-selens-white inline-flex items-center gap-1 transition-colors"
                   >
                     <span>Read update</span>
                     <ArrowRight className="w-3.5 h-3.5" />

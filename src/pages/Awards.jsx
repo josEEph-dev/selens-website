@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { PageHeader, Card, Section } from '../components/SharedUI'
+import { PageHeader, Section } from '../components/SharedUI'
+import { ImageFrame } from '../components/ui'
 import YearSelector from '../components/YearSelector'
-import { Calendar, Building, Award as AwardIcon, Archive } from 'lucide-react'
+import { Calendar, Building, Archive } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR } from '../lib/config'
 
 export default function Awards() {
@@ -75,8 +76,8 @@ export default function Awards() {
         description="Recognitions, institutional rankings, and chapter citations awarded to the Society of Electrical Engineering Students."
       />
 
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-10">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-selens-line pb-4">
+      <div className="selens-container py-12 sm:py-16 space-y-10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-selens-line pb-5">
           <span className="text-sm text-neutral-400 font-serif">
             Honors Registry
           </span>
@@ -88,7 +89,7 @@ export default function Awards() {
         </div>
 
         {isArchive && (
-          <div className="p-3.5 bg-selens-ink border border-selens-line rounded-[4px] flex items-center justify-between text-xs text-neutral-300">
+          <div className="p-3.5 bg-selens-ink border border-selens-line rounded-[4px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-neutral-300">
             <span className="flex items-center gap-2">
               <Archive className="w-4 h-4 text-selens-yellow shrink-0" />
               <span>Viewing awards archive for <strong>A.Y. {selectedYear}</strong></span>
@@ -132,41 +133,18 @@ export default function Awards() {
           </div>
         ) : (
           <Section title="Institutional Honors &amp; Citations">
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-5 sm:gap-6">
               {awards.map((award) => (
-                <Card
-                  key={award.id}
-                  className="p-6 flex flex-col sm:flex-row sm:items-start justify-between gap-6"
-                >
-                  <div className="space-y-2 flex-grow">
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-400">
-                      {award.academic_year && award.academic_year !== CURRENT_ACADEMIC_YEAR && (
-                        <span className="text-[11px] font-semibold text-neutral-400 bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px]">
-                          Archive: A.Y. {award.academic_year}
-                        </span>
-                      )}
-                      {award.date_awarded && (
-                        <>
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-3.5 h-3.5 text-selens-yellow shrink-0" />
-                            <span>
-                              {new Date(award.date_awarded).toLocaleDateString('en-US', {
-                                month: 'long',
-                                year: 'numeric',
-                              })}
-                            </span>
-                          </span>
-                          <span>•</span>
-                        </>
-                      )}
-                      {award.awarding_body && (
-                        <span className="flex items-center gap-1">
-                          <Building className="w-3.5 h-3.5 text-selens-yellow shrink-0" />
-                          <span>{award.awarding_body}</span>
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="font-serif font-bold text-lg text-selens-white">
+                <article key={award.id} className="selens-card h-full overflow-hidden flex flex-col">
+                  <ImageFrame src={award.image_url} alt={award.title} fit="contain" />
+
+                  <div className="flex-1 p-5 flex flex-col gap-2.5">
+                    {award.academic_year && award.academic_year !== CURRENT_ACADEMIC_YEAR && (
+                      <span className="self-start text-[11px] font-semibold text-neutral-400 bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px]">
+                        Archive: A.Y. {award.academic_year}
+                      </span>
+                    )}
+                    <h3 className="font-serif selens-fluid-h3 font-bold text-selens-white line-clamp-2 min-h-[2.7em] break-words">
                       {award.title}
                     </h3>
                     {award.description && (
@@ -174,19 +152,30 @@ export default function Awards() {
                         {award.description}
                       </p>
                     )}
+
+                    {(award.date_awarded || award.awarding_body) && (
+                      <div className="mt-auto pt-3 border-t border-selens-line space-y-1 text-xs text-neutral-400">
+                        {award.awarding_body && (
+                          <p className="flex items-start gap-1.5 min-w-0">
+                            <Building className="w-3.5 h-3.5 mt-px text-selens-yellow shrink-0" aria-hidden="true" />
+                            <span className="line-clamp-2 break-words">{award.awarding_body}</span>
+                          </p>
+                        )}
+                        {award.date_awarded && (
+                          <p className="flex items-center gap-1.5">
+                            <Calendar className="w-3.5 h-3.5 text-selens-yellow shrink-0" aria-hidden="true" />
+                            <time dateTime={award.date_awarded}>
+                              {new Date(award.date_awarded).toLocaleDateString('en-US', {
+                                month: 'long',
+                                year: 'numeric',
+                              })}
+                            </time>
+                          </p>
+                        )}
+                      </div>
+                    )}
                   </div>
-                  {award.image_url ? (
-                    <img
-                      src={award.image_url}
-                      alt={award.title}
-                      className="w-20 h-20 object-contain rounded-[4px] border border-selens-line shrink-0"
-                    />
-                  ) : (
-                    <div className="w-20 h-20 rounded-[4px] border border-selens-line bg-selens-ink flex items-center justify-center shrink-0 text-selens-yellow">
-                      <AwardIcon className="w-8 h-8 opacity-70" />
-                    </div>
-                  )}
-                </Card>
+                </article>
               ))}
             </div>
           </Section>

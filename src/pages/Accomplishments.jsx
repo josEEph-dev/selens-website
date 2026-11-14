@@ -4,7 +4,8 @@ import { supabase } from '../lib/supabaseClient'
 import { PageHeader } from '../components/SharedUI'
 import YearSelector from '../components/YearSelector'
 import CommitteeFilter from '../components/CommitteeFilter'
-import { ArrowRight, Trophy, Calendar, Archive } from 'lucide-react'
+import { ArrowRight, Archive } from 'lucide-react'
+import { ImageFrame } from '../components/ui'
 import { CURRENT_ACADEMIC_YEAR, getGroupForCommittee, formatCommitteeLabel } from '../lib/config'
 
 const CATEGORIES = [
@@ -119,21 +120,19 @@ export default function Accomplishments() {
         description="Celebrating student milestones, competition wins, community outreach initiatives, and organizational achievements."
       />
 
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-8">
+      <div className="selens-container py-12 sm:py-16 space-y-8">
         {/* Category filters & Year selector */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-selens-line pb-4">
-          <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-selens-line pb-5">
+          <div className="selens-chip-row" role="group" aria-label="Filter by category">
             {CATEGORIES.map((tab) => {
               const isActive = category === tab.id
               return (
                 <button
                   key={tab.id}
                   onClick={() => setCategory(tab.id)}
-                  className={`px-3.5 py-1.5 text-xs font-semibold rounded-[4px] transition ${
-                    isActive
-                      ? 'bg-selens-yellow text-selens-black'
-                      : 'bg-selens-ink border border-selens-line text-neutral-300 hover:border-selens-yellow hover:text-selens-yellow'
-                  }`}
+                  type="button"
+                  aria-pressed={isActive}
+                  className="selens-chip"
                 >
                   {tab.label}
                 </button>
@@ -158,7 +157,7 @@ export default function Accomplishments() {
         />
 
         {isArchive && (
-          <div className="p-3.5 bg-selens-ink border border-selens-line rounded-[4px] flex items-center justify-between text-xs text-neutral-300">
+          <div className="p-3.5 bg-selens-ink border border-selens-line rounded-[4px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-neutral-300">
             <span className="flex items-center gap-2">
               <Archive className="w-4 h-4 text-selens-yellow shrink-0" />
               <span>Viewing accomplishments archive for <strong>A.Y. {selectedYear}</strong></span>
@@ -205,79 +204,59 @@ export default function Accomplishments() {
             No accomplishments matching the selected committee filter.
           </div>
         ) : (
-          <div className="divide-y divide-selens-line border-y border-selens-line bg-selens-black rounded-[4px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-5 sm:gap-6">
             {filteredItems.map((item) => (
-              <article
+              <Link
                 key={item.id}
-                className="p-5 sm:p-6 hover:bg-selens-ink transition flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+                to={`/accomplishments/${item.slug}`}
+                className="selens-card h-full overflow-hidden flex flex-col group"
               >
-                <div className="flex items-start gap-4 flex-grow">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-900 rounded-[4px] overflow-hidden shrink-0 hidden sm:block border border-selens-line">
-                    {item.image_url ? (
-                      <img
-                        src={item.image_url}
-                        alt=""
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-300 opacity-90"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-selens-black text-neutral-600">
-                        <Trophy className="w-6 h-6 text-neutral-600" />
-                      </div>
+                <ImageFrame src={item.image_url} />
+
+                <div className="flex-1 p-5 flex flex-col gap-3">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-400 font-sans min-h-[1.375rem]">
+                    <span className="text-selens-yellow text-[11px] font-semibold">
+                      {formatCategoryLabel(item.category)}
+                    </span>
+                    {item.committee && (
+                      <span className="text-[11px] font-semibold text-neutral-300 bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px] truncate max-w-full">
+                        {formatCommitteeLabel(item.committee)}
+                      </span>
+                    )}
+                    {item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR && (
+                      <span className="text-[11px] font-semibold text-neutral-400 bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px]">
+                        Archive: A.Y. {item.academic_year}
+                      </span>
                     )}
                   </div>
 
-                  <div className="space-y-1.5">
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-400 font-sans">
-                      {item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR && (
-                        <span className="text-[11px] font-semibold text-neutral-400 bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px]">
-                          Archive: A.Y. {item.academic_year}
-                        </span>
-                      )}
-                      {item.committee && (
-                        <span className="text-[11px] font-semibold text-selens-yellow bg-selens-ink border border-selens-line px-2 py-0.5 rounded-[2px]">
-                          {formatCommitteeLabel(item.committee)}
-                        </span>
-                      )}
-                      {item.accomplished_on && (
-                        <span className="flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5 text-selens-yellow shrink-0" />
-                          <span>
-                            {new Date(item.accomplished_on).toLocaleDateString('en-US', {
-                              month: 'long',
-                              day: 'numeric',
-                              year: 'numeric',
-                            })}
-                          </span>
-                        </span>
-                      )}
-                      <span className="text-neutral-600">•</span>
-                      <span className="text-selens-yellow uppercase tracking-wider text-[11px] font-semibold">
-                        {formatCategoryLabel(item.category)}
-                      </span>
-                    </div>
+                  <h2 className="font-serif selens-fluid-h3 font-bold text-selens-white group-hover:text-selens-yellow transition-colors line-clamp-2 min-h-[2.7em] break-words">
+                    {item.title}
+                  </h2>
 
-                    <h2 className="font-serif text-lg font-bold text-selens-white group-hover:text-selens-yellow transition leading-snug">
-                      <Link to={`/accomplishments/${item.slug}`}>
-                        {item.title}
-                      </Link>
-                    </h2>
+                  <p className="text-sm text-neutral-300 line-clamp-3 leading-relaxed">
+                    {item.summary}
+                  </p>
 
-                    <p className="text-sm text-neutral-300 line-clamp-2 leading-relaxed">
-                      {item.summary}
-                    </p>
+                  <div className="mt-auto pt-3 border-t border-selens-line flex items-center justify-between gap-3 text-xs">
+                    {item.accomplished_on ? (
+                      <time dateTime={item.accomplished_on} className="text-neutral-400">
+                        {new Date(item.accomplished_on).toLocaleDateString('en-US', {
+                          month: 'long',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </time>
+                    ) : (
+                      <span />
+                    )}
+                    <span className="font-semibold text-selens-yellow inline-flex items-center gap-1 shrink-0">
+                      <span>Read details</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </span>
                   </div>
                 </div>
-
-                <div className="shrink-0 self-end sm:self-center">
-                  <Link
-                    to={`/accomplishments/${item.slug}`}
-                    className="text-xs font-semibold text-selens-yellow group-hover:text-selens-white flex items-center gap-1 transition"
-                  >
-                    <span>Read details</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </article>
+              </Link>
             ))}
           </div>
         )}

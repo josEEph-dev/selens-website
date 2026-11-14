@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { PageHeader, Card } from '../components/SharedUI'
+import { PageHeader } from '../components/SharedUI'
+import { ImageFrame } from '../components/ui'
 import YearSelector from '../components/YearSelector'
 import CommitteeFilter from '../components/CommitteeFilter'
-import { ExternalLink, Layers, Archive } from 'lucide-react'
+import { ExternalLink, Archive } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR, getGroupForCommittee, formatCommitteeLabel } from '../lib/config'
 
 export default function Projects() {
@@ -101,8 +102,8 @@ export default function Projects() {
         description="Explore the programs, resources, and community activities created and managed by the Society of Electrical Engineering Students."
       />
 
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-selens-line pb-4">
+      <div className="selens-container py-12 sm:py-16 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-selens-line pb-5">
           <span className="text-sm text-neutral-400 font-serif">
             Initiatives Registry
           </span>
@@ -123,7 +124,7 @@ export default function Projects() {
         />
 
         {isArchive && (
-          <div className="p-3.5 bg-selens-ink border border-selens-line rounded-[4px] flex items-center justify-between text-xs text-neutral-300">
+          <div className="p-3.5 bg-selens-ink border border-selens-line rounded-[4px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-neutral-300">
             <span className="flex items-center gap-2">
               <Archive className="w-4 h-4 text-selens-yellow shrink-0" />
               <span>Viewing projects archive for <strong>A.Y. {selectedYear}</strong></span>
@@ -173,68 +174,57 @@ export default function Projects() {
             No projects matching the selected committee filter.
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 auto-rows-fr gap-5 sm:gap-6">
             {filteredProjects.map((item) => (
-              <Card key={item.id} className="space-y-6 p-6 sm:p-8 overflow-hidden">
-                {/* Cover image or neutral placeholder */}
-                <div className="w-full aspect-[16/5] rounded-[4px] overflow-hidden border border-selens-line bg-selens-ink flex items-center justify-center">
-                  {item.cover_image_url ? (
-                    <img
-                      src={item.cover_image_url}
-                      alt={item.name}
-                      className="w-full h-full object-cover opacity-80"
-                    />
-                  ) : (
-                    <div className="flex flex-col items-center justify-center gap-2 text-neutral-500">
-                      <Layers className="w-8 h-8 text-neutral-600" />
-                      <span className="text-xs uppercase tracking-wider text-neutral-500 font-sans">SEES Project</span>
-                    </div>
-                  )}
-                </div>
+              <article key={item.id} className="selens-card h-full overflow-hidden flex flex-col">
+                <ImageFrame src={item.cover_image_url} alt={item.name} />
 
-                <div className="flex items-start gap-4">
-                  <div>
-                    <div className="flex flex-wrap items-center gap-3 mb-1">
+                <div className="flex-1 p-5 sm:p-6 flex flex-col gap-3">
+                  {(item.committee || item.status && item.status !== 'active' || (item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR)) && (
+                    <div className="flex flex-wrap items-center gap-2">
                       {item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR && (
                         <span className="text-[11px] font-semibold text-neutral-400 bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px]">
                           Archive: A.Y. {item.academic_year}
                         </span>
                       )}
                       {item.committee && (
-                        <span className="text-[11px] font-semibold text-selens-yellow bg-selens-ink border border-selens-line px-2 py-0.5 rounded-[2px]">
+                        <span className="text-[11px] font-semibold text-selens-yellow bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px]">
                           {formatCommitteeLabel(item.committee)}
                         </span>
                       )}
-                      <h2 className="font-serif font-bold text-xl sm:text-2xl text-selens-white">
-                        {item.name}
-                      </h2>
                       {item.status && item.status !== 'active' && (
-                        <span className="text-xs uppercase px-2.5 py-1 rounded-[4px] border border-selens-line text-neutral-400">
+                        <span className="text-[11px] font-semibold capitalize px-2 py-0.5 rounded-[2px] border border-selens-line text-neutral-400">
                           {item.status}
                         </span>
                       )}
                     </div>
-                    <p className="text-sm sm:text-base text-neutral-300 mt-2 leading-relaxed font-sans">
+                  )}
+
+                  <h2 className="font-serif selens-fluid-h3 font-bold text-selens-white line-clamp-2 break-words">
+                    {item.name}
+                  </h2>
+
+                  {item.description && (
+                    <p className="text-sm sm:text-base text-neutral-300 leading-relaxed font-sans">
                       {item.description}
                     </p>
-                  </div>
-                </div>
+                  )}
 
-                {/* External link */}
-                {item.link_url && (
-                  <div className="pt-4 border-t border-selens-line">
-                    <a
-                      href={item.link_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-selens-yellow hover:text-selens-white transition"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      <span>Learn more</span>
-                    </a>
-                  </div>
-                )}
-              </Card>
+                  {item.link_url && (
+                    <div className="mt-auto pt-3 border-t border-selens-line">
+                      <a
+                        href={item.link_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="min-h-[44px] inline-flex items-center gap-2 text-sm font-semibold text-selens-yellow hover:text-selens-white transition-colors"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        <span>Learn more</span>
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </article>
             ))}
           </div>
         )}

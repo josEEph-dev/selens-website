@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { Card, SecondaryButton } from '../components/SharedUI'
-import { ArrowLeft, Calendar, Tag, Newspaper } from 'lucide-react'
+import { ImageFrame } from '../components/ui'
+import { ArrowLeft, Calendar, Tag } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR, formatCommitteeLabel } from '../lib/config'
 
 export default function NewsDetail() {
@@ -34,13 +35,15 @@ export default function NewsDetail() {
       }
     }
     load()
-    return () => { ignore = true }
+    return () => {
+      ignore = true
+    }
   }, [slug])
 
   if (loading) {
     return (
       <div className="bg-selens-black text-selens-white min-h-screen py-16">
-        <div className="max-w-[800px] mx-auto px-4 sm:px-6 space-y-4">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-4">
           <div className="h-4 w-32 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
           <div className="h-10 w-3/4 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
           <div className="h-64 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
@@ -52,7 +55,7 @@ export default function NewsDetail() {
   if (error || !article) {
     return (
       <div className="bg-selens-black text-selens-white min-h-[70vh] flex items-center justify-center px-4 py-16">
-        <Card className="max-w-md w-full text-center space-y-4 py-10">
+        <Card hover={false} className="max-w-md w-full text-center space-y-4 py-10">
           <h2 className="font-serif font-bold text-xl text-selens-white">
             Article not found
           </h2>
@@ -87,11 +90,11 @@ export default function NewsDetail() {
   return (
     <div className="bg-selens-black text-selens-white min-h-screen">
       {/* Back link */}
-      <div className="border-b border-selens-line py-4">
-        <div className="max-w-[800px] mx-auto px-4 sm:px-6">
+      <div className="border-b border-selens-line bg-selens-surface py-3">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <Link
             to={article.category === 'student_activities' ? '/news/student-activities' : '/news'}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-300 hover:text-selens-yellow transition"
+            className="min-h-[44px] sm:min-h-0 inline-flex items-center gap-2 text-sm font-semibold text-neutral-300 hover:text-selens-yellow transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to {categoryLabel.toLowerCase()}</span>
@@ -99,9 +102,9 @@ export default function NewsDetail() {
         </div>
       </div>
 
-      <article className="max-w-[800px] mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-8">
+      <article className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-8">
         {/* Header Block */}
-        <div className="space-y-4">
+        <header className="space-y-4">
           <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-400">
             {isArchive && (
               <span className="text-[11px] font-semibold text-neutral-400 bg-selens-ink border border-selens-line px-2 py-0.5 rounded-[2px]">
@@ -125,47 +128,38 @@ export default function NewsDetail() {
             )}
           </div>
 
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-selens-white leading-tight">
+          <h1 className="font-serif selens-fluid-h1 font-bold text-selens-white break-words">
             {article.title}
           </h1>
 
+          <div className="w-12 h-1 bg-selens-yellow" aria-hidden="true" />
+
           {article.excerpt && (
-            <p className="text-lg text-neutral-300 font-sans leading-relaxed border-l-2 border-selens-yellow pl-4 italic">
+            <p className="max-w-prose text-base sm:text-lg text-neutral-300 font-sans leading-relaxed border-l-2 border-selens-yellow pl-4 italic">
               {article.excerpt}
             </p>
           )}
+        </header>
+
+        {/* Responsive 16:9 Thumbnail / Hero Image */}
+        <div className="rounded-[4px] overflow-hidden border border-selens-line">
+          <ImageFrame src={article.thumbnail_url} alt={article.title} className="border-b-0" />
         </div>
 
-        {/* Thumbnail / Hero Image */}
-        <div className="w-full aspect-[16/9] rounded-[4px] overflow-hidden border border-selens-line bg-selens-ink flex items-center justify-center">
-          {article.thumbnail_url ? (
-            <img
-              src={article.thumbnail_url}
-              alt={article.title}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center gap-2 text-neutral-500">
-              <Newspaper className="w-12 h-12 text-neutral-600" />
-              <span className="text-xs uppercase tracking-wider text-neutral-500 font-sans">SEES MSU-GSC</span>
-            </div>
-          )}
-        </div>
-
-        {/* Article Body */}
-        <div className="prose prose-invert max-w-none text-base text-neutral-200 leading-relaxed font-sans whitespace-pre-line border-t border-selens-line pt-8">
+        {/* Article Body (max-w-prose readable measure) */}
+        <div className="selens-prose max-w-prose font-sans whitespace-pre-line break-words border-t border-selens-line pt-8">
           {article.body}
         </div>
 
         {/* Footer Navigation */}
-        <div className="border-t border-selens-line pt-8 flex items-center justify-between">
+        <footer className="border-t border-selens-line pt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <span className="text-xs text-neutral-400">
             Society of Electrical Engineering Students, MSU-GSC • A.Y. {article.academic_year || CURRENT_ACADEMIC_YEAR}
           </span>
-          <SecondaryButton to="/news">
+          <SecondaryButton to="/news" className="self-start sm:self-auto min-h-[44px]">
             View all news
           </SecondaryButton>
-        </div>
+        </footer>
       </article>
     </div>
   )
