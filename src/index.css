@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* SELENS Core Dark Showcase & Admin Tokens */
+  /* SELENS Core Dark Showcase & Admin Tokens (kept intact for Admin pages & TeamLanyardRail) */
   --color-selens-black: #000000;
   --color-selens-surface: #0A0A0A;
   --color-selens-ink: #111111;
@@ -11,13 +11,13 @@
   --color-selens-yellow: #FFD100;
   --color-selens-white: #FFFFFF;
 
-  /* SELENS Editorial Paper Tokens (Warm archival paper-white + deep charcoal ink) */
-  --color-selens-paper: #FAF9F5;
-  --color-selens-paper-alt: #F1EFE7;
+  /* University Institutional Light Tokens (Crisp White + Neutral Gray + Deep Charcoal) */
+  --color-selens-paper: #FFFFFF;
+  --color-selens-paper-alt: #F4F4F5;
   --color-selens-paper-card: #FFFFFF;
-  --color-selens-paper-ink: #121212;
-  --color-selens-paper-muted: #52524D;
-  --color-selens-paper-rule: #DDD9CE;
+  --color-selens-paper-ink: #18181B;
+  --color-selens-paper-muted: #52525B;
+  --color-selens-paper-rule: #E4E4E7;
   --color-selens-yellow-ink: #856800;
 
   /* Semantic tokens mapped to SELENS dark showcase palette (for TeamLanyardRail) */
@@ -37,7 +37,7 @@
   --color-chart-4: #E5C158;
   --color-chart-5: #A3A3A3;
 
-  /* Brand Typography: Editorial Serif headings, crisp Sans body/UI */
+  /* Brand Typography: Institutional Serif headings, clean Sans UI/body */
   --font-serif: "Merriweather", Georgia, "Times New Roman", serif;
   --font-sans: "Source Sans 3", Roboto, Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
@@ -52,20 +52,20 @@
   background-color: var(--color-selens-black);
   color: var(--color-selens-white);
 
-  /* Fluid Editorial Heading Scale */
-  --font-size-hero: clamp(2.25rem, 4.6vw + 0.85rem, 4.15rem);
-  --font-size-h1: clamp(1.9rem, 3.1vw + 0.75rem, 2.95rem);
-  --font-size-h2: clamp(1.5rem, 2.2vw + 0.65rem, 2.25rem);
-  --font-size-h3: clamp(1.0625rem, 0.9vw + 0.75rem, 1.25rem);
+  /* Clean University Heading Scale */
+  --font-size-hero: clamp(1.85rem, 3vw + 0.8rem, 2.85rem);
+  --font-size-h1: clamp(1.7rem, 2.4vw + 0.7rem, 2.45rem);
+  --font-size-h2: clamp(1.35rem, 1.6vw + 0.65rem, 1.8rem);
+  --font-size-h3: clamp(1.0625rem, 0.8vw + 0.75rem, 1.2rem);
 
   /* Layout Tokens */
   --container-max: 1200px;
-  --nav-h: 76px;
+  --nav-h: 96px;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: #000000;
+  background-color: #FFFFFF;
   overflow-x: hidden;
 }
 
@@ -81,7 +81,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* High contrast mode toggle support (both dark and paper surfaces) */
+/* High contrast mode toggle support */
 html.contrast-high {
   --color-selens-line: #595959;
   --color-selens-line-subtle: #404040;
@@ -91,8 +91,8 @@ html.contrast-high {
   --color-selens-paper: #FFFFFF;
   --color-selens-paper-alt: #F4F4F4;
   --color-selens-paper-ink: #000000;
-  --color-selens-paper-muted: #262626;
-  --color-selens-paper-rule: #737373;
+  --color-selens-paper-muted: #18181B;
+  --color-selens-paper-rule: #52525B;
 }
 
 /* Accessible focus rings */
@@ -102,27 +102,27 @@ html.contrast-high {
 }
 
 .selens-paper-page :where(a, button, input, select, textarea, summary, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible {
-  outline: 2px solid var(--color-selens-paper-ink);
+  outline: 2px solid #18181B;
   outline-offset: 2px;
 }
 
 /* Fluid Typography Helpers */
 .selens-fluid-hero {
   font-size: var(--font-size-hero);
-  line-height: 1.09;
-  letter-spacing: -0.02em;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
 }
 
 .selens-fluid-h1 {
   font-size: var(--font-size-h1);
-  line-height: 1.15;
-  letter-spacing: -0.018em;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
 }
 
 .selens-fluid-h2 {
   font-size: var(--font-size-h2);
-  line-height: 1.22;
-  letter-spacing: -0.012em;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 .selens-fluid-h3 {
@@ -130,7 +130,7 @@ html.contrast-high {
   line-height: 1.35;
 }
 
-/* Editorial Container & Generous Section Rhythm */
+/* Container & Section Spacing */
 .selens-container {
   width: 100%;
   max-width: var(--container-max);
@@ -148,24 +148,61 @@ html.contrast-high {
 }
 
 .selens-section {
-  padding-top: 4.25rem;
-  padding-bottom: 4.25rem;
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
 }
 
 @media (min-width: 640px) {
   .selens-section {
-    padding-top: 5.75rem;
-    padding-bottom: 5.75rem;
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
   }
 }
 
-/* Paper Editorial Page Context (public pages; Admin dark pages stay dark) */
+/* Institutional White Page Context (public pages; Admin pages stay dark) */
 .selens-paper-page {
   background-color: var(--color-selens-paper);
   color: var(--color-selens-paper-ink);
 }
 
-/* Base card utility: dark by default (for Admin), crisp paper surface inside .selens-paper-page */
+/* PageHeader: clean light institutional banner on public pages, dark banner on Admin pages */
+.selens-page-header {
+  background-color: var(--color-selens-black);
+  color: var(--color-selens-white);
+  border-bottom: 1px solid var(--color-selens-line);
+}
+
+.selens-page-header-title {
+  color: var(--color-selens-white);
+}
+
+.selens-page-header-desc {
+  color: #d4d4d4;
+}
+
+.selens-page-header-crumb {
+  color: #a3a3a3;
+}
+
+.selens-paper-page .selens-page-header {
+  background-color: var(--color-selens-paper-alt);
+  color: var(--color-selens-paper-ink);
+  border-bottom: 1px solid var(--color-selens-paper-rule);
+}
+
+.selens-paper-page .selens-page-header-title {
+  color: var(--color-selens-paper-ink);
+}
+
+.selens-paper-page .selens-page-header-desc {
+  color: var(--color-selens-paper-muted);
+}
+
+.selens-paper-page .selens-page-header-crumb {
+  color: var(--color-selens-paper-muted);
+}
+
+/* Base card utilities (dark on Admin, clean white panel inside public pages) */
 .selens-card {
   background-color: var(--color-selens-ink);
   border: 1px solid var(--color-selens-line);
@@ -173,8 +210,7 @@ html.contrast-high {
   color: var(--color-selens-white);
   transition:
     border-color 180ms var(--ease-standard),
-    background-color 180ms var(--ease-standard),
-    transform 180ms var(--ease-standard);
+    background-color 180ms var(--ease-standard);
 }
 
 .selens-card-flat {
@@ -186,7 +222,6 @@ html.contrast-high {
 
 .selens-card:hover {
   border-color: rgba(255, 209, 0, 0.65);
-  transform: translateY(-2px);
 }
 
 .selens-paper-page .selens-card,
@@ -197,7 +232,7 @@ html.contrast-high {
 }
 
 .selens-paper-page .selens-card:hover {
-  border-color: var(--color-selens-paper-ink);
+  border-color: #a1a1aa;
 }
 
 .selens-filter-label {
@@ -221,105 +256,70 @@ html.contrast-high {
 
 .selens-paper-page .selens-select {
   background-color: #FFFFFF;
-  border-color: var(--color-selens-paper-rule);
+  border-color: #d4d4d8;
   color: var(--color-selens-paper-ink);
 }
 
 .selens-paper-page .selens-select:focus {
-  border-color: var(--color-selens-paper-ink);
+  border-color: #18181B;
 }
 
-/* Editorial inline link: >= 32px tap height, crisp yellow underline bar + arrow slide */
+/* Inline Links (>= 32px height for reliable tap targets) */
 .selens-editorial-link {
-  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.4rem;
   min-height: 32px;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.875rem;
-  color: var(--color-selens-paper-ink);
-  text-decoration: none;
-  transition: color 160ms var(--ease-standard);
+  color: #18181B;
+  text-decoration: underline;
+  text-decoration-color: #FFD100;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition: color 150ms var(--ease-standard), text-decoration-color 150ms var(--ease-standard);
 }
 
-.selens-editorial-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.125rem;
-  height: 2px;
-  background-color: var(--color-selens-yellow);
-  transform: scaleX(0.35);
-  transform-origin: left center;
-  transition: transform 180ms var(--ease-standard), background-color 180ms var(--ease-standard);
-}
-
-.selens-editorial-link:hover::after,
-.selens-editorial-link:focus-visible::after {
-  transform: scaleX(1);
-  background-color: var(--color-selens-paper-ink);
+.selens-editorial-link:hover,
+.selens-editorial-link:focus-visible {
+  color: #000000;
+  text-decoration-color: #18181B;
 }
 
 .selens-editorial-link svg {
-  transition: transform 180ms var(--ease-standard);
+  transition: transform 150ms var(--ease-standard);
 }
 
 .selens-editorial-link:hover svg {
-  transform: translateX(3px);
+  transform: translateX(2px);
 }
 
-/* Editorial link variant for dark bands */
 .selens-editorial-link-dark {
-  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.4rem;
   min-height: 32px;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.875rem;
   color: var(--color-selens-yellow);
-  text-decoration: none;
-  transition: color 160ms var(--ease-standard);
-}
-
-.selens-editorial-link-dark::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.125rem;
-  height: 2px;
-  background-color: var(--color-selens-yellow);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 180ms var(--ease-standard);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition: color 150ms var(--ease-standard), text-decoration-color 150ms var(--ease-standard);
 }
 
 .selens-editorial-link-dark:hover,
 .selens-editorial-link-dark:focus-visible {
   color: #FFFFFF;
+  text-decoration-color: var(--color-selens-yellow);
 }
 
-.selens-editorial-link-dark:hover::after,
-.selens-editorial-link-dark:focus-visible::after {
-  transform: scaleX(1);
-}
-
-.selens-editorial-link-dark svg {
-  transition: transform 180ms var(--ease-standard);
-}
-
-.selens-editorial-link-dark:hover svg {
-  transform: translateX(3px);
-}
-
-/* Primary & Secondary Buttons */
+/* Buttons */
 .selens-btn-primary {
   display: inline-flex;
   align-items: center;
@@ -330,35 +330,21 @@ html.contrast-high {
   color: #000000;
   font-weight: 700;
   font-size: 0.9375rem;
-  padding: 0.625rem 1.375rem;
-  border-radius: 3px;
+  padding: 0.625rem 1.25rem;
+  border-radius: 4px;
   border: 1px solid var(--color-selens-yellow);
   text-decoration: none;
   cursor: pointer;
   transition:
-    background-color 180ms var(--ease-standard),
-    color 180ms var(--ease-standard),
-    border-color 180ms var(--ease-standard),
-    box-shadow 180ms var(--ease-standard),
-    transform 120ms var(--ease-standard);
+    background-color 150ms var(--ease-standard),
+    color 150ms var(--ease-standard),
+    border-color 150ms var(--ease-standard);
 }
 
 .selens-btn-primary:hover {
-  background-color: #FFFFFF;
-  border-color: #FFFFFF;
-  color: #000000;
-  box-shadow: 0 0 18px rgba(255, 209, 0, 0.32);
-}
-
-.selens-btn-primary:active {
-  transform: scale(0.98);
-}
-
-.selens-paper-page .selens-btn-primary:hover {
-  background-color: #121212;
-  border-color: #121212;
+  background-color: #18181B;
+  border-color: #18181B;
   color: var(--color-selens-yellow);
-  box-shadow: none;
 }
 
 .selens-btn-secondary {
@@ -371,27 +357,19 @@ html.contrast-high {
   color: #FFFFFF;
   font-weight: 600;
   font-size: 0.9375rem;
-  padding: 0.625rem 1.375rem;
-  border-radius: 3px;
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  padding: 0.625rem 1.25rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
   text-decoration: none;
   cursor: pointer;
   transition:
-    color 180ms var(--ease-standard),
-    border-color 180ms var(--ease-standard),
-    background-color 180ms var(--ease-standard),
-    box-shadow 180ms var(--ease-standard),
-    transform 120ms var(--ease-standard);
+    color 150ms var(--ease-standard),
+    border-color 150ms var(--ease-standard);
 }
 
 .selens-btn-secondary:hover {
   border-color: var(--color-selens-yellow);
   color: var(--color-selens-yellow);
-  box-shadow: 0 0 16px rgba(255, 209, 0, 0.22);
-}
-
-.selens-btn-secondary:active {
-  transform: scale(0.98);
 }
 
 .selens-btn-ink {
@@ -400,20 +378,19 @@ html.contrast-high {
   justify-content: center;
   gap: 0.5rem;
   min-height: 44px;
-  background-color: #121212;
+  background-color: #18181B;
   color: #FFFFFF;
   font-weight: 700;
   font-size: 0.9375rem;
-  padding: 0.625rem 1.375rem;
-  border-radius: 3px;
-  border: 1px solid #121212;
+  padding: 0.625rem 1.25rem;
+  border-radius: 4px;
+  border: 1px solid #18181B;
   text-decoration: none;
   cursor: pointer;
   transition:
-    background-color 180ms var(--ease-standard),
-    color 180ms var(--ease-standard),
-    border-color 180ms var(--ease-standard),
-    transform 120ms var(--ease-standard);
+    background-color 150ms var(--ease-standard),
+    color 150ms var(--ease-standard),
+    border-color 150ms var(--ease-standard);
 }
 
 .selens-btn-ink:hover {
@@ -422,41 +399,33 @@ html.contrast-high {
   color: #000000;
 }
 
-.selens-btn-ink:active {
-  transform: scale(0.98);
-}
-
 .selens-btn-paper-outline {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   min-height: 44px;
-  background-color: transparent;
-  color: #121212;
+  background-color: #FFFFFF;
+  color: #18181B;
   font-weight: 600;
   font-size: 0.9375rem;
-  padding: 0.625rem 1.375rem;
-  border-radius: 3px;
-  border: 1px solid #121212;
+  padding: 0.625rem 1.25rem;
+  border-radius: 4px;
+  border: 1px solid #D4D4D8;
   text-decoration: none;
   cursor: pointer;
   transition:
-    background-color 180ms var(--ease-standard),
-    color 180ms var(--ease-standard),
-    transform 120ms var(--ease-standard);
+    background-color 150ms var(--ease-standard),
+    border-color 150ms var(--ease-standard),
+    color 150ms var(--ease-standard);
 }
 
 .selens-btn-paper-outline:hover {
-  background-color: #121212;
-  color: var(--color-selens-yellow);
+  border-color: #18181B;
+  background-color: #F4F4F5;
 }
 
-.selens-btn-paper-outline:active {
-  transform: scale(0.98);
-}
-
-/* Nav link underline wipe (scaleX only, 180ms) */
+/* Light University Navbar Links */
 .selens-nav-link {
   position: relative;
   display: inline-flex;
@@ -465,9 +434,8 @@ html.contrast-high {
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
   font-weight: 600;
-  letter-spacing: 0.015em;
-  color: #E5E5E5;
-  transition: color 160ms var(--ease-standard);
+  color: #3F3F46;
+  transition: color 150ms var(--ease-standard);
 }
 
 .selens-nav-link::after {
@@ -475,42 +443,24 @@ html.contrast-high {
   position: absolute;
   left: 0.75rem;
   right: 0.75rem;
-  bottom: 0.2rem;
+  bottom: 0.25rem;
   height: 2px;
   background-color: var(--color-selens-yellow);
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 180ms var(--ease-standard);
+  transition: transform 160ms var(--ease-standard);
 }
 
 .selens-nav-link:hover,
 .selens-nav-link:focus-visible,
 .selens-nav-link[data-active="true"] {
-  color: var(--color-selens-yellow);
+  color: #09090B;
 }
 
 .selens-nav-link:hover::after,
 .selens-nav-link:focus-visible::after,
 .selens-nav-link[data-active="true"]::after {
   transform: scaleX(1);
-}
-
-/* Subtle radial glow allowed ONLY in hero and page headers */
-.selens-hero-glow {
-  background-image: radial-gradient(
-    ellipse 65% 55% at 50% 42%,
-    rgba(255, 209, 0, 0.10) 0%,
-    rgba(255, 255, 255, 0.025) 35%,
-    rgba(0, 0, 0, 0) 72%
-  );
-}
-
-.selens-header-glow {
-  background-image: radial-gradient(
-    ellipse 60% 50% at 50% 0%,
-    rgba(255, 209, 0, 0.07) 0%,
-    rgba(0, 0, 0, 0) 75%
-  );
 }
 
 /* Hidden scrollbar utility for horizontal sticky menus */
@@ -548,7 +498,7 @@ html.contrast-high {
   }
 }
 
-/* Filter chips: one horizontally scrollable row on mobile, wrapping from 640px up */
+/* Filter chips */
 .selens-chip-row {
   display: flex;
   align-items: center;
@@ -585,20 +535,20 @@ html.contrast-high {
   flex-shrink: 0;
   scroll-snap-align: start;
   min-height: 44px;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.9rem;
   font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.2;
-  border-radius: 3px;
+  border-radius: 4px;
   border: 1px solid var(--color-selens-line);
   background-color: var(--color-selens-ink);
   color: #d4d4d4;
   cursor: pointer;
   text-decoration: none;
   transition:
-    border-color 160ms var(--ease-standard),
-    color 160ms var(--ease-standard),
-    background-color 160ms var(--ease-standard);
+    border-color 150ms var(--ease-standard),
+    color 150ms var(--ease-standard),
+    background-color 150ms var(--ease-standard);
 }
 
 .selens-chip:hover {
@@ -614,26 +564,26 @@ html.contrast-high {
 }
 
 .selens-paper-page .selens-chip {
-  border-color: var(--color-selens-paper-rule);
+  border-color: #d4d4d8;
   background-color: #FFFFFF;
-  color: #3F3F3A;
+  color: #3F3F46;
 }
 
 .selens-paper-page .selens-chip:hover {
-  border-color: #121212;
-  color: #121212;
+  border-color: #18181B;
+  color: #18181B;
 }
 
 .selens-paper-page .selens-chip[aria-pressed="true"],
 .selens-paper-page .selens-chip[aria-current="page"] {
-  background-color: #121212;
-  border-color: #121212;
+  background-color: #18181B;
+  border-color: #18181B;
   color: var(--color-selens-yellow);
 }
 
 @media (min-width: 640px) {
   .selens-chip {
-    min-height: 40px;
+    min-height: 38px;
   }
 }
 
@@ -648,8 +598,8 @@ html.contrast-high {
   color: #ffffff;
   background-color: var(--color-selens-black);
   border: 1px solid var(--color-selens-line);
-  border-radius: 3px;
-  transition: border-color 160ms var(--ease-standard);
+  border-radius: 4px;
+  transition: border-color 150ms var(--ease-standard);
 }
 
 .selens-input::placeholder {
@@ -661,31 +611,22 @@ html.contrast-high {
   border-color: var(--color-selens-yellow);
 }
 
-.selens-input:focus-visible {
-  outline: 2px solid var(--color-selens-yellow);
-  outline-offset: 1px;
-}
-
 .selens-input[aria-invalid="true"] {
   border-color: #dc2626;
 }
 
 .selens-paper-page .selens-input {
-  color: #121212;
+  color: #18181B;
   background-color: #FFFFFF;
-  border-color: #CFCAC0;
+  border-color: #D4D4D8;
 }
 
 .selens-paper-page .selens-input::placeholder {
-  color: #6B6A64;
+  color: #71717A;
 }
 
 .selens-paper-page .selens-input:focus {
-  border-color: #121212;
-}
-
-.selens-paper-page .selens-input:focus-visible {
-  outline: 2px solid #121212;
+  border-color: #18181B;
 }
 
 /* Readable long-form article body */
@@ -697,7 +638,7 @@ html.contrast-high {
 }
 
 .selens-paper-page .selens-prose {
-  color: #292926;
+  color: #27272A;
 }
 
 .selens-prose > * + * {
@@ -707,10 +648,10 @@ html.contrast-high {
 .selens-prose img {
   max-width: 100%;
   height: auto;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
-/* Scroll Reveal (opacity + transform only, 320ms enter curve, visible by default) */
+/* Subtle Scroll Reveal (opacity + 10px translate only, visible by default) */
 .selens-reveal {
   opacity: 1;
   transform: translate3d(0, 0, 0);
@@ -718,48 +659,15 @@ html.contrast-high {
 
 .selens-reveal[data-reveal="pending"] {
   opacity: 0;
-  transform: translate3d(0, 12px, 0);
+  transform: translate3d(0, 10px, 0);
 }
 
 .selens-reveal[data-reveal="revealed"] {
   opacity: 1;
   transform: translate3d(0, 0, 0);
   transition:
-    opacity 320ms var(--ease-enter),
-    transform 320ms var(--ease-enter);
-}
-
-/* Hero Load-In (< 650ms total; `backwards` fill avoids locking hover transforms) */
-@keyframes selens-hero-enter {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 12px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-.selens-hero-item {
-  animation: selens-hero-enter 340ms var(--ease-enter) backwards;
-}
-
-/* Single finite waveform settle (1.2s) instead of infinite loop -> restores 60 fps scroll & mobile settling */
-@keyframes selens-waveform-settle {
-  from {
-    opacity: 0;
-    transform: translate3d(-1.25%, 0, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-.selens-waveform-drift {
-  transform-origin: center center;
-  animation: selens-waveform-settle 1.2s var(--ease-enter) backwards;
+    opacity 280ms var(--ease-enter),
+    transform 280ms var(--ease-enter);
 }
 
 /* Respect prefers-reduced-motion */
@@ -773,22 +681,9 @@ html.contrast-high {
     scroll-behavior: auto !important;
   }
 
-  .selens-card:hover,
-  .selens-btn-primary:active,
-  .selens-btn-secondary:active,
-  .selens-btn-ink:active,
-  .selens-btn-paper-outline:active,
-  .selens-chip:active,
-  .selens-editorial-link:hover svg,
-  .selens-editorial-link-dark:hover svg {
-    transform: none !important;
-  }
-
   .selens-reveal,
   .selens-reveal[data-reveal="pending"],
-  .selens-reveal[data-reveal="revealed"],
-  .selens-hero-item,
-  .selens-waveform-drift {
+  .selens-reveal[data-reveal="revealed"] {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

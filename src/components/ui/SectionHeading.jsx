@@ -1,16 +1,12 @@
 import Reveal from './Reveal'
 
 /**
- * SectionHeading:
- * Plain serif heading with a short yellow underline bar and optional description.
- * Left-aligned by default, with an optional align="center" prop.
- * Wrapped in Reveal by default (`reveal = true`); pass `reveal={false}` to opt out (e.g. People page).
+ * Clean institutional SectionHeading (no stamped yellow bars or fake numbered eyebrows).
  */
 export default function SectionHeading({
   title,
   description,
   action,
-  eyebrow,
   align = 'left',
   tone = 'dark',
   reveal = true,
@@ -20,22 +16,15 @@ export default function SectionHeading({
   const isPaper = tone === 'paper'
   const headingColor = isPaper ? 'text-selens-paper-ink' : 'text-selens-white'
   const descColor = isPaper ? 'text-selens-paper-muted' : 'text-neutral-300'
-  const eyebrowColor = isPaper ? 'text-selens-paper-muted' : 'text-selens-yellow'
   const ruleColor = isPaper ? 'border-selens-paper-rule' : 'border-selens-line'
 
   const content = isCentered ? (
-    <div className={`text-center max-w-2xl mx-auto space-y-3 ${className}`}>
-      {eyebrow && (
-        <p className={`font-mono text-xs uppercase tracking-[0.2em] ${eyebrowColor}`}>
-          {eyebrow}
-        </p>
-      )}
+    <div className={`text-center max-w-2xl mx-auto space-y-2 ${className}`}>
       <h2 className={`font-serif selens-fluid-h2 font-bold ${headingColor}`}>
         {title}
       </h2>
-      <div className="w-12 h-1 bg-selens-yellow mx-auto" aria-hidden="true" />
       {description && (
-        <p className={`text-sm sm:text-base ${descColor} font-sans leading-relaxed pt-1`}>
+        <p className={`text-sm sm:text-base ${descColor} font-sans leading-relaxed`}>
           {description}
         </p>
       )}
@@ -43,20 +32,14 @@ export default function SectionHeading({
     </div>
   ) : (
     <div
-      className={`flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b ${ruleColor} pb-5 ${className}`}
+      className={`flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b ${ruleColor} pb-3.5 ${className}`}
     >
-      <div className="max-w-2xl">
-        {eyebrow && (
-          <p className={`font-mono text-xs uppercase tracking-[0.2em] mb-2 ${eyebrowColor}`}>
-            {eyebrow}
-          </p>
-        )}
+      <div className="max-w-2xl space-y-1">
         <h2 className={`font-serif selens-fluid-h2 font-bold ${headingColor}`}>
           {title}
         </h2>
-        <div className="w-12 h-1 bg-selens-yellow mt-3" aria-hidden="true" />
         {description && (
-          <p className={`text-sm sm:text-base ${descColor} font-sans leading-relaxed mt-3`}>
+          <p className={`text-sm sm:text-base ${descColor} font-sans leading-relaxed`}>
             {description}
           </p>
         )}

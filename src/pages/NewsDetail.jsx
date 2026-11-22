@@ -131,8 +131,6 @@ export default function NewsDetail() {
             {article.title}
           </h1>
 
-          <div className="w-12 h-1 bg-selens-yellow" aria-hidden="true" />
-
           {article.excerpt && (
             <p className="max-w-prose text-base sm:text-lg text-selens-paper-muted font-sans leading-relaxed border-l-4 border-selens-yellow pl-4 italic">
               {article.excerpt}

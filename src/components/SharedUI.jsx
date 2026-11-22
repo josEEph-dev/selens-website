@@ -1,40 +1,31 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Waveform, Reveal } from './ui'
+import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Reveal } from './ui'
 
 export { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Reveal }
 
 /**
- * Standardized PageHeader for all inner pages:
- * - Left-aligned serif H1 with short yellow bar
- * - Description
- * - Hairline bottom border
- * - Faint waveform accent (hero SVG at low opacity) + subtle radial glow
- * Props unchanged: { title, description, action }
+ * Clean institutional PageHeader:
+ * - Light gray header with breadcrumb on public pages (.selens-paper-page)
+ * - Dark header on Admin pages (no decorative waveform or fake glows)
  */
-export function PageHeader({ title, description, action, eyebrow }) {
+export function PageHeader({ title, description, action }) {
   return (
-    <div className="relative overflow-hidden border-b-2 border-selens-yellow bg-selens-black text-selens-white selens-header-glow">
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <Waveform intensity={0.45} />
-        <div
-          className="absolute inset-x-0 bottom-0 h-16"
-          style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, #000000 100%)' }}
-        />
-      </div>
-      <div className="relative selens-container pt-12 pb-10 sm:pt-16 sm:pb-14 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-        <div className="min-w-0 max-w-3xl">
-          {eyebrow && (
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-selens-yellow mb-3">
-              {eyebrow}
-            </p>
-          )}
-          <h1 className="font-serif selens-fluid-h1 font-bold text-selens-white break-words">
+    <div className="selens-page-header">
+      <div className="selens-container py-8 sm:py-11 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+        <div className="min-w-0 max-w-3xl space-y-2.5">
+          <nav aria-label="Breadcrumb" className="text-xs font-sans selens-page-header-crumb flex items-center gap-1.5">
+            <Link to="/" className="hover:underline">
+              Home
+            </Link>
+            <span aria-hidden="true">/</span>
+            <span className="truncate">{title}</span>
+          </nav>
+          <h1 className="font-serif selens-fluid-h1 font-bold selens-page-header-title break-words">
             {title}
           </h1>
-          <div className="w-12 h-1 bg-selens-yellow mt-3.5" aria-hidden="true" />
           {description && (
-            <p className="text-base sm:text-lg text-neutral-300 font-sans max-w-2xl leading-relaxed mt-4">
+            <p className="text-sm sm:text-base selens-page-header-desc font-sans max-w-2xl leading-relaxed">
               {description}
             </p>
           )}
@@ -45,11 +36,6 @@ export function PageHeader({ title, description, action, eyebrow }) {
   )
 }
 
-/**
- * Standardized Section header:
- * - Serif H2
- * - Short yellow underline bar
- */
 export function Section({ title, description, action, children, tone = 'dark', className = '' }) {
   return (
     <section className={`space-y-6 ${className}`}>
@@ -59,10 +45,6 @@ export function Section({ title, description, action, children, tone = 'dark', c
   )
 }
 
-/**
- * Standardized Card:
- * - Adapts automatically: dark selens-ink on Admin pages, crisp white card inside .selens-paper-page
- */
 export function Card({ children, className = '', hover = true, ...props }) {
   return (
     <div
@@ -74,13 +56,6 @@ export function Card({ children, className = '', hover = true, ...props }) {
   )
 }
 
-/**
- * Standardized StatCard:
- * - Yellow serif numeral
- * - Serif title
- * - One sentence
- * - Yellow arrow link
- */
 export function StatCard({ numeral, title, description, linkTo, linkText = 'View details' }) {
   return (
     <div className="selens-card p-6 space-y-4 flex flex-col justify-between">
@@ -108,11 +83,6 @@ export function StatCard({ numeral, title, description, linkTo, linkText = 'View
   )
 }
 
-/**
- * Standardized Primary Button:
- * - Yellow fill, black text
- * - Rectangular, 4px max radius
- */
 export function PrimaryButton({ children, to, href, className = '', ...props }) {
   const baseClasses = 'selens-btn-primary text-sm px-5 py-2.5 cursor-pointer'
 
@@ -139,11 +109,6 @@ export function PrimaryButton({ children, to, href, className = '', ...props }) 
   )
 }
 
-/**
- * Standardized Secondary Button:
- * - 1px white outline, white text
- * - Rectangular, 4px max radius
- */
 export function SecondaryButton({ children, to, href, className = '', ...props }) {
   const baseClasses = 'selens-btn-secondary text-sm px-5 py-2.5 cursor-pointer'
 

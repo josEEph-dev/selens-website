@@ -36,6 +36,11 @@ export default function Footer() {
                 className="h-10 w-10 object-contain"
               />
               <img
+                src="/website-assets/coe-logo.png"
+                alt="College of Engineering Logo"
+                className="h-10 w-10 object-contain"
+              />
+              <img
                 src="/website-assets/selens-logo.png"
                 alt="SELENS Logo"
                 className="h-10 w-10 object-contain"

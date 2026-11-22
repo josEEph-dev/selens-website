@@ -102,15 +102,14 @@ export default function Projects() {
   return (
     <div id="main-content" className="selens-paper-page min-h-screen">
       <PageHeader
-        eyebrow="Engineering Programs & Services"
         title="Projects &amp; Initiatives"
         description="Explore the programs, resources, and community activities created and managed by the Society of Electrical Engineering Students."
       />
 
-      <div className="selens-container py-12 sm:py-16 space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-selens-paper-rule pb-5">
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-selens-paper-muted">
-            Initiatives Registry · A.Y. {selectedYear}
+      <div className="selens-container py-10 sm:py-14 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200 pb-4">
+          <span className="text-sm font-semibold text-neutral-700">
+            Academic Year {selectedYear}
           </span>
           <YearSelector
             years={availableYears}
@@ -183,45 +182,38 @@ export default function Projects() {
             No projects matching the selected committee filter.
           </div>
         ) : (
-          <div className="divide-y divide-selens-paper-rule border-t-2 border-b border-selens-paper-ink">
+          <div className="divide-y divide-neutral-200 border-t border-b border-neutral-200">
             {filteredProjects.map((item, idx) => (
               <Reveal
                 key={item.id}
                 index={idx}
-                className="py-8 sm:py-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start"
+                className="py-7 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
               >
-                {/* Monospace Spec Number + Metadata */}
-                <div className="lg:col-span-2 space-y-2.5">
-                  <span className="font-mono text-2xl sm:text-3xl font-bold text-selens-paper-ink block leading-none">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {item.status && item.status !== 'active' && (
-                      <span className="font-mono text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-[2px] bg-selens-yellow text-selens-black">
-                        {item.status}
-                      </span>
-                    )}
+                <div className={`${item.cover_image_url ? 'lg:col-span-8' : 'lg:col-span-12'} space-y-2.5`}>
+                  <div className="flex flex-wrap items-center gap-2">
                     {item.committee && (
-                      <span className="font-sans text-[11px] font-bold px-2 py-0.5 rounded-[2px] bg-selens-paper-ink text-selens-yellow">
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-[3px] bg-neutral-100 border border-neutral-200 text-neutral-800">
                         {formatCommitteeLabel(item.committee)}
                       </span>
                     )}
+                    {item.status && item.status !== 'active' && (
+                      <span className="text-xs font-semibold capitalize px-2 py-0.5 rounded-[3px] bg-selens-yellow text-neutral-950">
+                        {item.status}
+                      </span>
+                    )}
                     {item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR && (
-                      <span className="font-mono text-[11px] font-semibold px-2 py-0.5 rounded-[2px] border border-selens-paper-rule text-selens-paper-muted">
+                      <span className="text-xs text-neutral-500">
                         A.Y. {item.academic_year}
                       </span>
                     )}
                   </div>
-                </div>
 
-                {/* Project Title, Description & Action */}
-                <div className={`${item.cover_image_url ? 'lg:col-span-6' : 'lg:col-span-10'} space-y-3`}>
-                  <h2 className="font-serif text-xl sm:text-2xl font-bold text-selens-paper-ink break-words leading-snug">
+                  <h2 className="font-serif text-xl font-bold text-neutral-950 break-words leading-snug">
                     {item.name}
                   </h2>
 
                   {item.description && (
-                    <p className="text-sm sm:text-base text-selens-paper-muted leading-relaxed font-sans max-w-2xl">
+                    <p className="text-sm sm:text-base text-neutral-600 leading-relaxed font-sans max-w-2xl">
                       {item.description}
                     </p>
                   )}
@@ -241,7 +233,6 @@ export default function Projects() {
                   )}
                 </div>
 
-                {/* Optional Cover Image (only rendered if present) */}
                 {item.cover_image_url && (
                   <div className="lg:col-span-4">
                     <ImageFrame
@@ -249,7 +240,7 @@ export default function Projects() {
                       src={item.cover_image_url}
                       alt={item.name}
                       aspect="aspect-[16/10]"
-                      className="rounded-[3px]"
+                      className="rounded-[4px]"
                     />
                   </div>
                 )}

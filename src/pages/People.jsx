@@ -186,23 +186,22 @@ export default function People() {
   return (
     <div id="main-content" className="selens-paper-page min-h-screen">
       <PageHeader
-        eyebrow="Directory · A.Y. 2026–2027"
         title="People &amp; Leadership"
         description="Meet the officers, legislative representatives, and faculty advisers serving the Society of Electrical Engineering Students for A.Y. 2026–2027."
       />
 
-      <div className="selens-container py-12 sm:py-16 space-y-12">
+      <div className="selens-container py-10 sm:py-14 space-y-12">
         {loading ? (
           <div className="space-y-8">
-            <div className="h-[340px] bg-selens-paper-alt border border-selens-paper-rule rounded-[4px] animate-pulse" />
-            <div className="h-[340px] bg-selens-paper-alt border border-selens-paper-rule rounded-[4px] animate-pulse" />
+            <div className="h-[340px] bg-neutral-100 border border-neutral-200 rounded-[4px] animate-pulse" />
+            <div className="h-[340px] bg-neutral-100 border border-neutral-200 rounded-[4px] animate-pulse" />
           </div>
         ) : error ? (
-          <div className="border-y border-red-300 bg-red-50 p-8 text-center text-sm text-red-800">
+          <div className="border border-red-200 bg-red-50 rounded-[4px] p-8 text-center text-sm text-red-800">
             {error}
           </div>
         ) : people.length === 0 ? (
-          <div className="border-y border-selens-paper-rule py-12 text-center text-sm text-selens-paper-muted">
+          <div className="border-y border-neutral-200 py-12 text-center text-sm text-neutral-600">
             The officer directory has not been published yet. Check back soon.
           </div>
         ) : (
@@ -210,8 +209,8 @@ export default function People() {
             {/* Sticky Group Menu */}
             {activeGroups.length > 0 && (
               <nav
-                className="sticky z-30 -mx-4 px-4 sm:mx-0 sm:px-0 bg-selens-paper/95 backdrop-blur-md border-b border-selens-paper-rule"
-                style={{ top: 'var(--nav-h, 76px)' }}
+                className="sticky z-30 -mx-4 px-4 sm:mx-0 sm:px-0 bg-white/95 backdrop-blur-md border-b border-neutral-200"
+                style={{ top: 'var(--nav-h, 96px)' }}
                 aria-label="People Directory Navigation"
               >
                 <div
@@ -234,10 +233,10 @@ export default function People() {
                             .getElementById(group.id)
                             ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                         }}
-                        className={`snap-start shrink-0 min-h-[44px] px-4 py-2 text-xs sm:text-sm font-semibold rounded-[3px] border transition-colors cursor-pointer ${
+                        className={`snap-start shrink-0 min-h-[42px] px-4 py-2 text-xs sm:text-sm font-semibold rounded-[4px] border transition-colors cursor-pointer ${
                           isCurrent
-                            ? 'bg-selens-paper-ink border-selens-paper-ink text-selens-yellow'
-                            : 'bg-white border-selens-paper-rule text-selens-paper-muted hover:border-selens-paper-ink hover:text-selens-paper-ink'
+                            ? 'bg-neutral-950 border-neutral-950 text-selens-yellow'
+                            : 'bg-white border-neutral-300 text-neutral-700 hover:border-neutral-950 hover:text-neutral-950'
                         }`}
                       >
                         {group.heading}
@@ -249,17 +248,16 @@ export default function People() {
             )}
 
             {/* Groups */}
-            <div className="space-y-16 sm:space-y-20">
-              {activeGroups.map((group, groupIdx) => (
+            <div className="space-y-16">
+              {activeGroups.map((group) => (
                 <section
                   key={group.id}
                   id={group.id}
-                  style={{ scrollMarginTop: 'calc(var(--nav-h, 76px) + 4.75rem)' }}
+                  style={{ scrollMarginTop: 'calc(var(--nav-h, 96px) + 4.75rem)' }}
                   className="space-y-8"
                 >
                   <SectionHeading
                     tone="paper"
-                    eyebrow={`0${groupIdx + 1} / Branch`}
                     title={group.heading}
                     reveal={false}
                   />
@@ -270,14 +268,13 @@ export default function People() {
                       if (items.length === 0) return null
 
                       return (
-                        <div key={subgroup.category} className="space-y-4">
+                        <div key={subgroup.category} className="space-y-3">
                           {subgroup.label && (
                             <div className="flex items-baseline justify-between gap-3">
-                              <h3 className="font-serif text-base sm:text-lg font-bold text-selens-paper-ink flex items-center gap-2.5">
-                                <span className="inline-block w-2 h-2 bg-selens-yellow shrink-0" aria-hidden="true" />
-                                <span>{subgroup.label}</span>
+                              <h3 className="font-serif text-base sm:text-lg font-bold text-neutral-900">
+                                {subgroup.label}
                               </h3>
-                              <span className="font-mono text-xs text-selens-paper-muted">
+                              <span className="text-xs text-neutral-500">
                                 {items.length} {items.length === 1 ? 'member' : 'members'}
                               </span>
                             </div>
@@ -302,7 +299,7 @@ export default function People() {
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-6 right-6 z-40 min-h-[44px] inline-flex items-center gap-2 bg-selens-paper-ink text-selens-yellow text-sm font-bold px-4 py-2 rounded-[3px] border border-selens-paper-ink hover:bg-selens-yellow hover:text-selens-black hover:border-selens-yellow transition-colors cursor-pointer shadow-md"
+          className="fixed bottom-6 right-6 z-40 min-h-[44px] inline-flex items-center gap-2 bg-neutral-950 text-selens-yellow text-sm font-bold px-4 py-2 rounded-[4px] border border-neutral-950 hover:bg-selens-yellow hover:text-neutral-950 hover:border-selens-yellow transition-colors cursor-pointer shadow-md"
         >
           <ArrowUp className="w-4 h-4" />
           <span>Back to top</span>

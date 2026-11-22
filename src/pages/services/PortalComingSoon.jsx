@@ -11,12 +11,11 @@ export default function PortalComingSoon() {
       />
 
       <div className="selens-container py-16 flex justify-center">
-        <div className="max-w-xl w-full border-y-2 border-selens-paper-ink text-center space-y-6 py-12 px-4">
-          <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-paper-ink">
+        <div className="max-w-xl w-full border border-neutral-200 bg-neutral-50 rounded-[4px] text-center space-y-5 py-12 px-6">
+          <div className="font-serif font-bold text-3xl sm:text-4xl text-neutral-950">
             Coming Soon
           </div>
-          <div className="w-12 h-1 bg-selens-yellow mx-auto" aria-hidden="true" />
-          <p className="text-base text-selens-paper-muted font-sans leading-relaxed max-w-md mx-auto">
+          <p className="text-base text-neutral-600 font-sans leading-relaxed max-w-md mx-auto">
             Online student services, TEEchPoints tracking, and document requests will be available soon.
           </p>
           <div className="pt-2">

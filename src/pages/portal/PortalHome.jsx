@@ -63,19 +63,17 @@ export default function PortalHome() {
     return (
       <div id="main-content" className="selens-paper-page min-h-[75vh]">
         <PageHeader
-          eyebrow="Member Services"
           title="Student Portal"
           description="Access your SELENS student account, services, and upcoming digital tools."
         />
 
         <div className="selens-container py-14 flex justify-center">
           <Card className="max-w-xl w-full space-y-6 p-6 sm:p-8" hover={false}>
-            <div className="space-y-3">
-              <h2 className="font-serif text-2xl font-bold text-selens-paper-ink">
+            <div className="space-y-2.5">
+              <h2 className="font-serif text-2xl font-bold text-neutral-950">
                 Welcome to the SELENS Student Portal
               </h2>
-              <div className="w-12 h-1 bg-selens-yellow" aria-hidden="true" />
-              <p className="text-sm sm:text-base text-selens-paper-muted font-sans leading-relaxed">
+              <p className="text-sm sm:text-base text-neutral-600 font-sans leading-relaxed">
                 Sign in with your SELENS account or create a new student account using your @msugensan.edu.ph email address.
               </p>
             </div>
@@ -114,20 +112,19 @@ export default function PortalHome() {
   return (
     <div id="main-content" className="selens-paper-page min-h-[75vh]">
       <PageHeader
-        eyebrow="Member Dashboard"
         title="Student Portal"
         description="Your SELENS member dashboard and student services."
         action={
           <div className="flex flex-wrap items-center gap-3">
             {isOfficer && (
-              <Link to="/dashboard" className="selens-btn-primary text-sm">
+              <Link to="/dashboard" className="selens-btn-ink text-sm">
                 Officer Dashboard
               </Link>
             )}
             <button
               type="button"
               onClick={signOut}
-              className="selens-btn-secondary text-sm"
+              className="selens-btn-paper-outline text-sm"
             >
               Sign out
             </button>
@@ -135,14 +132,11 @@ export default function PortalHome() {
         }
       />
 
-      <div className="selens-container py-12 space-y-12">
-        <Card hover={false} className="space-y-5 p-6 sm:p-8">
-          <div className="space-y-1.5">
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-selens-paper-ink break-words">
-              Welcome, {displayName}
-            </h2>
-            <div className="w-12 h-1 bg-selens-yellow" aria-hidden="true" />
-          </div>
+      <div className="selens-container py-10 space-y-10">
+        <Card hover={false} className="space-y-4 p-6 sm:p-8">
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-neutral-950 break-words">
+            Welcome, {displayName}
+          </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-selens-paper-rule">
             <div>
@@ -160,19 +154,16 @@ export default function PortalHome() {
           </div>
         </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-selens-paper-rule border-t-2 border-selens-paper-ink">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {PORTAL_CARDS.map((item) => (
-            <div key={item.title} className="py-6 md:px-6 first:md:pl-0 last:md:pr-0 space-y-3">
+            <div key={item.title} className="border border-neutral-200 rounded-[4px] bg-white p-6 space-y-2.5">
               <div className="flex items-center justify-between gap-2">
-                <span className="font-mono text-xs font-bold text-selens-paper-muted">
-                  {item.num}
-                </span>
-                <span className="font-mono text-[11px] font-bold uppercase tracking-wider bg-selens-paper-ink text-selens-yellow px-2 py-0.5 rounded-[2px]">
+                <h3 className="font-serif text-lg font-bold text-neutral-950">{item.title}</h3>
+                <span className="text-[11px] font-bold bg-neutral-950 text-selens-yellow px-2 py-0.5 rounded-[2px] shrink-0">
                   {item.badge}
                 </span>
               </div>
-              <h3 className="font-serif text-xl font-bold text-selens-paper-ink">{item.title}</h3>
-              <p className="text-sm text-selens-paper-muted font-sans leading-relaxed">
+              <p className="text-sm text-neutral-600 font-sans leading-relaxed">
                 {item.description}
               </p>
             </div>

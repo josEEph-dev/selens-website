@@ -10,16 +10,15 @@ export default function NotFound() {
         description="The page you are looking for does not exist or has been moved."
       />
       <div className="selens-container py-16">
-        <div className="max-w-xl mx-auto border-y-2 border-selens-paper-ink text-center space-y-6 py-12">
-          <div className="font-serif font-bold text-6xl text-selens-paper-ink">
+        <div className="max-w-xl mx-auto border border-neutral-200 bg-neutral-50 rounded-[4px] text-center space-y-5 py-12 px-6">
+          <div className="font-serif font-bold text-6xl text-neutral-950">
             404
           </div>
-          <div className="w-12 h-1 bg-selens-yellow mx-auto" aria-hidden="true" />
           <div className="space-y-2">
-            <h2 className="font-serif font-bold text-xl text-selens-paper-ink">
+            <h2 className="font-serif font-bold text-xl text-neutral-950">
               Looking for something else?
             </h2>
-            <p className="text-sm text-selens-paper-muted max-w-md mx-auto">
+            <p className="text-sm text-neutral-600 max-w-md mx-auto">
               Return to our homepage to explore the latest news, officer directory, or student portal.
             </p>
           </div>

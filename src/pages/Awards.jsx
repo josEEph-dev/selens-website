@@ -76,15 +76,14 @@ export default function Awards() {
   return (
     <div id="main-content" className="selens-paper-page min-h-screen">
       <PageHeader
-        eyebrow="Honors Registry"
         title="Accreditations &amp; Awards"
         description="Recognitions, institutional rankings, and chapter citations awarded to the Society of Electrical Engineering Students."
       />
 
-      <div className="selens-container py-12 sm:py-16 space-y-10">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-selens-paper-rule pb-5">
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-selens-paper-muted">
-            Honors Registry · A.Y. {selectedYear}
+      <div className="selens-container py-10 sm:py-14 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200 pb-4">
+          <span className="text-sm font-semibold text-neutral-700">
+            Academic Year {selectedYear}
           </span>
           <YearSelector
             years={availableYears}
