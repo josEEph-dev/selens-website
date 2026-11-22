@@ -25,7 +25,7 @@ export function PageHeader({ title, description, action }) {
               <span aria-hidden="true">/</span>
               <span className="truncate">{title}</span>
             </nav>
-            <h1 className="selens-fluid-h1 selens-page-header-title break-words">
+            <h1 className="selens-fluid-h1 selens-page-header-title break-words [overflow-wrap:anywhere]">
               {title}
             </h1>
             {description && (

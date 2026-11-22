@@ -72,7 +72,7 @@ export default function Footer() {
           </div>
 
           {/* Column 4: Visit & Talk */}
-          <div className="grid gap-2.5 content-start">
+          <div className="col-span-2 lg:col-span-1 grid gap-2.5 content-start min-w-0">
             <h2 className="m-text-4 text-[#a2a7ae] mb-2">Visit &amp; Contact</h2>
             <p className="m-text-6 text-[#a2a7ae]">
               DEE Office, College of Engineering Building<br />
@@ -81,7 +81,7 @@ export default function Footer() {
             </p>
             <a
               href="mailto:iieeasteeg@msugensan.edu.ph"
-              className="m-link m-text-6 text-white w-fit mt-1"
+              className="m-link m-text-6 text-white w-fit max-w-full break-all mt-1"
             >
               iieeasteeg@msugensan.edu.ph
             </a>

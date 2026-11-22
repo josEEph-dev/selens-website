@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 
-const RATIO = 96 / 62
-const MAX_W = 124
-const MIN_RAIL_W = 100
-const EM = 11.2
-const RAIL_PITCH_MIN = 1.16
-const RAIL_PITCH_MAX = 1.62
-const CAROUSEL_PITCH = 1.2
-const GAP = 0.07
+const RATIO = 1.6
+const MAX_W = 152
+const MIN_RAIL_W = 122
+const EM = 13.0
+const RAIL_PITCH_MIN = 1.14
+const RAIL_PITCH_MAX = 1.56
+const CAROUSEL_PITCH = 1.16
+const GAP = 0.06
 const PERSPECTIVE = 900
 const MAX_STRETCH = 64
 const FIRST_DELAY = 1100
@@ -20,7 +20,7 @@ const REEL_K = 220
 const REEL_ZETA = 0.5
 const REST_Y = [9, -10, 7, -8, 10, -7, 8, -9]
 const REST_Z = [-1.6, 1.2, -2, 1.5, -1, 1.8, -1.3, 2]
-const DROPS = [6, 20, 0, 13, 22, 4, 16, 9]
+const DROPS = [4, 14, 0, 10, 16, 3, 12, 7]
 const TONES = [
   'text-chart-1',
   'text-chart-2',
@@ -124,7 +124,7 @@ function geometry(W, items) {
   const cordRest = 12 * u
   const clipH = 13 * u
   const clipW = 30 * u
-  const base = 56 * u
+  const base = 44 * u
   const straps = items.map(
     (item, i) => base + Math.max(0, item.drop ?? DROPS[i % DROPS.length] ?? 0) * u
   )
@@ -386,17 +386,36 @@ const BadgeFaces = React.memo(function BadgeFaces({ item, tone }) {
   const tags = (item.tags ?? []).slice(0, 3)
   const links = (item.links ?? []).slice(0, 3)
 
+  const nameText = item.name || ''
+  const roleText = item.role || ''
+  const teamText = item.team || ''
+  const nameLen = nameText.length
+  const roleLen = roleText.length
+
+  const frontNameSize =
+    nameLen > 28 ? 'text-[0.76em]' : nameLen > 20 ? 'text-[0.84em]' : 'text-[0.94em]'
+  const frontRoleSize =
+    roleLen > 38 ? 'text-[0.6em]' : roleLen > 24 ? 'text-[0.68em]' : 'text-[0.76em]'
+  const backNameSize =
+    nameLen > 28 ? 'text-[0.78em]' : nameLen > 20 ? 'text-[0.86em]' : 'text-[0.92em]'
+  const backRoleSize =
+    roleLen > 38 ? 'text-[0.62em]' : roleLen > 24 ? 'text-[0.68em]' : 'text-[0.74em]'
+
+  const showFrontTeam =
+    Boolean(teamText) &&
+    !roleText.toLowerCase().includes(teamText.toLowerCase())
+
   return (
     <>
       <span
         data-face="front"
-        className="absolute inset-0 flex flex-col items-center overflow-hidden rounded-[0.85em] border border-border bg-card px-[0.75em] pb-[0.65em] text-card-foreground [backface-visibility:hidden]"
+        className="absolute inset-0 flex flex-col items-center overflow-hidden rounded-[0.85em] border border-border bg-card px-[0.65em] pb-[0.55em] text-card-foreground [backface-visibility:hidden]"
         style={{ transform: 'translateZ(1px)' }}
       >
         <Band tone={tone} tall />
         <Hole />
         <span
-          className="relative mt-[2.05em] block size-[4.9em] shrink-0 rounded-full bg-card p-[0.2em]"
+          className="relative mt-[1.85em] block size-[4.4em] shrink-0 rounded-full bg-card p-[0.18em]"
           style={{
             boxShadow:
               '0 0.15em 0.5em color-mix(in oklab, black 65%, transparent)',
@@ -417,27 +436,31 @@ const BadgeFaces = React.memo(function BadgeFaces({ item, tone }) {
             )}
           </span>
         </span>
-        <span className="mt-[0.5em] block w-full line-clamp-2 text-center font-serif text-[0.95em] font-bold leading-[1.2] tracking-tight text-selens-white">
-          {item.name}
+        <span
+          className={`mt-[0.45em] block w-full line-clamp-3 text-balance break-words [overflow-wrap:anywhere] text-center font-sans ${frontNameSize} font-semibold leading-[1.18] tracking-tight text-selens-white`}
+        >
+          {nameText}
         </span>
-        <span className="mt-[0.2em] block w-full line-clamp-2 text-center font-sans text-[0.75em] leading-[1.25] text-neutral-300">
-          {item.role}
+        <span
+          className={`mt-[0.22em] block w-full line-clamp-3 text-balance break-words text-center font-sans ${frontRoleSize} leading-[1.22] text-neutral-300`}
+        >
+          {roleText}
         </span>
-        {item.team && (
-          <span className="mt-[0.35em] block w-full truncate text-center font-sans text-[0.56em] font-medium uppercase tracking-[0.16em] text-neutral-400">
-            {item.team}
+        {showFrontTeam && (
+          <span className="mt-[0.28em] block w-full line-clamp-2 break-words text-center font-sans text-[0.54em] font-medium uppercase leading-[1.2] tracking-[0.12em] text-neutral-400">
+            {teamText}
           </span>
         )}
-        <span className="mt-auto block w-full border-t border-dashed border-border pt-[0.45em]">
+        <span className="mt-auto block w-full border-t border-dashed border-border pt-[0.38em]">
           <svg
             aria-hidden="true"
             viewBox={`0 0 ${bars.width} 20`}
             preserveAspectRatio="none"
-            className="block h-[1.35em] w-full text-foreground/75"
+            className="block h-[1.05em] w-full text-foreground/75"
           >
             <path d={bars.d} fill="currentColor" />
           </svg>
-          <span className="mt-[0.2em] block text-center font-mono text-[0.5em] tracking-[0.3em] text-neutral-400">
+          <span className="mt-[0.16em] block text-center font-mono text-[0.48em] tracking-[0.26em] text-neutral-400">
             {digits}
           </span>
         </span>
@@ -451,29 +474,33 @@ const BadgeFaces = React.memo(function BadgeFaces({ item, tone }) {
       >
         <Band tone={tone} />
         <Hole />
-        <span className="flex h-full flex-col gap-[0.45em] px-[0.8em] pt-[2.55em] pb-[4.9em]">
+        <span className="flex h-full flex-col gap-[0.4em] px-[0.75em] pt-[2.45em] pb-[4.1em]">
           <span className="block">
-            <span className="block line-clamp-2 font-serif text-[0.9em] font-bold leading-tight text-selens-white">
-              {item.name}
+            <span
+              className={`block break-words [overflow-wrap:anywhere] font-sans ${backNameSize} font-semibold leading-[1.18] text-selens-white`}
+            >
+              {nameText}
             </span>
-            <span className="mt-[0.15em] block line-clamp-2 font-sans text-[0.72em] leading-snug text-neutral-300">
-              {item.role}
+            <span
+              className={`mt-[0.2em] block break-words font-sans ${backRoleSize} leading-[1.25] text-neutral-300`}
+            >
+              {roleText}
             </span>
           </span>
-          {item.bio && (
+          {item.bio && !roleText.toLowerCase().includes(item.bio.toLowerCase()) && (
             <span
               data-bio
-              className="line-clamp-3 block font-sans text-[0.7em] leading-[1.35] text-neutral-300"
+              className="line-clamp-3 block break-words font-sans text-[0.66em] leading-[1.32] text-neutral-300"
             >
               {item.bio}
             </span>
           )}
           {tags.length > 0 && (
-            <span className="flex flex-wrap gap-[0.25em] pt-[0.1em]">
+            <span className="flex flex-wrap gap-[0.22em] pt-[0.1em]">
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="block rounded-full border border-border bg-muted px-[0.55em] py-[0.14em] font-sans text-[0.58em] leading-tight text-neutral-300"
+                  className="block max-w-full break-words rounded-full border border-border bg-muted px-[0.52em] py-[0.12em] font-sans text-[0.55em] leading-tight text-neutral-300"
                 >
                   {tag}
                 </span>
@@ -484,7 +511,7 @@ const BadgeFaces = React.memo(function BadgeFaces({ item, tone }) {
         {links.length > 0 && (
           <span
             aria-hidden="true"
-            className="absolute bottom-[0.75em] left-[0.55em] flex flex-col items-start gap-[0.1em] transition-opacity duration-150 motion-reduce:transition-none"
+            className="absolute bottom-[0.65em] left-[0.55em] flex flex-col items-start gap-[0.1em] transition-opacity duration-150 motion-reduce:transition-none"
             style={{ opacity: 'var(--drawn, 1)' }}
           >
             {links.map((link) => (
@@ -498,7 +525,7 @@ const BadgeFaces = React.memo(function BadgeFaces({ item, tone }) {
         <svg
           aria-hidden="true"
           viewBox="-1 -1 23 23"
-          className="absolute bottom-[0.75em] right-[0.75em] size-[3.6em] text-foreground/90"
+          className="absolute bottom-[0.65em] right-[0.65em] size-[3.05em] text-foreground/90"
         >
           <path d={qr} fill="currentColor" />
         </svg>
@@ -656,7 +683,7 @@ export function TeamLanyardRail({
       const n = Math.max(1, count)
       const railW = Math.min(MAX_W, (width - 40) / (n * RAIL_PITCH_MIN + 0.4))
       const carousel = railW < MIN_RAIL_W
-      const W = Math.round((carousel ? clamp(width * 0.3, 96, 118) : railW) * 4) / 4
+      const W = Math.round((carousel ? clamp(width * 0.54, 152, 188) : railW) * 4) / 4
       setSize((old) =>
         Math.abs(old.width - width) < 0.5 && old.carousel === carousel && old.W === W
           ? old
@@ -1413,11 +1440,20 @@ export function TeamLanyardRail({
   const W = g.W
   const base = W / EM
   const current = active ?? flipped
-  const person = current === null ? null : items[current] ?? null
-  const showingBack = current !== null && current === flipped
   const centerIndex = size.carousel ? (active ?? carouselIndex) : null
-  const line1 = person ? `${person.name} — ${person.role}` : caption
-  const line2 = person ? (showingBack ? labels.back : labels.flip) : ''
+  const person =
+    current !== null
+      ? items[current] ?? null
+      : size.carousel && centerIndex !== null
+        ? items[centerIndex] ?? null
+        : items.length === 1
+          ? items[0] ?? null
+          : null
+  const showingBack = current !== null && current === flipped
+  const line1 = person ? person.name : caption
+  const line2 = person
+    ? `${person.role}${showingBack ? ` · ${labels.back}` : ''}`
+    : ''
 
   return (
     <div
@@ -1947,14 +1983,16 @@ export function TeamLanyardRail({
         </div>
       )}
 
-      <div className="relative z-10 flex flex-col items-center gap-3 px-6 pb-8 pt-3 text-center">
-        <div id={`${uid}-caption`} aria-live="polite" className="min-h-[2.75rem]">
-          <p className="text-sm sm:text-base font-medium tracking-[-0.015em] text-white">
+      <div className="relative z-10 flex flex-col items-center gap-3 px-4 sm:px-6 pb-7 sm:pb-8 pt-3 text-center">
+        <div id={`${uid}-caption`} aria-live="polite" className="min-h-[3rem] max-w-xl mx-auto">
+          <p className="text-sm sm:text-base font-medium tracking-[-0.015em] text-white break-words">
             {line1}
           </p>
-          <p className="mt-0.5 m-text-6 text-[#a2a7ae]">
-            {line2}
-          </p>
+          {line2 && (
+            <p className="mt-1 m-text-6 text-[#a2a7ae] break-words">
+              {line2}
+            </p>
+          )}
           {showingBack && person?.bio && (
             <span className="sr-only">{person.bio}</span>
           )}

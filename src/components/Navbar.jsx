@@ -241,7 +241,7 @@ export default function Navbar() {
                 to={isOfficer ? '/dashboard' : '/portal'}
                 className="m-btn-2"
               >
-                <span className="m-btn-2__label">
+                <span className="m-btn-2__label max-w-[88px] sm:max-w-none truncate">
                   {isOfficer ? 'Dashboard' : profile?.full_name?.split(' ')[0] || 'Portal'}
                 </span>
                 <span className="m-btn-2__icon" aria-hidden="true">
@@ -309,7 +309,12 @@ export default function Navbar() {
                 className="m-btn-2 m-btn-2--dark text-xs"
               >
                 <span className="m-btn-2__label">
-                  {contrastHigh ? 'Standard contrast' : 'High contrast'}
+                  <span className="hidden sm:inline">
+                    {contrastHigh ? 'Standard contrast' : 'High contrast'}
+                  </span>
+                  <span className="sm:hidden">
+                    {contrastHigh ? 'Standard' : 'Contrast'}
+                  </span>
                 </span>
               </button>
               <button

@@ -163,17 +163,17 @@ html.contrast-high {
 
 .m-text-2 {
   font-family: var(--hush-font);
-  font-size: clamp(40px, 6vw, 94px);
+  font-size: clamp(34px, 6vw, 94px);
   font-weight: 400;
-  line-height: 0.98;
+  line-height: 0.99;
   letter-spacing: -0.045em;
 }
 
 .m-text-3 {
   font-family: var(--hush-font);
-  font-size: clamp(32px, 4.4vw, 66px);
+  font-size: clamp(28px, 4.4vw, 66px);
   font-weight: 400;
-  line-height: 1.03;
+  line-height: 1.04;
   letter-spacing: -0.042em;
 }
 
@@ -187,9 +187,9 @@ html.contrast-high {
 
 .m-text-5 {
   font-family: var(--hush-font);
-  font-size: clamp(20px, 1.85vw, 26px);
+  font-size: clamp(18px, 1.85vw, 26px);
   font-weight: 500;
-  line-height: 1.14;
+  line-height: 1.16;
   letter-spacing: -0.028em;
 }
 
@@ -203,7 +203,7 @@ html.contrast-high {
 
 .m-text-7 {
   font-family: var(--hush-font);
-  font-size: clamp(36px, 3.6vw, 54px);
+  font-size: clamp(34px, 3.6vw, 54px);
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.045em;
@@ -212,17 +212,17 @@ html.contrast-high {
 /* Fluid legacy helper aliases mapped cleanly to Hush scale */
 .selens-fluid-hero {
   font-family: var(--hush-font);
-  font-size: clamp(40px, 6vw, 92px);
+  font-size: clamp(34px, 6vw, 92px);
   font-weight: 400;
-  line-height: 0.98;
+  line-height: 0.99;
   letter-spacing: -0.045em;
 }
 
 .selens-fluid-h1 {
   font-family: var(--hush-font);
-  font-size: clamp(32px, 4.4vw, 64px);
+  font-size: clamp(28px, 4.4vw, 64px);
   font-weight: 400;
-  line-height: 1.04;
+  line-height: 1.05;
   letter-spacing: -0.042em;
 }
 
@@ -915,7 +915,7 @@ html.contrast-high {
   padding: 4px 0 0 6px;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   .hush-bt-panel {
     aspect-ratio: 16 / 10;
     clip-path: inset(0 round 22px);
@@ -924,7 +924,10 @@ html.contrast-high {
     position: static;
     width: auto;
     min-height: 0;
-    padding: 16px 4px 0;
+    margin-top: 12px;
+    padding: 18px 20px;
+    border-radius: 20px;
+    background: var(--hush-white);
   }
 }
 
@@ -1034,11 +1037,13 @@ html.contrast-high {
 
 .hush-ft-word {
   font-family: var(--hush-font);
-  font-size: clamp(64px, 21vw, 290px);
+  font-size: clamp(50px, 19.5vw, 290px);
   font-weight: 500;
   letter-spacing: -0.07em;
   line-height: 0.78;
   white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
   user-select: none;
 }
 

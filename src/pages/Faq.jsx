@@ -129,9 +129,9 @@ export default function Faq() {
                         type="button"
                         aria-expanded={isOpen}
                         onClick={() => setOpenId(isOpen ? null : faq.id)}
-                        className="w-full py-6 text-left flex items-center justify-between gap-5 cursor-pointer group"
+                        className="w-full py-5 sm:py-6 text-left flex items-center justify-between gap-4 sm:gap-5 cursor-pointer group"
                       >
-                        <span className="m-text-5 text-[#121315] break-words">
+                        <span className="m-text-5 text-[#121315] min-w-0 flex-1 break-words">
                           {faq.question}
                         </span>
                         <span

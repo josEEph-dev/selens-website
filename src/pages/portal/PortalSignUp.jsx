@@ -283,7 +283,7 @@ export default function PortalSignUp() {
                   onChange={(e) => setAgreed(e.target.checked)}
                   className="mt-1 h-4 w-4 shrink-0 rounded border border-[#cdd0d4] accent-[#121315]"
                 />
-                <span className="break-words">
+                <span className="min-w-0 break-words [overflow-wrap:anywhere]">
                   I agree that SELENS may use my name, school email, student ID, and year level to run student services. {'Questions about your data? Contact SELENS at iieeasteeg@msugensan.edu.ph or through facebook at https://www.facebook.com/selensmsugsc.'}
                 </span>
               </label>

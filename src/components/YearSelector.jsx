@@ -5,7 +5,7 @@ export default function YearSelector({ years = [], selectedYear, onChange, class
   if (!years || years.length <= 1) return null
 
   return (
-    <div className={`flex items-center gap-2.5 min-w-0 ${className}`}>
+    <div className={`flex flex-wrap items-center gap-2.5 min-w-0 ${className}`}>
       <label
         htmlFor="selens-year-select"
         className="m-text-6 font-medium selens-filter-label flex items-center gap-1.5 shrink-0"
