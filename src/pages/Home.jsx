@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { CURRENT_ACADEMIC_YEAR, formatCommitteeLabel } from '../lib/config'
-import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Waveform, Reveal } from '../components/ui'
+import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Waveform, Reveal, TeamLanyardRail } from '../components/ui'
 import {
   ArrowRight,
   MapPin,
@@ -216,6 +216,21 @@ export default function Home() {
       ignore = true
     }
   }, [])
+
+  const officerLanyardItems = useMemo(
+    () =>
+      officers.map((officer, index) => ({
+        id: String(officer.id),
+        name: officer.full_name,
+        role: officer.position,
+        team: `A.Y. ${CURRENT_ACADEMIC_YEAR}`,
+        image: officer.photo_url || '',
+        tags: ['Executive Board', `A.Y. ${CURRENT_ACADEMIC_YEAR}`],
+        links: [{ label: 'Full directory', href: '/people' }],
+        tone: (index % 5) + 1,
+      })),
+    [officers]
+  )
 
   return (
     <div className="bg-selens-black text-selens-white">
@@ -700,53 +715,16 @@ export default function Home() {
           />
 
           {loadingOfficers ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="h-24 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
-              ))}
-            </div>
+            <div className="h-[340px] bg-selens-surface border border-selens-line rounded-[4px] animate-pulse" />
           ) : officersError ? (
             <div className="p-6 text-center text-sm text-red-400 bg-selens-ink border border-selens-line rounded-[4px]">
               {officersError}
             </div>
-          ) : officers.length > 0 ? (
-            <Reveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0 border border-selens-line rounded-[4px] bg-selens-ink overflow-hidden">
-              {officers.map((officer) => (
-                <Link
-                  key={officer.id}
-                  to="/people"
-                  className="p-4 sm:p-5 border-b sm:border-r border-selens-line hover:bg-selens-elevated transition-colors flex items-center gap-4 group"
-                >
-                  <div className="w-14 h-14 rounded-[4px] bg-selens-black border border-selens-line flex items-center justify-center shrink-0 overflow-hidden">
-                    {officer.photo_url ? (
-                      <img
-                        src={officer.photo_url}
-                        alt={officer.full_name}
-                        className="w-full h-full object-cover object-top"
-                      />
-                    ) : (
-                      <span className="text-selens-yellow font-serif font-bold text-sm">
-                        {officer.full_name
-                          ? officer.full_name
-                              .split(' ')
-                              .map((n) => n[0])
-                              .slice(0, 2)
-                              .join('')
-                          : 'EE'}
-                      </span>
-                    )}
-                  </div>
-                  <div className="min-w-0 space-y-0.5">
-                    <h3 className="font-serif font-bold text-sm sm:text-base text-selens-white group-hover:text-selens-yellow transition-colors truncate">
-                      {officer.full_name}
-                    </h3>
-                    <p className="text-xs text-neutral-400 font-sans truncate">
-                      {officer.position}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </Reveal>
+          ) : officerLanyardItems.length > 0 ? (
+            <TeamLanyardRail
+              items={officerLanyardItems}
+              caption="Hover, drag, pull down, or click a badge to flip"
+            />
           ) : (
             <div className="text-center py-8 text-neutral-400 bg-selens-ink border border-selens-line rounded-[4px]">
               Officer directory will be updated shortly.

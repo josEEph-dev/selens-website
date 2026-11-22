@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { dataApi } from '../lib/supabase'
 import { PageHeader } from '../components/SharedUI'
-import { SectionHeading } from '../components/ui'
+import { SectionHeading, TeamLanyardRail } from '../components/ui'
 import { Mail, User, ArrowUp } from 'lucide-react'
 
 const GROUPS = [
@@ -208,13 +208,37 @@ export default function People() {
   }, [])
 
   // Group people by category
-  const categorized = {}
-  people.forEach((p) => {
-    if (!categorized[p.category]) {
-      categorized[p.category] = []
-    }
-    categorized[p.category].push(p)
-  })
+  const categorized = useMemo(() => {
+    const map = {}
+    people.forEach((p) => {
+      if (!map[p.category]) {
+        map[p.category] = []
+      }
+      map[p.category].push(p)
+    })
+    return map
+  }, [people])
+
+  const execBoardItems = useMemo(
+    () =>
+      (categorized.executive_board || []).map((person, index) => ({
+        id: String(person.id),
+        name: person.full_name,
+        role: person.position,
+        team: person.committee || 'Executive Board',
+        image: person.photo_url || '',
+        bio: person.committee || undefined,
+        tags: [
+          person.academic_year ? `A.Y. ${person.academic_year}` : null,
+          'Executive Board',
+        ].filter(Boolean),
+        links: person.email
+          ? [{ label: 'Email', href: `mailto:${person.email}` }]
+          : [],
+        tone: (index % 5) + 1,
+      })),
+    [categorized]
+  )
 
   // Determine non-empty groups for anchor menu and rendering
   const activeGroups = GROUPS.filter((g) =>
@@ -354,22 +378,23 @@ export default function People() {
                             </h3>
                           )}
 
-                          <div
-                            className={`grid grid-cols-1 auto-rows-fr gap-3 sm:gap-6 ${
-                              isExec
-                                ? 'sm:grid-cols-2 lg:grid-cols-3'
-                                : 'sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-                            }`}
-                          >
-                            {members.map((person) => (
-                              <PersonCard
-                                key={person.id}
-                                person={person}
-                                large={isExec}
-                                isFaculty={isAdviser}
-                              />
-                            ))}
-                          </div>
+                          {isExec ? (
+                            <TeamLanyardRail
+                              items={execBoardItems}
+                              caption="Hover, drag, pull down, or click an officer badge to flip"
+                            />
+                          ) : (
+                            <div className="grid grid-cols-1 auto-rows-fr gap-3 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                              {members.map((person) => (
+                                <PersonCard
+                                  key={person.id}
+                                  person={person}
+                                  large={false}
+                                  isFaculty={isAdviser}
+                                />
+                              ))}
+                            </div>
+                          )}
                         </div>
                       )
                     })}
