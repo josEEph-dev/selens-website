@@ -86,68 +86,41 @@ export default function About() {
           </div>
         </section>
 
-        {/* Official Organizational Charts (Real SELENS & DEE Assets) */}
+        {/* Department of Electrical Engineering Faculty Chart */}
         <section className="space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
             <h2 className="m-text-3 text-[#121315] lg:col-span-7">
-              Organizational structure.
+              Department faculty &amp; staff.
             </h2>
             <p className="m-text text-[#4d5158] lg:col-span-5">
-              Official organizational charts for the Society of Electrical Engineering Students and the Department of Electrical Engineering faculty.
+              Official organizational chart of the Department of Electrical Engineering faculty and staff at MSU-General Santos.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-            <figure className="lg:col-span-8 m-panel-light p-5 sm:p-7 space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <figcaption className="m-text-5 text-[#121315]">
-                  SELENS Organizational Chart
-                </figcaption>
-                <a
-                  href="/website-assets/selens-org-chart.png"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="m-link m-text-4 text-[#121315]"
-                >
-                  <span>View full size</span>
-                  <ArrowUpRight className="w-4 h-4" />
-                </a>
-              </div>
-              <div className="rounded-[16px] overflow-hidden bg-[#e7e8ea]/50 p-2">
-                <img
-                  src="/website-assets/selens-org-chart.png"
-                  alt="SELENS Set of Officers Organizational Chart"
-                  loading="lazy"
-                  className="w-full h-auto rounded-[12px] block"
-                />
-              </div>
-            </figure>
-
-            <figure className="lg:col-span-4 m-panel-light p-5 sm:p-7 space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <figcaption className="m-text-5 text-[#121315]">
-                  DEE Faculty &amp; Staff
-                </figcaption>
-                <a
-                  href="/website-assets/faculty-org-chart.png"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="m-link m-text-4 text-[#121315]"
-                >
-                  <span>Full size</span>
-                  <ArrowUpRight className="w-4 h-4" />
-                </a>
-              </div>
-              <div className="rounded-[16px] overflow-hidden bg-[#e7e8ea]/50 p-2">
-                <img
-                  src="/website-assets/faculty-org-chart.png"
-                  alt="Department of Electrical Engineering Faculty Organizational Chart"
-                  loading="lazy"
-                  className="w-full h-auto rounded-[12px] block"
-                />
-              </div>
-            </figure>
-          </div>
+          <figure className="m-panel-light p-5 sm:p-8 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <figcaption className="m-text-5 text-[#121315]">
+                DEE Faculty &amp; Staff Organizational Chart
+              </figcaption>
+              <a
+                href="/website-assets/faculty-org-chart.png"
+                target="_blank"
+                rel="noreferrer"
+                className="m-link m-text-4 text-[#121315]"
+              >
+                <span>View full size</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
+            </div>
+            <div className="rounded-[16px] overflow-hidden bg-[#e7e8ea]/50 p-2 sm:p-3 max-w-3xl mx-auto">
+              <img
+                src="/website-assets/faculty-org-chart.png"
+                alt="Department of Electrical Engineering Faculty Organizational Chart"
+                loading="lazy"
+                className="w-full h-auto rounded-[12px] block"
+              />
+            </div>
+          </figure>
         </section>
 
         {/* Governing Documents — Deep Ink 28px Panel */}

@@ -345,10 +345,10 @@ export default function Home() {
                 <li className="grid grid-cols-[36px_1fr] gap-x-3 gap-y-1 py-5">
                   <span className="m-text-4 text-[#121315] row-span-2 pt-0.5">01</span>
                   <Link to="/about" className="m-text-5 text-[#121315] no-underline hover:underline underline-offset-4">
-                    About SELENS &amp; Org Charts
+                    About SELENS
                   </Link>
                   <p className="m-text-6 text-[#4d5158]">
-                    Our founding constitutional mandate, core objectives, and official student &amp; faculty structure.
+                    Our founding constitutional mandate, core objectives, and Department of Electrical Engineering faculty.
                   </p>
                 </li>
                 <li className="grid grid-cols-[36px_1fr] gap-x-3 gap-y-1 py-5">
