@@ -6,37 +6,87 @@ import { ArrowUp } from 'lucide-react'
 
 const GROUPS = [
   {
-    id: 'executive-appointive',
-    heading: 'Executive / Appointive Officials',
+    id: 'dean',
+    heading: 'Dean',
+    subgroups: [{ bucket: 'dean', label: null }],
+  },
+  {
+    id: 'assistant-dean',
+    heading: 'Assistant Dean',
+    subgroups: [{ bucket: 'assistant_dean', label: null }],
+  },
+  {
+    id: 'department-chairperson',
+    heading: 'Department Chairperson',
+    subgroups: [{ bucket: 'department_chairperson', label: null }],
+  },
+  {
+    id: 'faculty',
+    heading: 'Faculty',
+    subgroups: [{ bucket: 'faculty', label: null }],
+  },
+  {
+    id: 'staff',
+    heading: 'Staff',
+    subgroups: [{ bucket: 'staff', label: null }],
+  },
+  {
+    id: 'executives',
+    heading: 'Executives',
+    subgroups: [{ bucket: 'executives', label: null }],
+  },
+  {
+    id: 'legislatives',
+    heading: 'Legislatives',
+    subgroups: [{ bucket: 'legislatives', label: null }],
+  },
+  {
+    id: 'representatives',
+    heading: 'Representatives',
     subgroups: [
-      { category: 'executive_board', label: 'Executive Board' },
-      { category: 'undersecretary', label: 'Undersecretaries and Representatives' },
+      { bucket: 'year_representatives', label: 'Year Representatives' },
+      { bucket: 'comelec_representatives', label: 'COMELEC Representatives' },
     ],
   },
   {
-    id: 'legislative',
-    heading: 'Legislative',
-    subgroups: [
-      { category: 'councilor', label: 'Councilors' },
-      { category: 'year_representative', label: 'Year Representatives' },
-    ],
+    id: 'appointed-officials',
+    heading: 'Usec / Appointed Officials',
+    subgroups: [{ bucket: 'appointed_officials', label: null }],
   },
   {
-    id: 'judiciary-comelec',
-    heading: 'Judiciary / COMELEC Representatives',
-    subgroups: [
-      { category: 'comelec', label: 'COMELEC' },
-      { category: 'judiciary', label: 'Judiciary' },
-    ],
-  },
-  {
-    id: 'faculty-staff',
-    heading: 'Faculty and Staff',
-    subgroups: [
-      { category: 'adviser', label: null },
-    ],
+    id: 'judiciary',
+    heading: 'Judiciary',
+    subgroups: [{ bucket: 'judiciary', label: null }],
   },
 ]
+
+function classifyPerson(person) {
+  const cat = (person.category || '').toLowerCase()
+  const pos = (person.position || '').toLowerCase()
+
+  if (cat === 'adviser') {
+    if (/\b(assistant|associate|vice)\s+dean\b/.test(pos)) return 'assistant_dean'
+    if (/\bdean\b/.test(pos)) return 'dean'
+    if (/\b(department\s+chair(person|man)?|chairperson|chairman)\b/.test(pos)) {
+      return 'department_chairperson'
+    }
+    if (
+      /\b(custodian|technician|staff|clerk|aide|utility|admin(istrative)?\s+(staff|officer|assistant|aide)|lab(oratory)?\s+assistant)\b/.test(
+        pos
+      )
+    ) {
+      return 'staff'
+    }
+    return 'faculty'
+  }
+
+  if (cat === 'executive_board') return 'executives'
+  if (cat === 'councilor') return 'legislatives'
+  if (cat === 'year_representative') return 'year_representatives'
+  if (cat === 'comelec') return 'comelec_representatives'
+  if (cat === 'judiciary') return 'judiciary'
+  return 'appointed_officials'
+}
 
 export default function People() {
   const [people, setPeople] = useState([])
@@ -95,31 +145,29 @@ export default function People() {
     }
   }, [])
 
-  const categorized = useMemo(() => {
+  const bucketed = useMemo(() => {
     const map = {}
     people.forEach((p) => {
-      if (!map[p.category]) {
-        map[p.category] = []
+      const key = classifyPerson(p)
+      if (!map[key]) {
+        map[key] = []
       }
-      map[p.category].push(p)
+      map[key].push(p)
     })
     return map
   }, [people])
 
-  const lanyardByCategory = useMemo(() => {
+  const lanyardByBucket = useMemo(() => {
     const map = {}
     GROUPS.forEach((group) => {
       group.subgroups.forEach((subgroup) => {
-        const members = categorized[subgroup.category] || []
-        const isFaculty = subgroup.category === 'adviser'
+        const members = bucketed[subgroup.bucket] || []
         const fallbackLabel = subgroup.label || group.heading
-        map[subgroup.category] = members.map((person, index) => ({
+        map[subgroup.bucket] = members.map((person, index) => ({
           id: String(person.id),
           name: person.full_name,
           role: person.position,
-          team: isFaculty
-            ? person.committee || 'Faculty & Staff'
-            : person.committee || fallbackLabel,
+          team: person.committee || fallbackLabel,
           image: person.photo_url || '',
           bio: person.committee || undefined,
           tags: [
@@ -134,10 +182,10 @@ export default function People() {
       })
     })
     return map
-  }, [categorized])
+  }, [bucketed])
 
   const activeGroups = GROUPS.filter((g) =>
-    g.subgroups.some((sg) => (categorized[sg.category] || []).length > 0)
+    g.subgroups.some((sg) => (bucketed[sg.bucket] || []).length > 0)
   )
 
   useEffect(() => {
@@ -247,7 +295,7 @@ export default function People() {
               </nav>
             )}
 
-            {/* Branch Sections with Interactive TeamLanyardRail */}
+            {/* Groups in Officer-Requested Institutional Order */}
             <div className="space-y-16">
               {activeGroups.map((group) => (
                 <section
@@ -264,11 +312,11 @@ export default function People() {
 
                   <div className="space-y-10">
                     {group.subgroups.map((subgroup) => {
-                      const items = lanyardByCategory[subgroup.category] || []
+                      const items = lanyardByBucket[subgroup.bucket] || []
                       if (items.length === 0) return null
 
                       return (
-                        <div key={subgroup.category} className="space-y-3.5">
+                        <div key={subgroup.bucket} className="space-y-3.5">
                           {subgroup.label && (
                             <div className="flex items-baseline justify-between gap-3 px-1">
                               <h3 className="m-text-5 text-[#121315]">

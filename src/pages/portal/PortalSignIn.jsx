@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../../context/useAuth'
 import { PageHeader } from '../../components/SharedUI'
 import { useNoIndex } from './useNoIndex'
@@ -11,6 +12,7 @@ export default function PortalSignIn() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
@@ -86,16 +88,27 @@ export default function PortalSignIn() {
                   Forgot password?
                 </Link>
               </div>
-              <input
-                id="signin-password"
-                type="password"
-                required
-                aria-invalid={Boolean(error)}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                className="m-field__control"
-              />
+              <div className="relative">
+                <input
+                  id="signin-password"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  aria-invalid={Boolean(error)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  className="m-field__control !pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-pressed={showPassword}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full inline-flex items-center justify-center text-[#4d5158] hover:text-[#121315] hover:bg-[#cdd0d4]/60 transition-colors cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
+                </button>
+              </div>
             </div>
 
             <button

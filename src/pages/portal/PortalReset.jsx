@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../../context/useAuth'
 import { PageHeader } from '../../components/SharedUI'
 import { useNoIndex } from './useNoIndex'
@@ -11,6 +12,8 @@ export default function PortalReset() {
 
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
@@ -79,34 +82,56 @@ export default function PortalReset() {
                   <label htmlFor="reset-password" className="m-field__label">
                     New Password
                   </label>
-                  <input
-                    id="reset-password"
-                    type="password"
-                    required
-                    minLength={8}
-                    aria-invalid={Boolean(error)}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Minimum 8 characters"
-                    className="m-field__control"
-                  />
+                  <div className="relative">
+                    <input
+                      id="reset-password"
+                      type={showPassword ? 'text' : 'password'}
+                      required
+                      minLength={8}
+                      aria-invalid={Boolean(error)}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Minimum 8 characters"
+                      className="m-field__control !pr-12"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-label={showPassword ? 'Hide new password' : 'Show new password'}
+                      aria-pressed={showPassword}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full inline-flex items-center justify-center text-[#4d5158] hover:text-[#121315] hover:bg-[#cdd0d4]/60 transition-colors cursor-pointer"
+                    >
+                      {showPassword ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="m-field">
                   <label htmlFor="reset-confirm-password" className="m-field__label">
                     Confirm New Password
                   </label>
-                  <input
-                    id="reset-confirm-password"
-                    type="password"
-                    required
-                    minLength={8}
-                    aria-invalid={Boolean(error)}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Re-enter your new password"
-                    className="m-field__control"
-                  />
+                  <div className="relative">
+                    <input
+                      id="reset-confirm-password"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      required
+                      minLength={8}
+                      aria-invalid={Boolean(error)}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Re-enter your new password"
+                      className="m-field__control !pr-12"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+                      aria-pressed={showConfirmPassword}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full inline-flex items-center justify-center text-[#4d5158] hover:text-[#121315] hover:bg-[#cdd0d4]/60 transition-colors cursor-pointer"
+                    >
+                      {showConfirmPassword ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
+                    </button>
+                  </div>
                 </div>
 
                 <button

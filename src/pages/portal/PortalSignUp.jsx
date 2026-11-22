@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../../context/useAuth'
 import { PageHeader } from '../../components/SharedUI'
 import { useNoIndex } from './useNoIndex'
@@ -18,6 +19,7 @@ export default function PortalSignUp() {
   const [studentId, setStudentId] = useState('')
   const [yearLevel, setYearLevel] = useState('1st Year')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [agreed, setAgreed] = useState(false)
   const [error, setError] = useState('')
   const [confirmationMessage, setConfirmationMessage] = useState('')
@@ -180,16 +182,27 @@ export default function PortalSignUp() {
                 <label htmlFor="signup-password" className="m-field__label">
                   Password
                 </label>
-                <input
-                  id="signup-password"
-                  type="password"
-                  required
-                  minLength={8}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Minimum 8 characters"
-                  className="m-field__control"
-                />
+                <div className="relative">
+                  <input
+                    id="signup-password"
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    minLength={8}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Minimum 8 characters"
+                    className="m-field__control !pr-12"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    aria-pressed={showPassword}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full inline-flex items-center justify-center text-[#4d5158] hover:text-[#121315] hover:bg-[#cdd0d4]/60 transition-colors cursor-pointer"
+                  >
+                    {showPassword ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
+                  </button>
+                </div>
               </div>
 
               <label className="flex items-start gap-3 m-text-6 text-[#4d5158] cursor-pointer pt-1">

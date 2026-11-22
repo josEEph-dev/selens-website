@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
 import { PageHeader } from '../components/SharedUI'
-import { LogIn, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { LogIn, AlertCircle, CheckCircle2, Eye, EyeOff } from 'lucide-react'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const { signIn, user, profile, signOut } = useAuth()
@@ -120,16 +121,27 @@ export default function Login() {
                     <label htmlFor="officer-password" className="m-field__label">
                       Password
                     </label>
-                    <input
-                      id="officer-password"
-                      type="password"
-                      required
-                      aria-invalid={Boolean(error)}
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="m-field__control"
-                    />
+                    <div className="relative">
+                      <input
+                        id="officer-password"
+                        type={showPassword ? 'text' : 'password'}
+                        required
+                        aria-invalid={Boolean(error)}
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="m-field__control !pr-12"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                        aria-pressed={showPassword}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full inline-flex items-center justify-center text-[#4d5158] hover:text-[#121315] hover:bg-[#cdd0d4]/60 transition-colors cursor-pointer"
+                      >
+                        {showPassword ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
+                      </button>
+                    </div>
                   </div>
 
                   <button
