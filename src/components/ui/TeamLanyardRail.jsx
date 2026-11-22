@@ -1049,18 +1049,49 @@ export function TeamLanyardRail({
   const ready = size.width > 0
   React.useEffect(() => {
     if (!ready || reduced || swayed.current) return
-    const timers = Array.from({ length: count }, (_, i) =>
-      window.setTimeout(
-        () => impulse(i, (i % 2 ? -1 : 1) * (30 - (i % 4) * 3)),
-        60 + i * 70
-      )
-    )
-    const done = window.setTimeout(() => {
+    const stage = stageRef.current
+    if (!stage) return
+
+    let timers = []
+    let doneTimer = 0
+    const runSway = () => {
+      if (swayed.current) return
       swayed.current = true
-    }, 80 + count * 70)
+      const capped = Math.min(count, 10)
+      timers = Array.from({ length: capped }, (_, i) =>
+        window.setTimeout(
+          () => impulse(i, (i % 2 ? -1 : 1) * (30 - (i % 4) * 3)),
+          60 + i * 70
+        )
+      )
+      doneTimer = window.setTimeout(() => {
+        timers = []
+      }, 80 + capped * 70)
+    }
+
+    if (typeof IntersectionObserver === 'undefined') {
+      runSway()
+      return () => {
+        timers.forEach((t) => window.clearTimeout(t))
+        window.clearTimeout(doneTimer)
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          runSway()
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.15 }
+    )
+    observer.observe(stage)
+
     return () => {
+      observer.disconnect()
       timers.forEach((t) => window.clearTimeout(t))
-      window.clearTimeout(done)
+      window.clearTimeout(doneTimer)
     }
   }, [ready, reduced, count, impulse])
 
@@ -1830,31 +1861,89 @@ export function TeamLanyardRail({
 
       {size.carousel && count > 1 && (
         <div
-          className="relative z-10 mt-1 flex flex-wrap justify-center gap-1.5 px-4"
+          className="relative z-10 mt-1 flex items-center justify-center gap-3 px-4"
           role="group"
           aria-label={labels.show}
         >
-          {items.map((item, i) => (
-            <button
-              key={item.id}
-              type="button"
-              aria-label={`${labels.show} ${item.name}`}
-              aria-current={centerIndex === i}
-              onClick={() => {
-                stop()
-                setActive(i)
-              }}
-              className={`min-h-[24px] px-1 inline-flex items-center justify-center cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring`}
+          <button
+            type="button"
+            aria-label="Previous badge"
+            onClick={() => {
+              stop()
+              const curr = centerIndex ?? 0
+              const prev = (curr - 1 + count) % count
+              setActive(prev)
+            }}
+            className="min-w-[36px] min-h-[36px] inline-flex items-center justify-center rounded-[4px] border border-selens-line bg-selens-ink text-neutral-300 hover:border-selens-yellow hover:text-selens-yellow transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 16 16"
+              className="size-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <span
-                className={`block h-1.5 rounded-full transition-[width,background-color] duration-300 motion-reduce:transition-none ${
-                  centerIndex === i
-                    ? 'w-6 bg-selens-yellow'
-                    : 'w-1.5 bg-neutral-600 hover:bg-neutral-400'
-                }`}
-              />
-            </button>
-          ))}
+              <path d="M10 3.5 5.5 8 10 12.5" />
+            </svg>
+          </button>
+
+          {count <= 12 ? (
+            <div className="flex flex-wrap items-center justify-center gap-1">
+              {items.map((item, i) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-label={`${labels.show} ${item.name}`}
+                  aria-current={centerIndex === i}
+                  onClick={() => {
+                    stop()
+                    setActive(i)
+                  }}
+                  className="min-h-[24px] px-1 inline-flex items-center justify-center cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <span
+                    className={`block h-1.5 rounded-full transition-[width,background-color] duration-300 motion-reduce:transition-none ${
+                      centerIndex === i
+                        ? 'w-6 bg-selens-yellow'
+                        : 'w-1.5 bg-neutral-600 hover:bg-neutral-400'
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
+          ) : (
+            <span className="font-mono text-xs tabular-nums text-neutral-400 min-w-[4.5rem] text-center">
+              {(centerIndex ?? 0) + 1} / {count}
+            </span>
+          )}
+
+          <button
+            type="button"
+            aria-label="Next badge"
+            onClick={() => {
+              stop()
+              const curr = centerIndex ?? 0
+              const next = (curr + 1) % count
+              setActive(next)
+            }}
+            className="min-w-[36px] min-h-[36px] inline-flex items-center justify-center rounded-[4px] border border-selens-line bg-selens-ink text-neutral-300 hover:border-selens-yellow hover:text-selens-yellow transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 16 16"
+              className="size-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M6 3.5 10.5 8 6 12.5" />
+            </svg>
+          </button>
         </div>
       )}
 

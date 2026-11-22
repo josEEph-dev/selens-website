@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react'
 import { dataApi } from '../lib/supabase'
 import { PageHeader } from '../components/SharedUI'
 import { SectionHeading, TeamLanyardRail } from '../components/ui'
-import { Mail, User, ArrowUp } from 'lucide-react'
+import { ArrowUp } from 'lucide-react'
 
 const GROUPS = [
   {
@@ -37,119 +37,6 @@ const GROUPS = [
     ],
   },
 ]
-
-function InitialsAvatar({ name, large = false }) {
-  const initials = name
-    ? name
-        .split(' ')
-        .filter(Boolean)
-        .map((n) => n[0])
-        .slice(0, 2)
-        .join('')
-    : ''
-
-  return (
-    <div className="w-full h-full bg-selens-black flex items-center justify-center select-none">
-      {initials ? (
-        <span
-          className={`font-serif font-bold text-selens-yellow text-base ${
-            large ? 'sm:text-3xl' : 'sm:text-xl'
-          }`}
-        >
-          {initials}
-        </span>
-      ) : (
-        <User className={`text-neutral-600 w-6 h-6 ${large ? 'sm:w-10 sm:h-10' : 'sm:w-8 sm:h-8'}`} />
-      )}
-    </div>
-  )
-}
-
-function PersonCard({ person, large = false, isFaculty = false }) {
-  const [imgError, setImgError] = useState(false)
-
-  return (
-    <article className="selens-card h-full min-h-[136px] sm:min-h-0 p-3.5 sm:p-0 flex flex-row sm:flex-col items-center sm:items-stretch gap-3.5 sm:gap-0 overflow-hidden">
-      {/* Avatar / Photo Area: 64px square on <640px, aspect-[4/5] on >=640px */}
-      <div className="w-16 h-16 sm:w-full sm:h-auto sm:aspect-[4/5] shrink-0 rounded-[4px] sm:rounded-none border border-selens-line sm:border-0 sm:border-b sm:border-selens-line bg-neutral-950 overflow-hidden relative flex items-center justify-center">
-        {person.photo_url && !imgError ? (
-          <img
-            src={person.photo_url}
-            alt={person.full_name}
-            loading="lazy"
-            className="w-full h-full object-cover object-top"
-            onError={() => setImgError(true)}
-          />
-        ) : (
-          <InitialsAvatar name={person.full_name} large={large} />
-        )}
-      </div>
-
-      {/* Text & Contact Area */}
-      <div className="flex-1 min-w-0 sm:p-4 flex flex-row sm:flex-col items-center sm:items-stretch justify-between gap-2.5 sm:gap-3">
-        <div className="min-w-0 flex-1 space-y-1 sm:space-y-1.5">
-          {/* Name: font-serif, line-clamp-2, reserved 2-line height */}
-          <h4
-            title={person.full_name}
-            className={`font-serif font-bold text-selens-white leading-snug line-clamp-2 min-h-[2.4375rem] break-words ${
-              large
-                ? 'text-sm sm:text-lg lg:text-xl sm:min-h-[3.125rem] lg:min-h-[3.5rem]'
-                : 'text-sm sm:text-base sm:min-h-[2.75rem]'
-            }`}
-          >
-            {person.full_name}
-          </h4>
-
-          {/* Position: line-clamp-3, reserved 3-line height */}
-          <p
-            title={person.position}
-            className="text-xs sm:text-sm text-neutral-300 font-sans font-medium leading-snug line-clamp-3 min-h-[3.09375rem] sm:min-h-[3.625rem] break-words"
-          >
-            {person.position}
-          </p>
-
-          {/* Committee: small, line-clamp-1 on <640px, line-clamp-2 on >=640px, reserved height */}
-          {!isFaculty && (
-            <p
-              title={person.committee || ''}
-              className="text-xs text-neutral-400 font-sans leading-normal line-clamp-1 sm:line-clamp-2 min-h-[1.125rem] sm:min-h-[2.25rem] pt-0.5 break-words"
-            >
-              {person.committee || '\u00A0'}
-            </p>
-          )}
-        </div>
-
-        {/* Mobile (<640px): Icon-only email link */}
-        {person.email && (
-          <a
-            href={`mailto:${person.email}`}
-            aria-label={`Email ${person.full_name}`}
-            title={person.email}
-            className="sm:hidden w-10 h-10 shrink-0 inline-flex items-center justify-center rounded-[4px] border border-selens-line bg-selens-black text-neutral-300 hover:text-selens-yellow hover:border-selens-yellow transition-colors"
-          >
-            <Mail className="w-4 h-4" />
-          </a>
-        )}
-
-        {/* Tablet/Desktop (>=640px): Footer email row with reserved height */}
-        <div className="hidden sm:flex items-center pt-2.5 border-t border-selens-line min-h-[2.25rem]">
-          {person.email ? (
-            <a
-              href={`mailto:${person.email}`}
-              title={person.email}
-              className="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-selens-yellow transition-colors min-w-0 max-w-full"
-            >
-              <Mail className="w-3.5 h-3.5 shrink-0 text-selens-yellow" />
-              <span className="truncate">{person.email}</span>
-            </a>
-          ) : (
-            <span className="text-xs text-neutral-600 select-none">&mdash;</span>
-          )}
-        </div>
-      </div>
-    </article>
-  )
-}
 
 export default function People() {
   const [people, setPeople] = useState([])
@@ -219,26 +106,36 @@ export default function People() {
     return map
   }, [people])
 
-  const execBoardItems = useMemo(
-    () =>
-      (categorized.executive_board || []).map((person, index) => ({
-        id: String(person.id),
-        name: person.full_name,
-        role: person.position,
-        team: person.committee || 'Executive Board',
-        image: person.photo_url || '',
-        bio: person.committee || undefined,
-        tags: [
-          person.academic_year ? `A.Y. ${person.academic_year}` : null,
-          'Executive Board',
-        ].filter(Boolean),
-        links: person.email
-          ? [{ label: 'Email', href: `mailto:${person.email}` }]
-          : [],
-        tone: (index % 5) + 1,
-      })),
-    [categorized]
-  )
+  // Build memoized lanyard badge items for every subgroup so scroll updates never re-create arrays
+  const lanyardByCategory = useMemo(() => {
+    const map = {}
+    GROUPS.forEach((group) => {
+      group.subgroups.forEach((subgroup) => {
+        const members = categorized[subgroup.category] || []
+        const isFaculty = subgroup.category === 'adviser'
+        const fallbackLabel = subgroup.label || group.heading
+        map[subgroup.category] = members.map((person, index) => ({
+          id: String(person.id),
+          name: person.full_name,
+          role: person.position,
+          team: isFaculty
+            ? person.committee || 'Faculty & Staff'
+            : person.committee || fallbackLabel,
+          image: person.photo_url || '',
+          bio: person.committee || undefined,
+          tags: [
+            person.academic_year ? `A.Y. ${person.academic_year}` : null,
+            fallbackLabel,
+          ].filter(Boolean),
+          links: person.email
+            ? [{ label: 'Email', href: `mailto:${person.email}` }]
+            : [],
+          tone: (index % 5) + 1,
+        }))
+      })
+    })
+    return map
+  }, [categorized])
 
   // Determine non-empty groups for anchor menu and rendering
   const activeGroups = GROUPS.filter((g) =>
@@ -295,10 +192,9 @@ export default function People() {
 
       <div className="selens-container py-12 sm:py-16 space-y-12">
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            <div className="h-32 sm:h-72 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
-            <div className="h-32 sm:h-72 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
-            <div className="h-32 sm:h-72 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
+          <div className="space-y-8">
+            <div className="h-[340px] bg-selens-surface border border-selens-line rounded-[4px] animate-pulse" />
+            <div className="h-[340px] bg-selens-surface border border-selens-line rounded-[4px] animate-pulse" />
           </div>
         ) : error ? (
           <div className="bg-selens-ink border border-selens-line rounded-[4px] p-12 text-center text-sm text-red-400">
@@ -364,37 +260,26 @@ export default function People() {
 
                   <div className="space-y-10">
                     {group.subgroups.map((subgroup) => {
-                      const members = categorized[subgroup.category] || []
-                      if (members.length === 0) return null
-
-                      const isExec = subgroup.category === 'executive_board'
-                      const isAdviser = subgroup.category === 'adviser'
+                      const items = lanyardByCategory[subgroup.category] || []
+                      if (items.length === 0) return null
 
                       return (
                         <div key={subgroup.category} className="space-y-4">
                           {subgroup.label && (
-                            <h3 className="font-serif text-base sm:text-lg font-bold text-selens-yellow">
-                              {subgroup.label}
-                            </h3>
-                          )}
-
-                          {isExec ? (
-                            <TeamLanyardRail
-                              items={execBoardItems}
-                              caption="Hover, drag, pull down, or click an officer badge to flip"
-                            />
-                          ) : (
-                            <div className="grid grid-cols-1 auto-rows-fr gap-3 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                              {members.map((person) => (
-                                <PersonCard
-                                  key={person.id}
-                                  person={person}
-                                  large={false}
-                                  isFaculty={isAdviser}
-                                />
-                              ))}
+                            <div className="flex items-baseline justify-between gap-3">
+                              <h3 className="font-serif text-base sm:text-lg font-bold text-selens-yellow">
+                                {subgroup.label}
+                              </h3>
+                              <span className="font-mono text-xs text-neutral-400">
+                                {items.length} {items.length === 1 ? 'member' : 'members'}
+                              </span>
                             </div>
                           )}
+
+                          <TeamLanyardRail
+                            items={items}
+                            caption="Hover, drag, pull down, or click a badge to flip"
+                          />
                         </div>
                       )
                     })}
