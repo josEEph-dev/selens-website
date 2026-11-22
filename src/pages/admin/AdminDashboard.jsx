@@ -74,12 +74,39 @@ export default function AdminDashboard() {
             faqs: f.length,
           })
 
-          const norm = (s) => (s || '').trim().toLowerCase().replace(/\s+/g, ' ')
-          const myEmail = norm(profile?.email)
-          const myName = norm(profile?.full_name)
+          const normEmail = (s) => (s || '').trim().toLowerCase().replace(/\s+/g, ' ')
+          const normName = (s) =>
+            (s || '')
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase()
+              .replace(/[.,]/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim()
+          const stripMi = (s) => s.replace(/ [a-z] /g, ' ').replace(/\s+/g, ' ').trim()
+
+          const myEmail = normEmail(profile?.email)
+          const myFull = normName(profile?.full_name)
+          const myFirst = normName(profile?.first_name)
+          const myMiddle = normName(profile?.middle_name)
+          const mySurname = normName(profile?.surname)
+          const candidates = new Set(
+            [
+              myFull,
+              myFull ? stripMi(myFull) : '',
+              myFirst && mySurname ? `${myFirst} ${mySurname}` : '',
+              myFirst && myMiddle && mySurname ? `${myFirst} ${myMiddle[0]} ${mySurname}` : '',
+              myFirst && myMiddle && mySurname ? `${myFirst} ${myMiddle} ${mySurname}` : '',
+            ].filter(Boolean)
+          )
+
           const match =
-            (myEmail && p.find((row) => norm(row.email) === myEmail)) ||
-            (myName && p.find((row) => norm(row.full_name) === myName)) ||
+            (myEmail && p.find((row) => normEmail(row.email) === myEmail)) ||
+            (candidates.size > 0 &&
+              p.find((row) => {
+                const target = normName(row.full_name)
+                return candidates.has(target) || candidates.has(stripMi(target))
+              })) ||
             null
           setMyPerson(match)
           setMyPhotoUrl(match?.photo_url || '')
@@ -93,7 +120,7 @@ export default function AdminDashboard() {
     }
     loadStats()
     return () => { ignore = true }
-  }, [profile?.email, profile?.full_name])
+  }, [profile?.email, profile?.full_name, profile?.first_name, profile?.middle_name, profile?.surname])
 
   const handleSaveMyPhoto = async (e) => {
     e.preventDefault()

@@ -17,6 +17,9 @@ CREATE TABLE IF NOT EXISTS public.allowed_signup_emails (
 CREATE TABLE IF NOT EXISTS public.profiles (
   id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   full_name text,
+  first_name text,
+  middle_name text,
+  surname text,
   role text NOT NULL DEFAULT 'student'
     CHECK (role = ANY (ARRAY['student'::text, 'officer'::text, 'pubrel'::text, 'admin_affairs'::text, 'admin'::text])),
   student_id text
@@ -74,6 +77,79 @@ AS $$
   );
 $$;
 
+CREATE OR REPLACE FUNCTION public.normalize_person_name(input_text text)
+RETURNS text
+LANGUAGE sql
+IMMUTABLE
+SET search_path = public
+AS $$
+  SELECT btrim(
+    regexp_replace(
+      regexp_replace(
+        translate(
+          lower(coalesce(input_text, '')),
+          'áàâäãåéèêëíìîïóòôöõúùûüñçÁÀÂÄÃÅÉÈÊËÍÌÎÏÓÒÔÖÕÚÙÛÜÑÇ',
+          'aaaaaaeeeeiiiiooooouuuuncaaaaaaeeeeiiiiooooouuuunc'
+        ),
+        '[.,]',
+        ' ',
+        'g'
+      ),
+      '\s+',
+      ' ',
+      'g'
+    )
+  );
+$$;
+
+CREATE OR REPLACE FUNCTION public.matches_people_name(
+  p_first text,
+  p_middle text,
+  p_surname text,
+  p_full text,
+  row_full_name text
+)
+RETURNS boolean
+LANGUAGE plpgsql
+IMMUTABLE
+SET search_path = public
+AS $$
+DECLARE
+  v_target text := public.normalize_person_name(row_full_name);
+  v_target_no_mi text := btrim(regexp_replace(v_target, ' [a-z] ', ' ', 'g'));
+  v_full text := public.normalize_person_name(p_full);
+  v_first text := public.normalize_person_name(p_first);
+  v_middle text := public.normalize_person_name(p_middle);
+  v_surname text := public.normalize_person_name(p_surname);
+  v_mi text;
+BEGIN
+  IF v_target = '' THEN
+    RETURN false;
+  END IF;
+
+  IF v_full <> '' AND (v_target = v_full OR v_target_no_mi = v_full) THEN
+    RETURN true;
+  END IF;
+
+  IF v_first <> '' AND v_surname <> '' THEN
+    IF v_target = (v_first || ' ' || v_surname)
+       OR v_target_no_mi = (v_first || ' ' || v_surname) THEN
+      RETURN true;
+    END IF;
+
+    IF v_middle <> '' THEN
+      v_mi := left(v_middle, 1);
+      IF v_target = (v_first || ' ' || v_mi || ' ' || v_surname)
+         OR v_target = (v_first || ' ' || v_middle || ' ' || v_surname) THEN
+        RETURN true;
+      END IF;
+    END IF;
+  END IF;
+
+  RETURN false;
+END;
+$$;
+
 CREATE OR REPLACE FUNCTION public.is_own_person_row(p_email text, p_full_name text)
 RETURNS boolean
 LANGUAGE sql
@@ -95,9 +171,21 @@ AS $$
           )
           OR (
             nullif(btrim(coalesce(p_full_name, '')), '') IS NOT NULL
-            AND lower(regexp_replace(btrim(p_full_name), '\s+', ' ', 'g')) IN (
-              lower(regexp_replace(btrim(coalesce(pr.full_name, '')), '\s+', ' ', 'g')),
-              lower(regexp_replace(btrim(coalesce(u.raw_user_meta_data->>'full_name', '')), '\s+', ' ', 'g'))
+            AND (
+              public.matches_people_name(
+                pr.first_name,
+                pr.middle_name,
+                pr.surname,
+                pr.full_name,
+                p_full_name
+              )
+              OR public.matches_people_name(
+                u.raw_user_meta_data->>'first_name',
+                u.raw_user_meta_data->>'middle_name',
+                u.raw_user_meta_data->>'surname',
+                u.raw_user_meta_data->>'full_name',
+                p_full_name
+              )
             )
           )
         )
@@ -155,16 +243,85 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
 AS $$
+DECLARE
+  v_first text := nullif(btrim(coalesce(new.raw_user_meta_data->>'first_name', '')), '');
+  v_middle text := nullif(btrim(coalesce(new.raw_user_meta_data->>'middle_name', '')), '');
+  v_surname text := nullif(btrim(coalesce(new.raw_user_meta_data->>'surname', '')), '');
+  v_full text := nullif(btrim(coalesce(new.raw_user_meta_data->>'full_name', '')), '');
+  v_email text := lower(btrim(coalesce(new.email, '')));
+  v_local_letters text := regexp_replace(split_part(v_email, '@', 1), '[^a-z]', '', 'g');
+  v_first_token text;
+  v_surname_letters text;
+  v_email_matches_name boolean := false;
+  v_is_listed_officer boolean := false;
+  v_role text := 'student';
 BEGIN
-  INSERT INTO public.profiles (id, full_name, role, student_id, year_level)
+  IF v_full IS NULL THEN
+    IF v_first IS NOT NULL AND v_surname IS NOT NULL THEN
+      IF v_middle IS NOT NULL THEN
+        v_full := v_first || ' ' || upper(left(regexp_replace(v_middle, '^\.+', ''), 1)) || '. ' || v_surname;
+      ELSE
+        v_full := v_first || ' ' || v_surname;
+      END IF;
+    ELSE
+      v_full := split_part(new.email, '@', 1);
+    END IF;
+  END IF;
+
+  IF v_email LIKE '%@msugensan.edu.ph' AND v_first IS NOT NULL AND v_surname IS NOT NULL THEN
+    v_first_token := regexp_replace(split_part(public.normalize_person_name(v_first), ' ', 1), '[^a-z]', '', 'g');
+    v_surname_letters := regexp_replace(public.normalize_person_name(v_surname), '[^a-z]', '', 'g');
+    IF length(v_first_token) >= 2
+       AND length(v_surname_letters) >= 2
+       AND position(v_first_token in v_local_letters) > 0
+       AND position(v_surname_letters in v_local_letters) > 0 THEN
+      v_email_matches_name := true;
+    END IF;
+  END IF;
+
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.people pe
+    WHERE pe.category IN (
+      'executive_board',
+      'councilor',
+      'year_representative',
+      'undersecretary',
+      'comelec',
+      'judiciary',
+      'officer',
+      'committee_lead'
+    )
+    AND (
+      (
+        nullif(btrim(coalesce(pe.email, '')), '') IS NOT NULL
+        AND lower(btrim(pe.email)) = v_email
+      )
+      OR (
+        v_email_matches_name
+        AND public.matches_people_name(v_first, v_middle, v_surname, v_full, pe.full_name)
+      )
+    )
+  )
+  INTO v_is_listed_officer;
+
+  IF v_is_listed_officer THEN
+    v_role := 'officer';
+  END IF;
+
+  INSERT INTO public.profiles (id, full_name, first_name, middle_name, surname, role, student_id, year_level)
   VALUES (
     new.id,
-    coalesce(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1)),
-    'student',
-    nullif(new.raw_user_meta_data->>'student_id', ''),
-    nullif(new.raw_user_meta_data->>'year_level', '')
+    v_full,
+    v_first,
+    v_middle,
+    v_surname,
+    v_role,
+    nullif(btrim(coalesce(new.raw_user_meta_data->>'student_id', '')), ''),
+    nullif(btrim(coalesce(new.raw_user_meta_data->>'year_level', '')), '')
   )
   ON CONFLICT (id) DO NOTHING;
+
   RETURN new;
 END;
 $$;

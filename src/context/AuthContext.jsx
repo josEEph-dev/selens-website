@@ -108,7 +108,16 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
-  const signUp = async ({ email, password, full_name, year_level, student_id }) => {
+  const signUp = async ({
+    email,
+    password,
+    full_name,
+    first_name,
+    middle_name,
+    surname,
+    year_level,
+    student_id,
+  }) => {
     if (!isSupabaseConfigured || !supabase) {
       throw new Error('Authentication service is not configured.')
     }
@@ -119,6 +128,9 @@ export function AuthProvider({ children }) {
       options: {
         data: {
           full_name: (full_name || '').trim(),
+          first_name: (first_name || '').trim(),
+          middle_name: (middle_name || '').trim(),
+          surname: (surname || '').trim(),
           year_level,
           student_id: (student_id || '').trim(),
         },

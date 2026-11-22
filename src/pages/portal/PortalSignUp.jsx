@@ -9,12 +9,28 @@ const SCHOOL_EMAIL_REGEX = /^[^@\s]+@msugensan\.edu\.ph$/i
 const STUDENT_ID_REGEX = /^\d{4}-\d{4}$/
 const YEAR_LEVELS = ['1st Year', '2nd Year', '3rd Year', '4th Year', 'Other']
 
+function cleanWhitespace(value) {
+  return (value || '').trim().replace(/\s+/g, ' ')
+}
+
+function buildCanonicalFullName(firstName, middleName, surname) {
+  const first = cleanWhitespace(firstName)
+  const middle = cleanWhitespace(middleName)
+  const last = cleanWhitespace(surname)
+  if (!first || !last) return ''
+  if (!middle) return `${first} ${last}`
+  const initial = middle.replace(/^\.+/, '').charAt(0).toUpperCase()
+  return initial ? `${first} ${initial}. ${last}` : `${first} ${last}`
+}
+
 export default function PortalSignUp() {
   useNoIndex()
   const { user, loading, signUp } = useAuth()
   const navigate = useNavigate()
 
-  const [fullName, setFullName] = useState('')
+  const [surname, setSurname] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [middleName, setMiddleName] = useState('')
   const [email, setEmail] = useState('')
   const [studentId, setStudentId] = useState('')
   const [yearLevel, setYearLevel] = useState('1st Year')
@@ -29,17 +45,26 @@ export default function PortalSignUp() {
     return <Navigate to="/portal" replace />
   }
 
+  const previewFullName = buildCanonicalFullName(firstName, middleName, surname)
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
     setConfirmationMessage('')
 
-    const cleanName = fullName.trim()
+    const cleanSurname = cleanWhitespace(surname)
+    const cleanFirst = cleanWhitespace(firstName)
+    const cleanMiddle = cleanWhitespace(middleName)
+    const cleanFullName = buildCanonicalFullName(cleanFirst, cleanMiddle, cleanSurname)
     const cleanEmail = email.trim().toLowerCase()
     const cleanStudentId = studentId.trim()
 
-    if (!cleanName) {
-      setError('Enter your full name.')
+    if (!cleanSurname) {
+      setError('Enter your surname.')
+      return
+    }
+    if (!cleanFirst) {
+      setError('Enter your first name.')
       return
     }
     if (!SCHOOL_EMAIL_REGEX.test(cleanEmail)) {
@@ -64,7 +89,10 @@ export default function PortalSignUp() {
       const data = await signUp({
         email: cleanEmail,
         password,
-        full_name: cleanName,
+        full_name: cleanFullName,
+        first_name: cleanFirst,
+        middle_name: cleanMiddle,
+        surname: cleanSurname,
         year_level: yearLevel,
         student_id: cleanStudentId,
       })
@@ -112,19 +140,62 @@ export default function PortalSignUp() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} noValidate className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="m-field">
+                  <label htmlFor="signup-surname" className="m-field__label">
+                    Surname
+                  </label>
+                  <input
+                    id="signup-surname"
+                    type="text"
+                    required
+                    autoComplete="family-name"
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
+                    placeholder="Dela Cruz"
+                    className="m-field__control"
+                  />
+                </div>
+
+                <div className="m-field">
+                  <label htmlFor="signup-first-name" className="m-field__label">
+                    First Name
+                  </label>
+                  <input
+                    id="signup-first-name"
+                    type="text"
+                    required
+                    autoComplete="given-name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="Juan Miguel"
+                    className="m-field__control"
+                  />
+                </div>
+              </div>
+
               <div className="m-field">
-                <label htmlFor="signup-full-name" className="m-field__label">
-                  Full Name
+                <label htmlFor="signup-middle-name" className="m-field__label">
+                  Middle Name <span className="font-normal text-[#4d5158]">(Optional)</span>
                 </label>
                 <input
-                  id="signup-full-name"
+                  id="signup-middle-name"
                   type="text"
-                  required
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Juan Dela Cruz"
+                  autoComplete="additional-name"
+                  value={middleName}
+                  onChange={(e) => setMiddleName(e.target.value)}
+                  placeholder="Santos"
                   className="m-field__control"
                 />
+                {previewFullName ? (
+                  <p className="text-xs text-[#4d5158]">
+                    Documented as <strong className="font-medium text-[#121315]">{previewFullName}</strong>
+                  </p>
+                ) : (
+                  <p className="text-xs text-[#4d5158]">
+                    SELENS officers matching the official directory with their @msugensan.edu.ph email automatically unlock Officer Dashboard access.
+                  </p>
+                )}
               </div>
 
               <div className="m-field">
