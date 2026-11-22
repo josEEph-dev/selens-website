@@ -3,12 +3,10 @@ import { dataApi } from '../../lib/supabase'
 import { useAuth } from '../../context/useAuth'
 import { useNoIndex } from '../portal/useNoIndex'
 import { Plus, Edit2, Trash2, Users, X } from 'lucide-react'
-import { PageHeader, Card, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
+import { PageHeader, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
 import ImageUploader from '../../components/ImageUploader'
 
-const input = 'w-full px-3.5 py-2.5 bg-selens-black border border-selens-line rounded-[4px] text-sm text-selens-white placeholder:text-neutral-500 focus:outline-none focus:border-selens-yellow transition font-sans'
-
-const NAV_OFFSET = 80
+const NAV_OFFSET = 76
 
 const GROUPS = [
   {
@@ -161,50 +159,51 @@ export default function AdminPeople() {
   }
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-screen py-10">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-8">
-        <PageHeader
-          title="Manage People Directory"
-          subtitle="Maintain the official roster for Executive Board officers, legislative representatives, and faculty advisers for A.Y. 2026–2027."
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Officer Dashboard', href: '/dashboard' },
-            { label: 'People Directory' },
-          ]}
-          action={
-            <PrimaryButton
-              onClick={() =>
-                setEditingItem({
-                  full_name: '',
-                  position: '',
-                  committee: '',
-                  category: 'executive_board',
-                  photo_url: '',
-                  display_order: people.length + 1,
-                })
-              }
-              className="inline-flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add Person</span>
-            </PrimaryButton>
-          }
-        />
+    <div id="main-content" className="selens-paper-page min-h-screen pb-14">
+      <PageHeader
+        compactTop
+        title="Manage People Directory"
+        subtitle="Maintain the official roster for Executive Board officers, legislative representatives, and faculty advisers for A.Y. 2026–2027."
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Officer Dashboard', href: '/dashboard' },
+          { label: 'People Directory' },
+        ]}
+        action={
+          <PrimaryButton
+            onClick={() =>
+              setEditingItem({
+                full_name: '',
+                position: '',
+                committee: '',
+                category: 'executive_board',
+                photo_url: '',
+                display_order: people.length + 1,
+              })
+            }
+            className="inline-flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Person</span>
+          </PrimaryButton>
+        }
+      />
 
+      <div className="selens-container py-8 space-y-6">
         {feedback && (
           <div
             role="status"
-            className={`fixed bottom-6 left-6 z-40 max-w-sm p-4 text-sm font-medium rounded-[4px] border flex items-center justify-between gap-3 ${
+            className={`fixed bottom-6 left-6 right-6 sm:right-auto z-40 max-w-sm p-4 m-text-6 font-medium rounded-[16px] border m-shadow flex items-center justify-between gap-3 ${
               feedback.type === 'success'
-                ? 'bg-selens-ink border-selens-yellow text-selens-yellow'
-                : 'bg-selens-ink border-red-500/50 text-red-400'
+                ? 'bg-[#121315] border-[#121315] text-[#FFD100]'
+                : 'bg-red-50 border-red-200 text-red-800'
             }`}
           >
             <span>{feedback.message}</span>
             <button
               type="button"
               onClick={() => setFeedback(null)}
-              className="text-neutral-400 hover:text-selens-white transition cursor-pointer"
+              className="opacity-70 hover:opacity-100 transition cursor-pointer shrink-0"
               aria-label="Dismiss message"
             >
               <X className="w-4 h-4" />
@@ -214,241 +213,251 @@ export default function AdminPeople() {
 
         {editingItem && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 overflow-y-auto"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#121315]/60 backdrop-blur-sm p-4 overflow-y-auto"
             onClick={(e) => {
               if (e.target === e.currentTarget) setEditingItem(null)
             }}
           >
-            <Card className="border-selens-yellow max-w-3xl w-full max-h-[90vh] overflow-y-auto" hover={false}>
-              <div className="border-b border-selens-line pb-4 mb-6 flex items-center justify-between gap-4">
-                <div>
-                  <h2 className="text-lg font-bold font-serif text-selens-white">
+            <div className="m-panel-light m-shadow border-t-4 border-[#FFD100] max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8">
+              <div className="border-b border-[#cdd0d4] pb-4 mb-6 flex items-center justify-between gap-4">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <h2 className="m-text-5 text-[#121315]">
                     {editingItem.id ? 'Edit Person Record' : 'Add New Person Record'}
                   </h2>
-                  <span className="text-xs text-neutral-400">A.Y. 2026–2027</span>
+                  <span className="px-3 py-1 rounded-full bg-[#121315] text-[#FFD100] text-xs font-medium">
+                    A.Y. 2026–2027
+                  </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setEditingItem(null)}
-                  className="p-1.5 text-neutral-400 hover:text-selens-yellow transition rounded-[4px] cursor-pointer"
+                  className="w-9 h-9 rounded-full inline-flex items-center justify-center text-[#4d5158] hover:bg-[#e7e8ea] hover:text-[#121315] transition cursor-pointer shrink-0"
                   aria-label="Close modal"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
-            <form onSubmit={handleSave} className="space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={editingItem.full_name || ''}
-                    onChange={(e) => setEditingItem({ ...editingItem, full_name: e.target.value })}
-                    className={input}
-                    placeholder="e.g. Officer Name"
-                  />
+              <form onSubmit={handleSave} className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="m-field">
+                    <label className="m-field__label">Full Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={editingItem.full_name || ''}
+                      onChange={(e) => setEditingItem({ ...editingItem, full_name: e.target.value })}
+                      className="m-field__control"
+                      placeholder="e.g. Officer Name"
+                    />
+                  </div>
+                  <div className="m-field">
+                    <label className="m-field__label">Position</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. President or Councilor"
+                      value={editingItem.position || ''}
+                      onChange={(e) => setEditingItem({ ...editingItem, position: e.target.value })}
+                      className="m-field__control"
+                    />
+                  </div>
+                  <div className="m-field">
+                    <label className="m-field__label">Category</label>
+                    <select
+                      value={editingItem.category || 'executive_board'}
+                      onChange={(e) => setEditingItem({ ...editingItem, category: e.target.value })}
+                      className="m-field__control cursor-pointer"
+                    >
+                      {CATEGORY_GROUPS.map((group) => (
+                        <optgroup key={group.label} label={group.label}>
+                          {group.options.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </option>
+                          ))}
+                        </optgroup>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="m-field">
+                    <label className="m-field__label">Committee</label>
+                    <input
+                      type="text"
+                      value={editingItem.committee || ''}
+                      onChange={(e) => setEditingItem({ ...editingItem, committee: e.target.value })}
+                      className="m-field__control"
+                      placeholder="e.g. Academic Affairs, Logistics"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Position
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. President or Councilor"
-                    value={editingItem.position || ''}
-                    onChange={(e) => setEditingItem({ ...editingItem, position: e.target.value })}
-                    className={input}
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Category
-                  </label>
-                  <select
-                    value={editingItem.category || 'executive_board'}
-                    onChange={(e) => setEditingItem({ ...editingItem, category: e.target.value })}
-                    className={input}
-                  >
-                    {CATEGORY_GROUPS.map((group) => (
-                      <optgroup key={group.label} label={group.label}>
-                        {group.options.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </optgroup>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Committee
-                  </label>
-                  <input
-                    type="text"
-                    value={editingItem.committee || ''}
-                    onChange={(e) => setEditingItem({ ...editingItem, committee: e.target.value })}
-                    className={input}
-                    placeholder="e.g. Academic Affairs, Logistics"
-                  />
-                </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <ImageUploader
-                    label="Portrait Photo"
-                    value={editingItem.photo_url || ''}
-                    onChange={(val) => setEditingItem({ ...editingItem, photo_url: val })}
-                    placeholder="https://... or upload officer portrait"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <ImageUploader
+                      label="Portrait Photo"
+                      value={editingItem.photo_url || ''}
+                      onChange={(val) => setEditingItem({ ...editingItem, photo_url: val })}
+                      placeholder="https://... or upload officer portrait"
+                    />
+                  </div>
+                  <div className="m-field">
+                    <label className="m-field__label">
+                      Display Order{' '}
+                      <span className="text-[#4d5158] font-normal">(Lower numbers appear first.)</span>
+                    </label>
+                    <input
+                      type="number"
+                      value={editingItem.display_order ?? 1}
+                      onChange={(e) => setEditingItem({ ...editingItem, display_order: e.target.value })}
+                      className="m-field__control"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Display Order <span className="normal-case text-neutral-500 font-normal">(Lower numbers appear first.)</span>
-                  </label>
-                  <input
-                    type="number"
-                    value={editingItem.display_order ?? 1}
-                    onChange={(e) => setEditingItem({ ...editingItem, display_order: e.target.value })}
-                    className={input}
-                  />
-                </div>
-              </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-selens-line">
-                <SecondaryButton
-                  type="button"
-                  onClick={() => setEditingItem(null)}
-                >
-                  Cancel
-                </SecondaryButton>
-                <PrimaryButton type="submit">
-                  Save Record
-                </PrimaryButton>
-              </div>
-            </form>
-            </Card>
+                <div className="flex flex-wrap justify-end gap-3 pt-4 border-t border-[#cdd0d4]">
+                  <SecondaryButton type="button" onClick={() => setEditingItem(null)}>
+                    Cancel
+                  </SecondaryButton>
+                  <PrimaryButton type="submit">
+                    Save Record
+                  </PrimaryButton>
+                </div>
+              </form>
+            </div>
           </div>
         )}
 
         {loading ? (
-          <Card className="p-8 text-center text-neutral-400">Loading personnel directory...</Card>
+          <div className="m-panel-light m-shadow p-8 text-center m-text-6 text-[#4d5158]">
+            Loading personnel directory...
+          </div>
         ) : error ? (
-          <Card className="p-8 text-center text-red-400 text-sm">{error}</Card>
+          <div className="m-panel-light m-shadow p-8 text-center text-red-700 text-sm">{error}</div>
         ) : people.length === 0 ? (
-          <Card className="p-8 text-center text-neutral-400 text-sm">
+          <div className="m-panel-light m-shadow p-8 text-center m-text-6 text-[#4d5158]">
             No officer records entered yet for A.Y. 2026–2027.
-          </Card>
+          </div>
         ) : (
-          <div className="space-y-8">
-            <div className="flex items-center gap-3 text-sm font-serif font-bold text-selens-white">
-              <Users className="w-5 h-5 text-selens-yellow shrink-0" />
-              <span>{people.length} Personnel Records (A.Y. 2026–2027)</span>
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <span className="w-9 h-9 rounded-full bg-[#121315] text-[#FFD100] inline-flex items-center justify-center shrink-0">
+                <Users className="w-4 h-4" />
+              </span>
+              <span className="m-text-5 text-[#121315]">
+                {people.length} Personnel Records (A.Y. 2026–2027)
+              </span>
             </div>
 
             {activeGroups.length > 0 && (
               <nav
-                className="sticky z-30 bg-selens-black border-b-2 border-selens-yellow"
+                className="sticky z-30 bg-[#e7e8ea]/95 backdrop-blur-md -mx-4 px-4 sm:-mx-6 sm:px-6 py-2.5 border-b border-[#cdd0d4]"
                 style={{ top: NAV_OFFSET }}
                 aria-label="Manage People Directory Navigation"
               >
-                <div className="flex gap-2 overflow-x-auto whitespace-nowrap py-3">
-                  {activeGroups.map((group) => (
-                    <button
-                      key={group.id}
-                      type="button"
-                      onClick={() => {
-                        lockUntil.current = Date.now() + 1000
-                        setActiveId(group.id)
-                        document
-                          .getElementById(`admin-people-${group.id}`)
-                          ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                      }}
-                      className={`shrink-0 px-4 py-2 text-sm font-semibold rounded-[4px] border outline-none transition cursor-pointer ${
-                        activeId === group.id
-                          ? 'bg-selens-yellow border-selens-yellow text-black'
-                          : 'bg-selens-ink border-selens-line text-neutral-300 hover:border-selens-yellow hover:text-selens-yellow'
-                      }`}
-                    >
-                      {group.heading}
-                    </button>
-                  ))}
+                <div className="flex gap-2 overflow-x-auto whitespace-nowrap py-1">
+                  {activeGroups.map((group) => {
+                    const isActive = activeId === group.id
+                    return (
+                      <button
+                        key={group.id}
+                        type="button"
+                        onClick={() => {
+                          lockUntil.current = Date.now() + 1000
+                          setActiveId(group.id)
+                          document
+                            .getElementById(`admin-people-${group.id}`)
+                            ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }}
+                        className={`shrink-0 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full border outline-none transition cursor-pointer ${
+                          isActive
+                            ? 'bg-[#121315] border-[#121315] text-white'
+                            : 'bg-white border-[#cdd0d4] text-[#121315] hover:border-[#121315]'
+                        }`}
+                      >
+                        {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#FFD100]" aria-hidden="true" />}
+                        <span>{group.heading}</span>
+                      </button>
+                    )
+                  })}
                 </div>
               </nav>
             )}
 
-            <div className="space-y-12">
+            <div className="space-y-10">
               {activeGroups.map((group) => (
-                <section key={group.id} id={`admin-people-${group.id}`} className="space-y-6 scroll-mt-44">
+                <section key={group.id} id={`admin-people-${group.id}`} className="space-y-5 scroll-mt-44">
                   <div>
-                    <h2 className="font-serif text-xl sm:text-2xl font-bold text-selens-white">
+                    <h2 className="m-text-3 text-[#121315]">
                       {group.heading}
                     </h2>
-                    <div className="w-12 h-1 bg-selens-yellow mt-2" />
+                    <div className="w-12 h-1 rounded-full bg-[#FFD100] mt-2" />
                   </div>
 
-                  <div className="space-y-6">
+                  <div className="space-y-5">
                     {group.subgroups.map((subgroup) => {
                       const members = categorized[subgroup.category] || []
                       if (members.length === 0) return null
 
                       return (
-                        <Card key={subgroup.category} className="p-0 overflow-hidden" hover={false}>
-                          <div className="px-5 py-3.5 bg-selens-black/60 border-b border-selens-line flex items-center justify-between">
-                            <h3 className="font-serif font-bold text-sm text-selens-yellow">
+                        <div key={subgroup.category} className="m-panel-light m-shadow overflow-hidden">
+                          <div className="px-6 py-4 bg-[#121315] text-white flex items-center justify-between gap-3">
+                            <h3 className="m-text-5 text-white">
                               {subgroup.label || group.heading}
                             </h3>
-                            <span className="text-xs font-sans text-neutral-400">
+                            <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-[#FFD100] text-xs font-medium shrink-0">
                               {members.length} {members.length === 1 ? 'record' : 'records'}
                             </span>
                           </div>
                           <div className="overflow-x-auto">
-                            <table className="w-full text-sm border-collapse font-sans">
+                            <table className="w-full text-sm border-collapse">
                               <thead>
-                                <tr className="border-b border-selens-line text-left text-xs uppercase tracking-wider text-neutral-400 bg-selens-black/40">
-                                  <th className="px-5 py-3">Name</th>
-                                  <th className="px-5 py-3 hidden sm:table-cell">Position</th>
-                                  <th className="px-5 py-3 hidden md:table-cell">Order</th>
-                                  <th className="px-5 py-3 text-right">Actions</th>
+                                <tr className="border-b border-[#cdd0d4] text-left text-xs font-medium text-[#4d5158] bg-[#e7e8ea]/60">
+                                  <th className="px-5 py-3.5">Name</th>
+                                  <th className="px-5 py-3.5 hidden sm:table-cell">Position</th>
+                                  <th className="px-5 py-3.5 hidden md:table-cell">Order</th>
+                                  <th className="px-5 py-3.5 text-right">Actions</th>
                                 </tr>
                               </thead>
-                              <tbody className="divide-y divide-selens-line">
+                              <tbody className="divide-y divide-[#cdd0d4]">
                                 {members.map((p) => (
-                                  <tr key={p.id} className="hover:bg-selens-black/40 transition">
-                                    <td className="px-5 py-3.5">
-                                      <span className="font-bold text-selens-white font-serif text-base block">
+                                  <tr key={p.id} className="hover:bg-[#e7e8ea]/40 transition-colors">
+                                    <td className="px-5 py-4">
+                                      <span className="font-medium text-[#121315] text-base block">
                                         {p.full_name}
                                       </span>
-                                      <span className="text-xs text-neutral-400 sm:hidden">{p.position}</span>
+                                      <span className="text-xs text-[#4d5158] sm:hidden block mt-0.5">
+                                        {p.position}
+                                      </span>
                                     </td>
-                                    <td className="px-5 py-3.5 text-neutral-300 hidden sm:table-cell">
+                                    <td className="px-5 py-4 text-[#121315] hidden sm:table-cell">
                                       {p.position}
                                       {p.committee && (
-                                        <span className="text-xs text-neutral-500 block">{p.committee}</span>
+                                        <span className="text-xs text-[#4d5158] block mt-0.5">{p.committee}</span>
                                       )}
                                     </td>
-                                    <td className="px-5 py-3.5 text-neutral-400 hidden md:table-cell">
-                                      {p.display_order ?? '—'}
+                                    <td className="px-5 py-4 hidden md:table-cell">
+                                      <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#e7e8ea] text-[#121315] text-xs font-medium">
+                                        {p.display_order ?? '—'}
+                                      </span>
                                     </td>
-                                    <td className="px-5 py-3.5 text-right">
-                                      <div className="flex items-center justify-end gap-2">
+                                    <td className="px-5 py-4 text-right">
+                                      <div className="flex items-center justify-end gap-1.5">
                                         <button
+                                          type="button"
                                           onClick={() => setEditingItem(p)}
-                                          className="p-1.5 text-neutral-400 hover:text-selens-yellow transition rounded-[4px]"
+                                          className="w-9 h-9 rounded-full inline-flex items-center justify-center text-[#121315] hover:bg-[#FFD100] transition cursor-pointer"
                                           title="Edit Person"
+                                          aria-label="Edit Person"
                                         >
                                           <Edit2 className="w-4 h-4" />
                                         </button>
                                         {canDelete && (
                                           <button
+                                            type="button"
                                             onClick={() => handleDelete(p.id)}
-                                            className="p-1.5 text-neutral-400 hover:text-red-400 transition rounded-[4px]"
+                                            className="w-9 h-9 rounded-full inline-flex items-center justify-center text-[#4d5158] hover:bg-red-100 hover:text-red-700 transition cursor-pointer"
                                             title="Delete Person"
+                                            aria-label="Delete Person"
                                           >
                                             <Trash2 className="w-4 h-4" />
                                           </button>
@@ -460,7 +469,7 @@ export default function AdminPeople() {
                               </tbody>
                             </table>
                           </div>
-                        </Card>
+                        </div>
                       )
                     })}
                   </div>
@@ -470,8 +479,8 @@ export default function AdminPeople() {
           </div>
         )}
 
-        <div className="pt-4 border-t border-selens-line text-xs text-neutral-500 text-right">
-          SELENS Directory Management • A.Y. 2026–2027
+        <div className="pt-2 text-xs text-[#4d5158] text-right">
+          SELENS Directory Management · A.Y. 2026–2027
         </div>
       </div>
     </div>

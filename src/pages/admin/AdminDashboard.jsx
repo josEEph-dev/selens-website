@@ -12,11 +12,11 @@ import {
   HelpCircle,
   Trophy,
   Layers,
-  ArrowRight,
+  ArrowUpRight,
   LogOut,
   ExternalLink,
 } from 'lucide-react'
-import { PageHeader, Card, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
+import { PageHeader } from '../../components/SharedUI'
 import { CURRENT_ACADEMIC_YEAR } from '../../lib/config'
 
 export default function AdminDashboard() {
@@ -153,7 +153,6 @@ export default function AdminDashboard() {
     navigate('/login')
   }
 
-  // Modules grid must include: News, Accomplishments, Awards, Projects, Topnotchers, FAQs, People
   const modules = [
     {
       title: 'News & Announcements',
@@ -216,72 +215,87 @@ export default function AdminDashboard() {
   ]
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-screen py-10">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-8">
-        <PageHeader
-          title="Officer Dashboard"
-          subtitle="Content management system and administrative portal for SELENS officers."
-        />
+    <div id="main-content" className="selens-paper-page min-h-screen pb-14">
+      <PageHeader
+        title="Officer Dashboard"
+        description="Content management system and administrative portal for SELENS officers."
+        action={
+          <div className="flex flex-wrap items-center gap-2.5">
+            <Link
+              to="/"
+              target="_blank"
+              rel="noreferrer"
+              className="m-btn-2 m-btn-2--dark"
+            >
+              <span className="m-btn-2__label">Live Site</span>
+              <span className="m-btn-2__icon" aria-hidden="true">
+                <ExternalLink className="w-4 h-4" />
+              </span>
+            </Link>
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="m-btn-2 m-btn-2--dark cursor-pointer"
+            >
+              <span className="m-btn-2__label">
+                <LogOut className="w-4 h-4" />
+                <span>Sign out</span>
+              </span>
+            </button>
+          </div>
+        }
+      />
 
+      <div className="selens-container py-8 sm:py-12 space-y-8">
         {error && (
-          <div className="p-4 bg-selens-ink border border-red-500/50 rounded-[4px] text-sm text-red-400">
+          <div className="rounded-[18px] border border-red-200 bg-red-50 px-5 py-4 m-text-6 text-red-800">
             {error}
           </div>
         )}
 
-        {/* Officer Profile Banner */}
-        <Card className="border-selens-line">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-selens-yellow">
-                <Shield className="w-4 h-4" />
-                <span>Administrative Session • A.Y. {CURRENT_ACADEMIC_YEAR}</span>
+        {/* Officer Profile Summary Card (Matches Student Portal with Black/Yellow Accent) */}
+        <div className="m-panel-light m-shadow p-6 sm:p-9 space-y-5 border-t-4 border-[#FFD100]">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+            <div className="space-y-2 min-w-0">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#121315] text-[#FFD100] text-xs font-medium">
+                <Shield className="w-3.5 h-3.5 shrink-0" />
+                <span>Administrative Session · A.Y. {CURRENT_ACADEMIC_YEAR}</span>
               </div>
-              <h2 className="text-xl font-bold font-serif text-selens-white">
+              <h2 className="m-text-3 text-[#121315] break-words">
                 Welcome back, {profile?.full_name || 'Officer'}
               </h2>
-              <p className="text-sm text-neutral-400">
-                Signed in as <span className="text-selens-white font-medium">{profile?.email}</span> • Role:{' '}
-                <span className="text-selens-yellow font-medium uppercase tracking-wide">
-                  {profile?.role || 'Officer'}
-                </span>
+              <p className="m-text-6 text-[#4d5158] break-all">
+                Signed in as <span className="text-[#121315] font-medium">{profile?.email}</span>
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <SecondaryButton
-                to="/"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 text-xs"
-              >
-                <span>Live Site</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </SecondaryButton>
-              <button
-                onClick={handleSignOut}
-                className="px-4 py-2 border border-selens-line hover:border-red-500/50 text-neutral-300 hover:text-red-400 text-xs font-semibold rounded-[4px] inline-flex items-center gap-2 transition"
-              >
-                <LogOut className="w-3.5 h-3.5" />
-                <span>Sign Out</span>
-              </button>
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <span className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#FFD100] text-[#121315] m-text-4 capitalize">
+                Role: {profile?.role || 'Officer'}
+              </span>
+              <Link to="/portal" className="m-btn-2 m-btn-2--mist">
+                <span className="m-btn-2__label">Student Portal</span>
+                <span className="m-btn-2__icon" aria-hidden="true">
+                  <ArrowUpRight className="w-4 h-4" />
+                </span>
+              </Link>
             </div>
           </div>
-        </Card>
+        </div>
 
-        {/* My Directory Photo */}
-        <Card className="border-selens-line space-y-4" hover={false}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-selens-line pb-3">
+        {/* My People Directory Photo */}
+        <div className="m-panel-light m-shadow p-6 sm:p-8 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#cdd0d4] pb-4">
             <div>
-              <h3 className="font-serif font-bold text-lg text-selens-white">
+              <h3 className="m-text-5 text-[#121315]">
                 My People Directory Photo
               </h3>
-              <p className="text-xs text-neutral-400 font-sans">
+              <p className="m-text-6 text-[#4d5158] mt-0.5">
                 Update only your own portrait photo shown on the public People page.
               </p>
             </div>
             {myPerson && (
-              <span className="text-xs font-sans text-selens-yellow">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#121315] text-[#FFD100] text-xs font-medium w-fit">
                 Matched: {myPerson.full_name} ({myPerson.position})
               </span>
             )}
@@ -290,10 +304,10 @@ export default function AdminDashboard() {
           {photoFeedback && (
             <div
               role="status"
-              className={`p-3 text-xs sm:text-sm font-medium rounded-[4px] border ${
+              className={`p-3.5 m-text-6 font-medium rounded-[14px] border ${
                 photoFeedback.type === 'success'
-                  ? 'bg-selens-black border-selens-yellow text-selens-yellow'
-                  : 'bg-selens-black border-red-500/50 text-red-400'
+                  ? 'bg-[#121315] border-[#121315] text-[#FFD100]'
+                  : 'bg-red-50 border-red-200 text-red-800'
               }`}
             >
               {photoFeedback.message}
@@ -309,61 +323,65 @@ export default function AdminDashboard() {
                 placeholder="https://... or upload your portrait (<1MB)"
               />
               <div className="flex justify-end">
-                <PrimaryButton type="submit" disabled={savingPhoto}>
-                  {savingPhoto ? 'Saving...' : 'Save My Photo'}
-                </PrimaryButton>
+                <button type="submit" disabled={savingPhoto} className="m-btn">
+                  <span className="m-btn__label">
+                    {savingPhoto ? 'Saving...' : 'Save My Photo'}
+                  </span>
+                </button>
               </div>
             </form>
           ) : (
-            <p className="text-sm text-neutral-400 font-sans">
+            <p className="m-text-6 text-[#4d5158]">
               No People Directory entry matched your name ({profile?.full_name || '—'}) or email ({profile?.email || '—'}). Ask an admin to add or link your entry in People Directory.
             </p>
           )}
-        </Card>
+        </div>
 
         {/* Modules Grid */}
-        <div className="space-y-4">
-          <div className="border-b border-selens-line pb-2 flex items-center justify-between">
-            <h3 className="font-serif font-bold text-lg text-selens-white">
-              Content Management Modules
+        <div className="space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+            <h3 className="m-text-3 text-[#121315]">
+              Content management<span className="text-[#FFD100]">.</span>
             </h3>
-            <span className="text-xs text-neutral-400">
+            <span className="m-text-6 text-[#4d5158]">
               Select a module to create or edit records
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {modules.filter((mod) => !mod.adminOnly || isAdmin).map((mod) => {
               const Icon = mod.icon
               return (
                 <Link
                   key={mod.title}
                   to={mod.link}
-                  className="bg-selens-ink border border-selens-line rounded-[4px] p-6 hover:border-selens-yellow transition flex flex-col justify-between group space-y-4"
+                  className="m-surface no-underline flex flex-col justify-between gap-6 group transition-all hover:shadow-[0_22px_44px_-24px_rgba(18,19,21,0.45)]"
                 >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="w-10 h-10 rounded-[4px] bg-selens-black border border-selens-line flex items-center justify-center text-selens-yellow group-hover:scale-105 transition">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="w-11 h-11 rounded-full bg-[#121315] text-[#FFD100] flex items-center justify-center group-hover:bg-[#FFD100] group-hover:text-[#121315] transition-colors">
                         <Icon className="w-5 h-5" />
                       </div>
-                      <span className="text-xs font-bold text-selens-yellow bg-selens-black px-2.5 py-1 rounded-[4px] border border-selens-line">
+                      <span className="px-3 py-1 rounded-full bg-[#e7e8ea] text-[#121315] text-xs font-medium tabular-nums">
                         {mod.count} {mod.label}
                       </span>
                     </div>
 
-                    <div>
-                      <h4 className="font-serif font-bold text-base text-selens-white group-hover:text-selens-yellow transition">
+                    <div className="space-y-1.5">
+                      <h4 className="m-text-5 text-[#121315]">
                         {mod.title}
                       </h4>
-                      <p className="text-xs text-neutral-400 mt-1 leading-relaxed font-sans">
+                      <p className="m-text-6 text-[#4d5158]">
                         {mod.desc}
                       </p>
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-selens-line/60 flex items-center justify-between text-xs font-semibold text-selens-yellow">
+                  <div className="pt-3.5 border-t border-[#cdd0d4] flex items-center justify-between m-text-4 text-[#121315]">
                     <span>Manage entries</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    <span className="w-8 h-8 rounded-full bg-[#121315] text-[#FFD100] inline-flex items-center justify-center group-hover:bg-[#FFD100] group-hover:text-[#121315] transition-colors">
+                      <ArrowUpRight className="w-4 h-4" />
+                    </span>
                   </div>
                 </Link>
               )

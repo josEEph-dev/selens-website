@@ -52,14 +52,16 @@ function DashboardBackBar() {
   const { isOfficer } = useAuth()
   if (!isOfficer || !pathname.startsWith('/dashboard/')) return null
   return (
-    <div className="bg-selens-ink border-b border-selens-line">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between">
+    <div className="bg-[#e7e8ea] pt-20 sm:pt-24 pb-2">
+      <div className="selens-container flex items-center justify-between">
         <Link
           to="/dashboard"
-          className="inline-flex items-center gap-2 text-xs font-sans font-semibold text-selens-yellow hover:underline"
+          className="m-btn-2"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Officer Dashboard</span>
+          <span className="m-btn-2__label">
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Officer Dashboard</span>
+          </span>
         </Link>
       </div>
     </div>

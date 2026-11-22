@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react'
-
-const inputStyle = 'w-full px-3.5 py-2.5 bg-selens-black border border-selens-line rounded-[4px] text-sm text-selens-white placeholder:text-neutral-500 focus:outline-none focus:border-selens-yellow transition font-sans'
+import { Upload, X, Loader2 } from 'lucide-react'
 
 export default function ImageUploader({
   value = '',
@@ -19,14 +17,12 @@ export default function ImageUploader({
 
     setError(null)
 
-    // Allowed types: JPG, PNG, WebP
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
     if (!allowedTypes.includes(file.type)) {
       setError('Invalid file type. Only JPG, PNG, and WebP images are allowed.')
       return
     }
 
-    // Size limit: strictly under 1 MB
     const maxBytes = 1024 * 1024 // 1 MB
     if (file.size > maxBytes) {
       setError(`File size (${(file.size / (1024 * 1024)).toFixed(2)} MB) exceeds 1 MB limit. Please upload a smaller image.`)
@@ -60,15 +56,15 @@ export default function ImageUploader({
   }
 
   return (
-    <div className="space-y-2">
-      <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400">
+    <div className="m-field">
+      <label className="m-field__label">
         {label}
       </label>
 
       {/* Preview if image URL exists */}
       {value && (
-        <div className="flex items-center gap-3 p-3 bg-selens-ink border border-selens-line rounded-[4px]">
-          <div className="w-16 h-16 rounded-[4px] border border-selens-line overflow-hidden shrink-0 bg-selens-black flex items-center justify-center">
+        <div className="flex items-center gap-3 p-3 bg-[#e7e8ea] border border-[#cdd0d4] rounded-[14px]">
+          <div className="w-16 h-16 rounded-[10px] border border-[#cdd0d4] overflow-hidden shrink-0 bg-white flex items-center justify-center">
             <img
               src={value}
               alt="Preview"
@@ -79,14 +75,17 @@ export default function ImageUploader({
             />
           </div>
           <div className="flex-grow min-w-0">
-            <p className="text-xs text-neutral-300 truncate font-sans">{value}</p>
-            <span className="text-[11px] text-selens-yellow">Current Image</span>
+            <p className="text-xs text-[#121315] truncate font-medium">{value}</p>
+            <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-[#121315] text-[#FFD100] text-[11px] font-medium">
+              Current Image
+            </span>
           </div>
           <button
             type="button"
             onClick={() => onChange('')}
-            className="p-1.5 text-neutral-400 hover:text-red-400 transition rounded-[4px]"
+            className="w-9 h-9 rounded-full inline-flex items-center justify-center text-[#4d5158] hover:text-red-700 hover:bg-white transition cursor-pointer shrink-0"
             title="Remove Image"
+            aria-label="Remove Image"
           >
             <X className="w-4 h-4" />
           </button>
@@ -94,16 +93,16 @@ export default function ImageUploader({
       )}
 
       {/* File Upload Button + Fallback URL Input */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-        <label className="relative cursor-pointer shrink-0 inline-flex items-center justify-center gap-2 px-3.5 py-2.5 bg-selens-ink border border-selens-line hover:border-selens-yellow rounded-[4px] text-xs font-semibold text-neutral-200 transition">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+        <label className="relative cursor-pointer shrink-0 inline-flex items-center justify-center gap-2 min-h-[48px] px-4 bg-[#121315] text-white hover:bg-[#FFD100] hover:text-[#121315] rounded-full text-xs sm:text-sm font-medium transition group">
           {uploading ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin text-selens-yellow" />
+              <Loader2 className="w-4 h-4 animate-spin text-[#FFD100] group-hover:text-[#121315]" />
               <span>Uploading...</span>
             </>
           ) : (
             <>
-              <Upload className="w-4 h-4 text-selens-yellow" />
+              <Upload className="w-4 h-4 text-[#FFD100] group-hover:text-[#121315]" />
               <span>Upload Image (&lt;1MB)</span>
             </>
           )}
@@ -116,19 +115,19 @@ export default function ImageUploader({
           />
         </label>
 
-        <div className="flex-grow">
+        <div className="flex-grow min-w-0">
           <input
             type="url"
             value={value || ''}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
-            className={inputStyle}
+            className="m-field__control"
           />
         </div>
       </div>
 
       {error && (
-        <p className="text-xs text-red-400 font-sans">{error}</p>
+        <p className="text-xs text-red-700">{error}</p>
       )}
     </div>
   )

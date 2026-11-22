@@ -1,6 +1,5 @@
-import { Navigate, useLocation } from 'react-router-dom'
+import { Navigate, useLocation, Link } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
-import { Card, PrimaryButton, SecondaryButton } from './SharedUI'
 import { ShieldAlert } from 'lucide-react'
 
 /**
@@ -14,10 +13,10 @@ export default function ProtectedRoute({ children, requireAuth = true, requireOf
 
   if (loading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center bg-selens-black">
+      <div className="selens-paper-page flex min-h-[70vh] items-center justify-center pt-24">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-[4px] border-2 border-selens-line border-t-selens-yellow" />
-          <p className="text-sm font-sans text-neutral-300">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#cdd0d4] border-t-[#121315]" />
+          <p className="m-text-6 text-[#4d5158]">
             Checking authorization...
           </p>
         </div>
@@ -31,27 +30,27 @@ export default function ProtectedRoute({ children, requireAuth = true, requireOf
 
   if ((requireOfficer && !isOfficer) || (requireAdmin && !isAdmin)) {
     return (
-      <div className="bg-selens-black min-h-[75vh] flex items-center justify-center px-4 py-16">
-        <Card className="max-w-md w-full space-y-5 text-center">
-          <div className="w-12 h-12 rounded-[4px] bg-selens-black border border-selens-line text-selens-yellow flex items-center justify-center mx-auto">
+      <div className="selens-paper-page min-h-[75vh] flex items-center justify-center px-4 pt-28 pb-16">
+        <div className="m-panel-light m-shadow max-w-md w-full p-8 sm:p-10 space-y-5 text-center">
+          <div className="w-12 h-12 rounded-full bg-[#121315] text-[#FFD100] flex items-center justify-center mx-auto">
             <ShieldAlert className="w-6 h-6" />
           </div>
           <div className="space-y-2">
-            <h2 className="font-serif text-xl font-bold text-selens-white">
+            <h2 className="m-text-5 text-[#121315]">
               Not authorized
             </h2>
-            <p className="text-sm text-neutral-300 leading-relaxed font-sans">
+            <p className="m-text-6 text-[#4d5158]">
               {requireAdmin
                 ? 'This section is reserved for authorized SELENS administrators.'
                 : 'This dashboard is reserved for authorized SELENS officers and administrators.'}
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 pt-2 justify-center">
-            <PrimaryButton to="/">
-              Return to Home
-            </PrimaryButton>
+          <div className="pt-2">
+            <Link to="/" className="m-btn">
+              <span className="m-btn__label">Return to Home</span>
+            </Link>
           </div>
-        </Card>
+        </div>
       </div>
     )
   }

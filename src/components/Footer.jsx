@@ -1,13 +1,11 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { CURRENT_ACADEMIC_YEAR } from '../lib/config'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
-  const { pathname } = useLocation()
-  const isAdminRoute = pathname.startsWith('/dashboard')
 
   return (
-    <div className={isAdminRoute ? 'bg-selens-black pt-8' : 'bg-[#e7e8ea] pt-12 sm:pt-16'}>
+    <div className="bg-[#e7e8ea] pt-12 sm:pt-16">
       <footer id="footer" className="hush-footer hush-dark-scope">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
           {/* Column 1: Explore */}

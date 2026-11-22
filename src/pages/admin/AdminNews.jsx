@@ -3,13 +3,11 @@ import { useAuth } from '../../context/useAuth'
 import { useNoIndex } from '../portal/useNoIndex'
 import { dataApi } from '../../lib/supabase'
 import { Plus, Edit2, Trash2, BookOpen } from 'lucide-react'
-import { PageHeader, Card, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
+import { PageHeader, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
 import AcademicYearInput from '../../components/AcademicYearInput'
 import PostedBySelect from '../../components/PostedBySelect'
 import ImageUploader from '../../components/ImageUploader'
 import { CURRENT_ACADEMIC_YEAR, formatCommitteeLabel } from '../../lib/config'
-
-const input = 'w-full px-3.5 py-2.5 bg-selens-black border border-selens-line rounded-[4px] text-sm text-selens-white placeholder:text-neutral-500 focus:outline-none focus:border-selens-yellow transition font-sans'
 
 export default function AdminNews() {
   useNoIndex()
@@ -115,96 +113,91 @@ export default function AdminNews() {
   }
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-screen py-10">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-8">
-        <PageHeader
-          title="Manage News & Announcements"
-          subtitle="Publish official student org announcements and event updates."
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Officer Dashboard', href: '/dashboard' },
-            { label: 'News & Announcements' },
-          ]}
-          action={
-            <PrimaryButton
-              onClick={() =>
-                setEditingItem({
-                  title: '',
-                  slug: `bulletin-${Date.now()}`,
-                  category: 'news_events',
-                  excerpt: '',
-                  body: '',
-                  thumbnail_url: '',
-                  academic_year: CURRENT_ACADEMIC_YEAR,
-                  committee: 'General',
-                  published_at: new Date().toISOString(),
-                })
-              }
-              className="inline-flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              <span>New Article</span>
-            </PrimaryButton>
-          }
-        />
+    <div id="main-content" className="selens-paper-page min-h-screen pb-14">
+      <PageHeader
+        compactTop
+        title="Manage News & Announcements"
+        subtitle="Publish official student org announcements and event updates."
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Officer Dashboard', href: '/dashboard' },
+          { label: 'News & Announcements' },
+        ]}
+        action={
+          <PrimaryButton
+            onClick={() =>
+              setEditingItem({
+                title: '',
+                slug: `bulletin-${Date.now()}`,
+                category: 'news_events',
+                excerpt: '',
+                body: '',
+                thumbnail_url: '',
+                academic_year: CURRENT_ACADEMIC_YEAR,
+                committee: 'General',
+                published_at: new Date().toISOString(),
+              })
+            }
+            className="inline-flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Article</span>
+          </PrimaryButton>
+        }
+      />
 
+      <div className="selens-container py-8 space-y-6">
         {feedback && (
           <div
-            className={`p-4 text-sm font-medium rounded-[4px] border ${
+            className={`p-4 m-text-6 font-medium rounded-[16px] border ${
               feedback.type === 'success'
-                ? 'bg-selens-ink border-selens-yellow text-selens-yellow'
-                : 'bg-selens-ink border-red-500/50 text-red-400'
+                ? 'bg-[#121315] border-[#121315] text-[#FFD100]'
+                : 'bg-red-50 border-red-200 text-red-800'
             }`}
           >
             {feedback.message}
           </div>
         )}
 
-        {/* Compose / Edit Modal or Card */}
+        {/* Compose / Edit Card */}
         {editingItem && (
-          <Card className="border-selens-yellow">
-            <div className="border-b border-selens-line pb-4 mb-6 flex items-center justify-between">
-              <h2 className="text-lg font-bold font-serif text-selens-white">
+          <div className="m-panel-light m-shadow p-6 sm:p-8 border-t-4 border-[#FFD100]">
+            <div className="border-b border-[#cdd0d4] pb-4 mb-6 flex flex-wrap items-center justify-between gap-2">
+              <h2 className="m-text-5 text-[#121315]">
                 {editingItem.id ? 'Edit Article' : 'Compose New Article'}
               </h2>
-              <span className="text-xs text-neutral-400">
+              <span className="px-3 py-1 rounded-full bg-[#121315] text-[#FFD100] text-xs font-medium">
                 A.Y. {editingItem.academic_year || CURRENT_ACADEMIC_YEAR}
               </span>
             </div>
             <form onSubmit={handleSave} className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Article Title
-                  </label>
+                <div className="m-field">
+                  <label className="m-field__label">Article Title</label>
                   <input
                     type="text"
                     required
                     value={editingItem.title}
                     onChange={(e) => handleTitleChange(e.target.value)}
-                    className={input}
+                    className="m-field__control"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    URL Slug
-                  </label>
+                <div className="m-field">
+                  <label className="m-field__label">URL Slug</label>
                   <input
                     type="text"
                     required
                     value={editingItem.slug}
                     onChange={(e) => setEditingItem({ ...editingItem, slug: e.target.value })}
-                    className={input}
+                    className="m-field__control"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Category
-                  </label>
+                <div className="m-field">
+                  <label className="m-field__label">Category</label>
                   <select
                     value={editingItem.category}
                     onChange={(e) => setEditingItem({ ...editingItem, category: e.target.value })}
-                    className={input}
+                    className="m-field__control cursor-pointer"
                   >
                     <option value="news_events">News &amp; Events</option>
                     <option value="student_activities">Student Activities</option>
@@ -222,46 +215,37 @@ export default function AdminNews() {
                 />
               </div>
 
-              <div>
-                <ImageUploader
-                  label="Thumbnail Image"
-                  value={editingItem.thumbnail_url || ''}
-                  onChange={(val) => setEditingItem({ ...editingItem, thumbnail_url: val })}
-                  placeholder="https://... or upload article thumbnail"
-                />
-              </div>
+              <ImageUploader
+                label="Thumbnail Image"
+                value={editingItem.thumbnail_url || ''}
+                onChange={(val) => setEditingItem({ ...editingItem, thumbnail_url: val })}
+                placeholder="https://... or upload article thumbnail"
+              />
 
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                  Excerpt (short preview)
-                </label>
+              <div className="m-field">
+                <label className="m-field__label">Excerpt (short preview)</label>
                 <textarea
                   rows={2}
                   value={editingItem.excerpt || ''}
                   onChange={(e) => setEditingItem({ ...editingItem, excerpt: e.target.value })}
-                  className={input}
+                  className="m-field__control !py-3 !min-h-[76px]"
                   placeholder="Brief 1-2 sentence preview for news listings"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                  Article Body Content
-                </label>
+              <div className="m-field">
+                <label className="m-field__label">Article Body Content</label>
                 <textarea
                   rows={6}
                   value={editingItem.body || ''}
                   onChange={(e) => setEditingItem({ ...editingItem, body: e.target.value })}
-                  className={input}
+                  className="m-field__control !py-3 !min-h-[150px]"
                   placeholder="Full text of the announcement or event recap"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-selens-line">
-                <SecondaryButton
-                  type="button"
-                  onClick={() => setEditingItem(null)}
-                >
+              <div className="flex flex-wrap justify-end gap-3 pt-4 border-t border-[#cdd0d4]">
+                <SecondaryButton type="button" onClick={() => setEditingItem(null)}>
                   Cancel
                 </SecondaryButton>
                 <PrimaryButton type="submit">
@@ -269,29 +253,29 @@ export default function AdminNews() {
                 </PrimaryButton>
               </div>
             </form>
-          </Card>
+          </div>
         )}
 
         {/* Directory List Table */}
-        <Card className="p-0 overflow-hidden">
-          <div className="p-5 border-b border-selens-line flex items-center gap-3">
-            <BookOpen className="w-5 h-5 text-selens-yellow shrink-0" />
-            <h2 className="text-base font-bold font-serif text-selens-white">
+        <div className="m-panel-light m-shadow overflow-hidden">
+          <div className="px-6 py-4 bg-[#121315] text-white flex items-center gap-3">
+            <BookOpen className="w-5 h-5 text-[#FFD100] shrink-0" />
+            <h2 className="m-text-5 text-white">
               {news.length} Published Articles &amp; Announcements
             </h2>
           </div>
 
           {loading ? (
-            <div className="p-8 text-center text-neutral-400">Loading articles...</div>
+            <div className="p-8 text-center m-text-6 text-[#4d5158]">Loading articles...</div>
           ) : error ? (
-            <div className="p-8 text-center text-red-400 text-sm">{error}</div>
+            <div className="p-8 text-center text-red-700 text-sm">{error}</div>
           ) : news.length === 0 ? (
-            <div className="p-8 text-center text-neutral-400">No articles published yet.</div>
+            <div className="p-8 text-center m-text-6 text-[#4d5158]">No articles published yet.</div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-sm border-collapse font-sans">
+              <table className="w-full text-sm border-collapse">
                 <thead>
-                  <tr className="border-b border-selens-line text-left text-xs uppercase tracking-wider text-neutral-400 bg-selens-black/40">
+                  <tr className="border-b border-[#cdd0d4] text-left text-xs font-medium text-[#4d5158] bg-[#e7e8ea]/60">
                     <th className="px-5 py-3.5">Title</th>
                     <th className="px-5 py-3.5 hidden sm:table-cell">Academic Year</th>
                     <th className="px-5 py-3.5 hidden sm:table-cell">Posted By</th>
@@ -299,49 +283,48 @@ export default function AdminNews() {
                     <th className="px-5 py-3.5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-selens-line">
+                <tbody className="divide-y divide-[#cdd0d4]">
                   {news.map((item) => (
-                    <tr
-                      key={item.id}
-                      className="hover:bg-selens-black/40 transition"
-                    >
+                    <tr key={item.id} className="hover:bg-[#e7e8ea]/40 transition-colors">
                       <td className="px-5 py-4">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-bold text-selens-white font-serif text-base">
-                            {item.title}
-                          </span>
-                        </div>
-                        <p className="text-xs text-neutral-400 line-clamp-1 mt-1">
+                        <span className="font-medium text-[#121315] text-base block">
+                          {item.title}
+                        </span>
+                        <p className="text-xs text-[#4d5158] line-clamp-1 mt-0.5">
                           {item.excerpt}
                         </p>
                       </td>
-                      <td className="px-5 py-4 hidden sm:table-cell text-neutral-300 text-xs">
+                      <td className="px-5 py-4 hidden sm:table-cell text-[#4d5158] text-xs">
                         A.Y. {item.academic_year || '—'}
                       </td>
-                      <td className="px-5 py-4 hidden sm:table-cell text-neutral-300 text-xs">
-                        <span className="text-selens-yellow font-semibold block">
+                      <td className="px-5 py-4 hidden sm:table-cell text-xs">
+                        <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#121315] text-[#FFD100] font-medium">
                           {formatCommitteeLabel(item.committee)}
                         </span>
                       </td>
                       <td className="px-5 py-4 hidden sm:table-cell">
-                        <span className="text-xs uppercase px-2.5 py-1 rounded-[4px] border border-selens-line text-neutral-300">
+                        <span className="text-xs capitalize px-2.5 py-1 rounded-full bg-[#e7e8ea] text-[#121315] font-medium">
                           {item.category?.replace('_', ' ')}
                         </span>
                       </td>
                       <td className="px-5 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-1.5">
                           <button
+                            type="button"
                             onClick={() => setEditingItem(item)}
-                            className="p-1.5 text-neutral-400 hover:text-selens-yellow transition rounded-[4px]"
+                            className="w-9 h-9 rounded-full inline-flex items-center justify-center text-[#121315] hover:bg-[#FFD100] transition cursor-pointer"
                             title="Edit Article"
+                            aria-label="Edit Article"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           {canDelete && (
                             <button
+                              type="button"
                               onClick={() => handleDelete(item.id)}
-                              className="p-1.5 text-neutral-400 hover:text-red-400 transition rounded-[4px]"
+                              className="w-9 h-9 rounded-full inline-flex items-center justify-center text-[#4d5158] hover:bg-red-100 hover:text-red-700 transition cursor-pointer"
                               title="Delete Article"
+                              aria-label="Delete Article"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -354,10 +337,10 @@ export default function AdminNews() {
               </table>
             </div>
           )}
-        </Card>
+        </div>
 
-        <div className="pt-4 border-t border-selens-line text-xs text-neutral-500 text-right">
-          SELENS News Management • A.Y. 2026–2027 • Maintained by the Executive Secretary
+        <div className="pt-2 text-xs text-[#4d5158] text-right">
+          SELENS News Management · A.Y. 2026–2027 · Maintained by the Executive Secretary
         </div>
       </div>
     </div>

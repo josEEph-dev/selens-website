@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { CURRENT_ACADEMIC_YEAR, isValidAcademicYear } from '../lib/config'
 
-const inputStyle = 'w-full px-3.5 py-2.5 bg-selens-black border border-selens-line rounded-[4px] text-sm text-selens-white placeholder:text-neutral-500 focus:outline-none focus:border-selens-yellow transition font-sans'
-
 export default function AcademicYearInput({
   value = CURRENT_ACADEMIC_YEAR,
   onChange,
@@ -38,9 +36,9 @@ export default function AcademicYearInput({
     : null
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400">
+    <div className="m-field">
+      <div className="flex items-center justify-between gap-2">
+        <label className="m-field__label">
           {label}
         </label>
         {mode === 'custom' && (
@@ -50,7 +48,7 @@ export default function AcademicYearInput({
               setMode('select')
               onChange(allYears[0] || CURRENT_ACADEMIC_YEAR)
             }}
-            className="text-[11px] text-selens-yellow hover:underline"
+            className="m-link text-xs font-medium text-[#121315] cursor-pointer"
           >
             Choose existing year
           </button>
@@ -61,7 +59,7 @@ export default function AcademicYearInput({
         <select
           value={allYears.includes(value) ? value : '__custom__'}
           onChange={handleSelectChange}
-          className={inputStyle}
+          className="m-field__control cursor-pointer"
         >
           {allYears.map((yr) => (
             <option key={yr} value={yr}>
@@ -79,9 +77,10 @@ export default function AcademicYearInput({
             placeholder="e.g. 2027-2028"
             value={customVal}
             onChange={handleCustomChange}
-            className={`${inputStyle} ${error ? 'border-red-500' : ''}`}
+            aria-invalid={Boolean(error)}
+            className="m-field__control"
           />
-          {error && <p className="text-xs text-red-400 font-sans">{error}</p>}
+          {error && <p className="text-xs text-red-700">{error}</p>}
         </div>
       )}
     </div>

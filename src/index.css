@@ -1104,6 +1104,10 @@ html.contrast-high {
   padding-bottom: 8px;
 }
 
+.selens-paper-page .selens-page-header--compact {
+  padding-top: 16px;
+}
+
 .selens-paper-page .selens-page-header-inner {
   background-color: var(--hush-ink);
   color: var(--hush-white);
@@ -1128,6 +1132,9 @@ html.contrast-high {
 @media (max-width: 760px) {
   .selens-paper-page .selens-page-header {
     padding-top: 80px;
+  }
+  .selens-paper-page .selens-page-header--compact {
+    padding-top: 12px;
   }
   .selens-paper-page .selens-page-header-inner {
     border-radius: 22px;
@@ -1260,8 +1267,8 @@ html.contrast-high {
 
 .selens-paper-page .selens-btn-primary {
   border-radius: 999px;
-  min-height: 48px;
-  padding: 0 24px;
+  min-height: 46px;
+  padding: 0 22px;
   background-color: var(--hush-ink);
   border-color: var(--hush-ink);
   color: var(--hush-white);
@@ -1271,6 +1278,19 @@ html.contrast-high {
 .selens-paper-page .selens-btn-primary:hover {
   background-color: var(--hush-accent);
   border-color: var(--hush-accent);
+  color: var(--hush-ink);
+}
+
+/* PrimaryButton placed inside a dark #121315 banner stays high-contrast yellow -> white */
+.selens-paper-page .hush-dark-scope .selens-btn-primary {
+  background-color: var(--hush-accent);
+  border-color: var(--hush-accent);
+  color: var(--hush-ink);
+}
+
+.selens-paper-page .hush-dark-scope .selens-btn-primary:hover {
+  background-color: var(--hush-white);
+  border-color: var(--hush-white);
   color: var(--hush-ink);
 }
 
@@ -1291,12 +1311,40 @@ html.contrast-high {
   cursor: pointer;
   transition:
     color 180ms var(--ease-standard),
-    border-color 180ms var(--ease-standard);
+    border-color 180ms var(--ease-standard),
+    background-color 180ms var(--ease-standard);
 }
 
 .selens-btn-secondary:hover {
   border-color: var(--color-selens-yellow);
   color: var(--color-selens-yellow);
+}
+
+.selens-paper-page .selens-btn-secondary {
+  border-radius: 999px;
+  min-height: 46px;
+  padding: 0 20px;
+  background-color: var(--hush-mist);
+  border-color: var(--hush-hairline);
+  color: var(--hush-ink);
+}
+
+.selens-paper-page .selens-btn-secondary:hover {
+  background-color: var(--hush-ink);
+  border-color: var(--hush-ink);
+  color: var(--hush-white);
+}
+
+.selens-paper-page .hush-dark-scope .selens-btn-secondary {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--hush-white);
+}
+
+.selens-paper-page .hush-dark-scope .selens-btn-secondary:hover {
+  background-color: var(--hush-white);
+  border-color: var(--hush-white);
+  color: var(--hush-ink);
 }
 
 .selens-btn-ink {

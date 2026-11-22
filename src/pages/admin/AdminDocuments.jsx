@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { dataApi } from '../../lib/supabase'
 import { useNoIndex } from '../portal/useNoIndex'
-import { FileText, ArrowLeft, Edit2, CheckCircle2, Clock, XCircle } from 'lucide-react'
-import { PageHeader, Card, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
-
-const input = 'w-full px-3.5 py-2.5 bg-selens-black border border-selens-line rounded-[4px] text-sm text-selens-white placeholder:text-neutral-500 focus:outline-none focus:border-selens-yellow transition font-sans'
+import { FileText, Edit2, CheckCircle2, Clock, XCircle } from 'lucide-react'
+import { PageHeader, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
 
 const DOCUMENT_LABELS = {
   good_standing: 'Certificate of Good Standing',
@@ -19,32 +16,32 @@ const renderStatusBadge = (status) => {
   switch (status) {
     case 'approved':
       return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-[4px] border border-selens-yellow/40 text-selens-yellow">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-[#121315] text-[#FFD100]">
           <CheckCircle2 className="w-3.5 h-3.5" /> Approved
         </span>
       )
     case 'processing':
       return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-[4px] border border-selens-line text-neutral-300">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-[#e7e8ea] border border-[#cdd0d4] text-[#121315]">
           <Clock className="w-3.5 h-3.5" /> Processing
         </span>
       )
     case 'rejected':
       return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-[4px] border border-neutral-700 text-neutral-400">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-red-50 border border-red-200 text-red-700">
           <XCircle className="w-3.5 h-3.5" /> Rejected
         </span>
       )
     case 'claimed':
       return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-[4px] border border-selens-line text-neutral-400">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-[#e7e8ea] text-[#4d5158]">
           Claimed
         </span>
       )
     case 'pending':
     default:
       return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-[4px] bg-selens-yellow text-selens-black">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full bg-[#FFD100] text-[#121315]">
           <Clock className="w-3.5 h-3.5" /> Pending
         </span>
       )
@@ -56,17 +53,28 @@ export default function AdminDocuments() {
   const [requests, setRequests] = useState([])
   const [editingItem, setEditingItem] = useState(null)
   const [filterStatus, setFilterStatus] = useState('all')
+  const [feedback, setFeedback] = useState(null)
 
   const reloadData = async () => {
-    const data = await dataApi.list('document_requests', { orderBy: 'created_at', ascending: false })
-    setRequests(data)
+    try {
+      const data = await dataApi.list('document_requests', { orderBy: 'created_at', ascending: false })
+      setRequests(data)
+    } catch (err) {
+      console.error('[AdminDocuments] Reload error:', err)
+      setFeedback({ type: 'error', message: err.message || 'Failed to reload document requests.' })
+    }
   }
 
   useEffect(() => {
     let ignore = false
     async function fetchRequests() {
-      const data = await dataApi.list('document_requests', { orderBy: 'created_at', ascending: false })
-      if (!ignore) setRequests(data)
+      try {
+        const data = await dataApi.list('document_requests', { orderBy: 'created_at', ascending: false })
+        if (!ignore) setRequests(data)
+      } catch (err) {
+        console.error('[AdminDocuments] Fetch error:', err)
+        if (!ignore) setFeedback({ type: 'error', message: err.message || 'Failed to load document requests.' })
+      }
     }
     fetchRequests()
     return () => { ignore = true }
@@ -74,9 +82,16 @@ export default function AdminDocuments() {
 
   const handleUpdate = async (e) => {
     e.preventDefault()
-    await dataApi.upsert('document_requests', editingItem)
-    setEditingItem(null)
-    reloadData()
+    setFeedback(null)
+    try {
+      await dataApi.upsert('document_requests', editingItem)
+      setFeedback({ type: 'success', message: 'Document request updated successfully.' })
+      setEditingItem(null)
+      reloadData()
+    } catch (err) {
+      console.error('[AdminDocuments] Update error:', err)
+      setFeedback({ type: 'error', message: err.message || 'Failed to update document request.' })
+    }
   }
 
   const filtered = filterStatus === 'all'
@@ -86,62 +101,79 @@ export default function AdminDocuments() {
   const pendingCount = requests.filter((r) => r.status === 'pending').length
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-screen py-10">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-8">
-        <PageHeader
-          title="Document Requests Queue"
-          subtitle="Review and process member requests for good standing certificates, organizational clearance, and endorsement letters."
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Officer Dashboard', href: '/admin' },
-            { label: 'Document Queue' },
-          ]}
-          action={
-            pendingCount > 0 && (
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-selens-yellow text-selens-black font-semibold text-xs rounded-[4px]">
-                <Clock className="w-4 h-4" />
-                <span>{pendingCount} Pending Requisition{pendingCount === 1 ? '' : 's'}</span>
-              </span>
-            )
-          }
-        />
+    <div id="main-content" className="selens-paper-page min-h-screen pb-14">
+      <PageHeader
+        compactTop
+        title="Document Requests Queue"
+        subtitle="Review and process member requests for good standing certificates, organizational clearance, and endorsement letters."
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Officer Dashboard', href: '/dashboard' },
+          { label: 'Document Queue' },
+        ]}
+        action={
+          pendingCount > 0 && (
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#FFD100] text-[#121315] font-semibold text-xs rounded-full">
+              <Clock className="w-4 h-4" />
+              <span>{pendingCount} Pending Requisition{pendingCount === 1 ? '' : 's'}</span>
+            </span>
+          )
+        }
+      />
+
+      <div className="selens-container py-8 space-y-6">
+        {feedback && (
+          <div
+            className={`p-4 m-text-6 font-medium rounded-[16px] border ${
+              feedback.type === 'success'
+                ? 'bg-[#121315] border-[#121315] text-[#FFD100]'
+                : 'bg-red-50 border-red-200 text-red-800'
+            }`}
+          >
+            {feedback.message}
+          </div>
+        )}
 
         {/* Status Filter Tabs */}
         <div className="flex flex-wrap gap-2">
-          {['all', 'pending', 'processing', 'approved', 'rejected', 'claimed'].map((st) => (
-            <button
-              key={st}
-              onClick={() => setFilterStatus(st)}
-              className={`px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider rounded-[4px] transition ${
-                filterStatus === st
-                  ? 'bg-selens-yellow text-selens-black'
-                  : 'bg-selens-ink border border-selens-line text-neutral-400 hover:text-selens-white hover:border-neutral-500'
-              }`}
-            >
-              {st} {st !== 'all' && <span>({requests.filter((r) => r.status === st).length})</span>}
-            </button>
-          ))}
+          {['all', 'pending', 'processing', 'approved', 'rejected', 'claimed'].map((st) => {
+            const isActive = filterStatus === st
+            return (
+              <button
+                key={st}
+                type="button"
+                onClick={() => setFilterStatus(st)}
+                className={`px-4 py-2 text-xs font-medium uppercase tracking-wider rounded-full border transition cursor-pointer ${
+                  isActive
+                    ? 'bg-[#121315] border-[#121315] text-[#FFD100]'
+                    : 'bg-white border-[#cdd0d4] text-[#121315] hover:border-[#121315]'
+                }`}
+              >
+                {st} {st !== 'all' && <span>({requests.filter((r) => r.status === st).length})</span>}
+              </button>
+            )
+          })}
         </div>
 
-        {/* Update Modal / Drawer */}
+        {/* Update Form Card */}
         {editingItem && (
-          <Card className="border-selens-yellow">
-            <div className="border-b border-selens-line pb-4 mb-6 flex items-center justify-between">
-              <h2 className="text-lg font-bold font-serif text-selens-white">
+          <div className="m-panel-light m-shadow p-6 sm:p-8 border-t-4 border-[#FFD100]">
+            <div className="border-b border-[#cdd0d4] pb-4 mb-6 flex flex-wrap items-center justify-between gap-2">
+              <h2 className="m-text-5 text-[#121315]">
                 Process Request: {editingItem.full_name} ({editingItem.student_id})
               </h2>
-              <span className="text-xs text-neutral-400">A.Y. 2026–2027</span>
+              <span className="px-3 py-1 rounded-full bg-[#121315] text-[#FFD100] text-xs font-medium">
+                A.Y. 2026–2027
+              </span>
             </div>
             <form onSubmit={handleUpdate} className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Fulfillment Status
-                  </label>
+                <div className="m-field">
+                  <label className="m-field__label">Fulfillment Status</label>
                   <select
                     value={editingItem.status}
                     onChange={(e) => setEditingItem({ ...editingItem, status: e.target.value })}
-                    className={input}
+                    className="m-field__control cursor-pointer"
                   >
                     <option value="pending">Pending</option>
                     <option value="processing">Processing</option>
@@ -150,36 +182,29 @@ export default function AdminDocuments() {
                     <option value="claimed">Claimed</option>
                   </select>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    File Attachment URL (PDF)
-                  </label>
+                <div className="m-field">
+                  <label className="m-field__label">File Attachment URL (PDF)</label>
                   <input
                     type="text"
                     placeholder="/website-assets/sample.pdf or external URL"
                     value={editingItem.file_url || ''}
                     onChange={(e) => setEditingItem({ ...editingItem, file_url: e.target.value })}
-                    className={input}
+                    className="m-field__control"
                   />
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                  Officer Notes / Instructions to Student
-                </label>
+              <div className="m-field">
+                <label className="m-field__label">Officer Notes / Instructions to Student</label>
                 <textarea
                   rows={2}
                   value={editingItem.admin_notes || ''}
                   onChange={(e) => setEditingItem({ ...editingItem, admin_notes: e.target.value })}
-                  className={input}
+                  className="m-field__control !py-3 !min-h-[84px]"
                   placeholder="e.g. Approved. Pick up physical signed copy at the SELENS Council Office during office hours."
                 />
               </div>
-              <div className="flex justify-end gap-3 pt-4 border-t border-selens-line">
-                <SecondaryButton
-                  type="button"
-                  onClick={() => setEditingItem(null)}
-                >
+              <div className="flex flex-wrap justify-end gap-3 pt-4 border-t border-[#cdd0d4]">
+                <SecondaryButton type="button" onClick={() => setEditingItem(null)}>
                   Cancel
                 </SecondaryButton>
                 <PrimaryButton type="submit">
@@ -187,27 +212,29 @@ export default function AdminDocuments() {
                 </PrimaryButton>
               </div>
             </form>
-          </Card>
+          </div>
         )}
 
         {/* Requests Table */}
-        <Card className="p-0 overflow-hidden">
-          <div className="p-5 border-b border-selens-line flex items-center gap-3">
-            <FileText className="w-5 h-5 text-selens-yellow shrink-0" />
-            <h2 className="text-base font-bold font-serif text-selens-white">
-              {filtered.length} {filterStatus === 'all' ? 'Total' : filterStatus.charAt(0).toUpperCase() + filterStatus.slice(1)} {filtered.length === 1 ? 'Request' : 'Requests'}
+        <div className="m-panel-light m-shadow overflow-hidden">
+          <div className="px-6 py-4 bg-[#121315] text-white flex items-center gap-3">
+            <FileText className="w-5 h-5 text-[#FFD100] shrink-0" />
+            <h2 className="m-text-5 text-white">
+              {filtered.length}{' '}
+              {filterStatus === 'all' ? 'Total' : filterStatus.charAt(0).toUpperCase() + filterStatus.slice(1)}{' '}
+              {filtered.length === 1 ? 'Request' : 'Requests'}
             </h2>
           </div>
 
           {filtered.length === 0 ? (
-            <div className="px-6 py-12 text-center text-neutral-400 text-sm">
+            <div className="px-6 py-12 text-center m-text-6 text-[#4d5158]">
               No document requests match this status filter.
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-sm border-collapse font-sans">
+              <table className="w-full text-sm border-collapse">
                 <thead>
-                  <tr className="border-b border-selens-line text-left text-xs uppercase tracking-wider text-neutral-400 bg-selens-black/40">
+                  <tr className="border-b border-[#cdd0d4] text-left text-xs font-medium text-[#4d5158] bg-[#e7e8ea]/60">
                     <th className="px-5 py-3.5">Member</th>
                     <th className="px-5 py-3.5 hidden sm:table-cell">Document</th>
                     <th className="px-5 py-3.5 hidden md:table-cell">Purpose</th>
@@ -215,22 +242,22 @@ export default function AdminDocuments() {
                     <th className="px-5 py-3.5 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-selens-line">
+                <tbody className="divide-y divide-[#cdd0d4]">
                   {filtered.map((req) => (
-                    <tr key={req.id} className="hover:bg-selens-black/40 transition">
+                    <tr key={req.id} className="hover:bg-[#e7e8ea]/40 transition-colors">
                       <td className="px-5 py-4">
-                        <span className="font-bold text-selens-white font-serif text-base block">
+                        <span className="font-medium text-[#121315] text-base block">
                           {req.full_name}
                         </span>
-                        <span className="text-xs text-neutral-400">{req.student_id}</span>
+                        <span className="text-xs text-[#4d5158]">{req.student_id}</span>
                       </td>
-                      <td className="px-5 py-4 hidden sm:table-cell text-neutral-300">
+                      <td className="px-5 py-4 hidden sm:table-cell text-[#121315]">
                         <div>{DOCUMENT_LABELS[req.document_type] || req.document_type}</div>
-                        <span className="text-xs uppercase px-2 py-0.5 rounded-[4px] border border-selens-line text-neutral-400 inline-block mt-1">
+                        <span className="text-xs uppercase px-2.5 py-0.5 rounded-full bg-[#e7e8ea] text-[#4d5158] font-medium inline-block mt-1">
                           {req.urgency}
                         </span>
                       </td>
-                      <td className="px-5 py-4 hidden md:table-cell text-neutral-400 max-w-xs">
+                      <td className="px-5 py-4 hidden md:table-cell text-[#4d5158] max-w-xs">
                         <p className="line-clamp-2">{req.purpose}</p>
                       </td>
                       <td className="px-5 py-4">
@@ -238,8 +265,9 @@ export default function AdminDocuments() {
                       </td>
                       <td className="px-5 py-4 text-right">
                         <button
+                          type="button"
                           onClick={() => setEditingItem(req)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-selens-yellow text-selens-black text-xs font-semibold rounded-[4px] hover:bg-yellow-400 transition"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#121315] text-[#FFD100] text-xs font-semibold rounded-full hover:bg-[#FFD100] hover:text-[#121315] transition cursor-pointer"
                         >
                           <Edit2 className="w-3.5 h-3.5" /> Process
                         </button>
@@ -250,10 +278,10 @@ export default function AdminDocuments() {
               </table>
             </div>
           )}
-        </Card>
+        </div>
 
-        <div className="pt-4 border-t border-selens-line text-xs text-neutral-500 text-right">
-          SELENS Secretariat Queue • A.Y. 2026–2027
+        <div className="pt-2 text-xs text-[#4d5158] text-right">
+          SELENS Secretariat Queue · A.Y. 2026–2027
         </div>
       </div>
     </div>

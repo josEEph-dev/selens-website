@@ -3,12 +3,10 @@ import { dataApi } from '../../lib/supabase'
 import { useAuth } from '../../context/useAuth'
 import { useNoIndex } from '../portal/useNoIndex'
 import { Plus, Edit2, Trash2, Award } from 'lucide-react'
-import { PageHeader, Card, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
+import { PageHeader, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
 import AcademicYearInput from '../../components/AcademicYearInput'
 import ImageUploader from '../../components/ImageUploader'
 import { CURRENT_ACADEMIC_YEAR } from '../../lib/config'
-
-const input = 'w-full px-3.5 py-2.5 bg-selens-black border border-selens-line rounded-[4px] text-sm text-selens-white placeholder:text-neutral-500 focus:outline-none focus:border-selens-yellow transition font-sans'
 
 export default function AdminAwards() {
   useNoIndex()
@@ -87,42 +85,43 @@ export default function AdminAwards() {
   }
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-screen py-10">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-8">
-        <PageHeader
-          title="Manage Accreditations & Awards"
-          subtitle="Curate the registry of institutional recognitions, board passing performances, and society citations."
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Officer Dashboard', href: '/dashboard' },
-            { label: 'Accreditations & Awards' },
-          ]}
-          action={
-            <PrimaryButton
-              onClick={() =>
-                setEditingItem({
-                  title: '',
-                  description: '',
-                  awarding_body: '',
-                  date_awarded: '',
-                  image_url: '',
-                  academic_year: CURRENT_ACADEMIC_YEAR,
-                })
-              }
-              className="inline-flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add Award</span>
-            </PrimaryButton>
-          }
-        />
+    <div id="main-content" className="selens-paper-page min-h-screen pb-14">
+      <PageHeader
+        compactTop
+        title="Manage Accreditations & Awards"
+        subtitle="Curate the registry of institutional recognitions, board passing performances, and society citations."
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Officer Dashboard', href: '/dashboard' },
+          { label: 'Accreditations & Awards' },
+        ]}
+        action={
+          <PrimaryButton
+            onClick={() =>
+              setEditingItem({
+                title: '',
+                description: '',
+                awarding_body: '',
+                date_awarded: '',
+                image_url: '',
+                academic_year: CURRENT_ACADEMIC_YEAR,
+              })
+            }
+            className="inline-flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Award</span>
+          </PrimaryButton>
+        }
+      />
 
+      <div className="selens-container py-8 space-y-6">
         {feedback && (
           <div
-            className={`p-4 text-sm font-medium rounded-[4px] border ${
+            className={`p-4 m-text-6 font-medium rounded-[16px] border ${
               feedback.type === 'success'
-                ? 'bg-selens-ink border-selens-yellow text-selens-yellow'
-                : 'bg-selens-ink border-red-500/50 text-red-400'
+                ? 'bg-[#121315] border-[#121315] text-[#FFD100]'
+                : 'bg-red-50 border-red-200 text-red-800'
             }`}
           >
             {feedback.message}
@@ -130,53 +129,47 @@ export default function AdminAwards() {
         )}
 
         {editingItem && (
-          <Card className="border-selens-yellow">
-            <div className="border-b border-selens-line pb-4 mb-6 flex items-center justify-between">
-              <h2 className="text-lg font-bold font-serif text-selens-white">
+          <div className="m-panel-light m-shadow p-6 sm:p-8 border-t-4 border-[#FFD100]">
+            <div className="border-b border-[#cdd0d4] pb-4 mb-6 flex flex-wrap items-center justify-between gap-2">
+              <h2 className="m-text-5 text-[#121315]">
                 {editingItem.id ? 'Edit Award Record' : 'New Award Record'}
               </h2>
-              <span className="text-xs text-neutral-400">
+              <span className="px-3 py-1 rounded-full bg-[#121315] text-[#FFD100] text-xs font-medium">
                 A.Y. {editingItem.academic_year || CURRENT_ACADEMIC_YEAR}
               </span>
             </div>
             <form onSubmit={handleSave} className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Award Title
-                  </label>
+                <div className="m-field">
+                  <label className="m-field__label">Award Title</label>
                   <input
                     type="text"
                     required
                     value={editingItem.title || ''}
                     onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
-                    className={input}
+                    className="m-field__control"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Awarding Body / Organization
-                  </label>
+                <div className="m-field">
+                  <label className="m-field__label">Awarding Body / Organization</label>
                   <input
                     type="text"
                     required
                     value={editingItem.awarding_body || ''}
                     onChange={(e) => setEditingItem({ ...editingItem, awarding_body: e.target.value })}
-                    className={input}
+                    className="m-field__control"
                     placeholder="e.g. Professional Regulation Commission (PRC)"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Date Awarded
-                  </label>
+                <div className="m-field">
+                  <label className="m-field__label">Date Awarded</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. 2026-05-15"
                     value={editingItem.date_awarded || ''}
                     onChange={(e) => setEditingItem({ ...editingItem, date_awarded: e.target.value })}
-                    className={input}
+                    className="m-field__control"
                   />
                 </div>
                 <AcademicYearInput
@@ -193,23 +186,18 @@ export default function AdminAwards() {
                   />
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                  Description / Details
-                </label>
+              <div className="m-field">
+                <label className="m-field__label">Description / Details</label>
                 <textarea
                   rows={3}
                   value={editingItem.description || ''}
                   onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
-                  className={input}
+                  className="m-field__control !py-3 !min-h-[96px]"
                   placeholder="Official passing percentage, level of accreditation, or award details"
                 />
               </div>
-              <div className="flex justify-end gap-3 pt-4 border-t border-selens-line">
-                <SecondaryButton
-                  type="button"
-                  onClick={() => setEditingItem(null)}
-                >
+              <div className="flex flex-wrap justify-end gap-3 pt-4 border-t border-[#cdd0d4]">
+                <SecondaryButton type="button" onClick={() => setEditingItem(null)}>
                   Cancel
                 </SecondaryButton>
                 <PrimaryButton type="submit">
@@ -217,71 +205,77 @@ export default function AdminAwards() {
                 </PrimaryButton>
               </div>
             </form>
-          </Card>
+          </div>
         )}
 
-        <Card className="p-0 overflow-hidden">
-          <div className="p-5 border-b border-selens-line flex items-center gap-3">
-            <Award className="w-5 h-5 text-selens-yellow shrink-0" />
-            <h2 className="text-base font-bold font-serif text-selens-white">
+        <div className="m-panel-light m-shadow overflow-hidden">
+          <div className="px-6 py-4 bg-[#121315] text-white flex items-center gap-3">
+            <Award className="w-5 h-5 text-[#FFD100] shrink-0" />
+            <h2 className="m-text-5 text-white">
               {items.length} Award &amp; Accreditation Entries
             </h2>
           </div>
 
           {loading ? (
-            <div className="p-8 text-center text-neutral-400">Loading awards...</div>
+            <div className="p-8 text-center m-text-6 text-[#4d5158]">Loading awards...</div>
           ) : error ? (
-            <div className="p-8 text-center text-red-400 text-sm">{error}</div>
+            <div className="p-8 text-center text-red-700 text-sm">{error}</div>
           ) : items.length === 0 ? (
-            <div className="p-8 text-center text-neutral-400">No award entries found.</div>
+            <div className="p-8 text-center m-text-6 text-[#4d5158]">No award entries found.</div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-sm border-collapse font-sans">
+              <table className="w-full text-sm border-collapse">
                 <thead>
-                  <tr className="border-b border-selens-line text-left text-xs uppercase tracking-wider text-neutral-400 bg-selens-black/40">
+                  <tr className="border-b border-[#cdd0d4] text-left text-xs font-medium text-[#4d5158] bg-[#e7e8ea]/60">
                     <th className="px-5 py-3.5">Title</th>
                     <th className="px-5 py-3.5 hidden sm:table-cell">Academic Year</th>
                     <th className="px-5 py-3.5 hidden sm:table-cell">Awarding Body</th>
-                    <th className="px-5 py-3.5 text-center w-32">Date Awarded</th>
+                    <th className="px-5 py-3.5 text-center w-36">Date Awarded</th>
                     <th className="px-5 py-3.5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-selens-line">
+                <tbody className="divide-y divide-[#cdd0d4]">
                   {items.map((a) => (
-                    <tr key={a.id} className="hover:bg-selens-black/40 transition">
+                    <tr key={a.id} className="hover:bg-[#e7e8ea]/40 transition-colors">
                       <td className="px-5 py-4">
-                        <span className="font-bold text-selens-white font-serif text-base block">
+                        <span className="font-medium text-[#121315] text-base block">
                           {a.title}
                         </span>
                         {a.description && (
-                          <span className="text-xs text-neutral-400 line-clamp-1 mt-0.5 block">
+                          <span className="text-xs text-[#4d5158] line-clamp-1 mt-0.5 block">
                             {a.description}
                           </span>
                         )}
                       </td>
-                      <td className="px-5 py-4 hidden sm:table-cell text-neutral-300 text-xs">
+                      <td className="px-5 py-4 hidden sm:table-cell text-[#4d5158] text-xs">
                         A.Y. {a.academic_year || '—'}
                       </td>
-                      <td className="px-5 py-4 text-neutral-300 hidden sm:table-cell">
+                      <td className="px-5 py-4 text-[#121315] hidden sm:table-cell">
                         {a.awarding_body}
                       </td>
-                      <td className="px-5 py-4 text-center font-bold text-selens-yellow">
-                        {a.date_awarded}
+                      <td className="px-5 py-4 text-center">
+                        <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#FFD100] text-[#121315] text-xs font-semibold">
+                          {a.date_awarded}
+                        </span>
                       </td>
                       <td className="px-5 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-1.5">
                           <button
+                            type="button"
                             onClick={() => setEditingItem(a)}
-                            className="p-1.5 text-neutral-400 hover:text-selens-yellow transition rounded-[4px]"
+                            className="w-9 h-9 rounded-full inline-flex items-center justify-center text-[#121315] hover:bg-[#FFD100] transition cursor-pointer"
                             title="Edit Award"
+                            aria-label="Edit Award"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           {canDelete && (
                             <button
+                              type="button"
                               onClick={() => handleDelete(a.id)}
-                              className="p-1.5 text-neutral-400 hover:text-red-400 transition rounded-[4px]"
+                              className="w-9 h-9 rounded-full inline-flex items-center justify-center text-[#4d5158] hover:bg-red-100 hover:text-red-700 transition cursor-pointer"
                               title="Delete Award"
+                              aria-label="Delete Award"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -294,10 +288,10 @@ export default function AdminAwards() {
               </table>
             </div>
           )}
-        </Card>
+        </div>
 
-        <div className="pt-4 border-t border-selens-line text-xs text-neutral-500 text-right">
-          SELENS Accreditations &amp; Awards • Department of Electrical Engineering
+        <div className="pt-2 text-xs text-[#4d5158] text-right">
+          SELENS Accreditations &amp; Awards · Department of Electrical Engineering
         </div>
       </div>
     </div>

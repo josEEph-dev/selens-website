@@ -3,13 +3,11 @@ import { useAuth } from '../../context/useAuth'
 import { useNoIndex } from '../portal/useNoIndex'
 import { dataApi } from '../../lib/supabase'
 import { Plus, Edit2, Trash2, Layers } from 'lucide-react'
-import { PageHeader, Card, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
+import { PageHeader, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
 import AcademicYearInput from '../../components/AcademicYearInput'
 import PostedBySelect from '../../components/PostedBySelect'
 import ImageUploader from '../../components/ImageUploader'
 import { CURRENT_ACADEMIC_YEAR, formatCommitteeLabel } from '../../lib/config'
-
-const input = 'w-full px-3.5 py-2.5 bg-selens-black border border-selens-line rounded-[4px] text-sm text-selens-white placeholder:text-neutral-500 focus:outline-none focus:border-selens-yellow transition font-sans'
 
 export default function AdminProjects() {
   useNoIndex()
@@ -88,82 +86,78 @@ export default function AdminProjects() {
   }
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-screen py-10">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 space-y-8">
-        <PageHeader
-          title="Manage Projects & Initiatives"
-          subtitle="Curate active programs, academic projects, and organizational initiatives."
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Officer Dashboard', href: '/dashboard' },
-            { label: 'Projects & Initiatives' },
-          ]}
-          action={
-            <PrimaryButton
-              onClick={() =>
-                setEditingItem({
-                  name: '',
-                  description: '',
-                  status: 'ongoing',
-                  cover_image_url: '',
-                  link_url: '',
-                  academic_year: CURRENT_ACADEMIC_YEAR,
-                  committee: 'General',
-                })
-              }
-              className="inline-flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              <span>New Project</span>
-            </PrimaryButton>
-          }
-        />
+    <div id="main-content" className="selens-paper-page min-h-screen pb-14">
+      <PageHeader
+        compactTop
+        title="Manage Projects & Initiatives"
+        subtitle="Curate active programs, academic projects, and organizational initiatives."
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Officer Dashboard', href: '/dashboard' },
+          { label: 'Projects & Initiatives' },
+        ]}
+        action={
+          <PrimaryButton
+            onClick={() =>
+              setEditingItem({
+                name: '',
+                description: '',
+                status: 'ongoing',
+                cover_image_url: '',
+                link_url: '',
+                academic_year: CURRENT_ACADEMIC_YEAR,
+                committee: 'General',
+              })
+            }
+            className="inline-flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Project</span>
+          </PrimaryButton>
+        }
+      />
 
+      <div className="selens-container py-8 space-y-6">
         {feedback && (
           <div
-            className={`p-4 text-sm font-medium rounded-[4px] border ${
+            className={`p-4 m-text-6 font-medium rounded-[16px] border ${
               feedback.type === 'success'
-                ? 'bg-selens-ink border-selens-yellow text-selens-yellow'
-                : 'bg-selens-ink border-red-500/50 text-red-400'
+                ? 'bg-[#121315] border-[#121315] text-[#FFD100]'
+                : 'bg-red-50 border-red-200 text-red-800'
             }`}
           >
             {feedback.message}
           </div>
         )}
 
-        {/* Compose / Edit Modal or Card */}
         {editingItem && (
-          <Card className="border-selens-yellow">
-            <div className="border-b border-selens-line pb-4 mb-6 flex items-center justify-between">
-              <h2 className="text-lg font-bold font-serif text-selens-white">
+          <div className="m-panel-light m-shadow p-6 sm:p-8 border-t-4 border-[#FFD100]">
+            <div className="border-b border-[#cdd0d4] pb-4 mb-6 flex flex-wrap items-center justify-between gap-2">
+              <h2 className="m-text-5 text-[#121315]">
                 {editingItem.id ? 'Edit Project' : 'New Project Record'}
               </h2>
-              <span className="text-xs text-neutral-400">
+              <span className="px-3 py-1 rounded-full bg-[#121315] text-[#FFD100] text-xs font-medium">
                 A.Y. {editingItem.academic_year || CURRENT_ACADEMIC_YEAR}
               </span>
             </div>
             <form onSubmit={handleSave} className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Project Name
-                  </label>
+                <div className="m-field">
+                  <label className="m-field__label">Project Name</label>
                   <input
                     type="text"
                     required
                     value={editingItem.name}
                     onChange={(e) => setEditingItem({ ...editingItem, name: e.target.value })}
-                    className={input}
+                    className="m-field__control"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    Status
-                  </label>
+                <div className="m-field">
+                  <label className="m-field__label">Status</label>
                   <select
                     value={editingItem.status || 'ongoing'}
                     onChange={(e) => setEditingItem({ ...editingItem, status: e.target.value })}
-                    className={input}
+                    className="m-field__control cursor-pointer"
                   >
                     <option value="ongoing">Ongoing</option>
                     <option value="completed">Completed</option>
@@ -179,15 +173,13 @@ export default function AdminProjects() {
                   value={editingItem.committee || 'General'}
                   onChange={(val) => setEditingItem({ ...editingItem, committee: val })}
                 />
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                    External Link URL
-                  </label>
+                <div className="m-field sm:col-span-2">
+                  <label className="m-field__label">External Link URL</label>
                   <input
                     type="url"
                     value={editingItem.link_url || ''}
                     onChange={(e) => setEditingItem({ ...editingItem, link_url: e.target.value })}
-                    className={input}
+                    className="m-field__control"
                     placeholder="https://... (optional external info link)"
                   />
                 </div>
@@ -201,25 +193,20 @@ export default function AdminProjects() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1.5">
-                  Project Description
-                </label>
+              <div className="m-field">
+                <label className="m-field__label">Project Description</label>
                 <textarea
                   rows={4}
                   required
                   value={editingItem.description || ''}
                   onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
-                  className={input}
+                  className="m-field__control !py-3 !min-h-[116px]"
                   placeholder="Detailed description of the program goals and activities"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-selens-line">
-                <SecondaryButton
-                  type="button"
-                  onClick={() => setEditingItem(null)}
-                >
+              <div className="flex flex-wrap justify-end gap-3 pt-4 border-t border-[#cdd0d4]">
+                <SecondaryButton type="button" onClick={() => setEditingItem(null)}>
                   Cancel
                 </SecondaryButton>
                 <PrimaryButton type="submit">
@@ -227,29 +214,28 @@ export default function AdminProjects() {
                 </PrimaryButton>
               </div>
             </form>
-          </Card>
+          </div>
         )}
 
-        {/* Directory List Table */}
-        <Card className="p-0 overflow-hidden">
-          <div className="p-5 border-b border-selens-line flex items-center gap-3">
-            <Layers className="w-5 h-5 text-selens-yellow shrink-0" />
-            <h2 className="text-base font-bold font-serif text-selens-white">
+        <div className="m-panel-light m-shadow overflow-hidden">
+          <div className="px-6 py-4 bg-[#121315] text-white flex items-center gap-3">
+            <Layers className="w-5 h-5 text-[#FFD100] shrink-0" />
+            <h2 className="m-text-5 text-white">
               {projects.length} Projects &amp; Programs
             </h2>
           </div>
 
           {loading ? (
-            <div className="p-8 text-center text-neutral-400">Loading projects...</div>
+            <div className="p-8 text-center m-text-6 text-[#4d5158]">Loading projects...</div>
           ) : error ? (
-            <div className="p-8 text-center text-red-400 text-sm">{error}</div>
+            <div className="p-8 text-center text-red-700 text-sm">{error}</div>
           ) : projects.length === 0 ? (
-            <div className="p-8 text-center text-neutral-400">No project records found.</div>
+            <div className="p-8 text-center m-text-6 text-[#4d5158]">No project records found.</div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-sm border-collapse font-sans">
+              <table className="w-full text-sm border-collapse">
                 <thead>
-                  <tr className="border-b border-selens-line text-left text-xs uppercase tracking-wider text-neutral-400 bg-selens-black/40">
+                  <tr className="border-b border-[#cdd0d4] text-left text-xs font-medium text-[#4d5158] bg-[#e7e8ea]/60">
                     <th className="px-5 py-3.5">Name</th>
                     <th className="px-5 py-3.5 hidden sm:table-cell">Academic Year</th>
                     <th className="px-5 py-3.5 hidden sm:table-cell">Posted By</th>
@@ -257,47 +243,48 @@ export default function AdminProjects() {
                     <th className="px-5 py-3.5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-selens-line">
+                <tbody className="divide-y divide-[#cdd0d4]">
                   {projects.map((item) => (
-                    <tr
-                      key={item.id}
-                      className="hover:bg-selens-black/40 transition"
-                    >
+                    <tr key={item.id} className="hover:bg-[#e7e8ea]/40 transition-colors">
                       <td className="px-5 py-4">
-                        <span className="font-bold text-selens-white font-serif text-base block">
+                        <span className="font-medium text-[#121315] text-base block">
                           {item.name}
                         </span>
-                        <p className="text-xs text-neutral-400 line-clamp-1 mt-0.5">
+                        <p className="text-xs text-[#4d5158] line-clamp-1 mt-0.5">
                           {item.description}
                         </p>
                       </td>
-                      <td className="px-5 py-4 hidden sm:table-cell text-neutral-300 text-xs">
+                      <td className="px-5 py-4 hidden sm:table-cell text-[#4d5158] text-xs">
                         A.Y. {item.academic_year || '—'}
                       </td>
-                      <td className="px-5 py-4 hidden sm:table-cell text-neutral-300 text-xs">
-                        <span className="text-selens-yellow font-semibold block">
+                      <td className="px-5 py-4 hidden sm:table-cell text-xs">
+                        <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#121315] text-[#FFD100] font-medium">
                           {formatCommitteeLabel(item.committee)}
                         </span>
                       </td>
                       <td className="px-5 py-4 hidden sm:table-cell">
-                        <span className="text-xs uppercase px-2.5 py-1 rounded-[4px] border border-selens-line text-neutral-300">
+                        <span className="text-xs capitalize px-2.5 py-1 rounded-full bg-[#e7e8ea] text-[#121315] font-medium">
                           {item.status}
                         </span>
                       </td>
                       <td className="px-5 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-1.5">
                           <button
+                            type="button"
                             onClick={() => setEditingItem(item)}
-                            className="p-1.5 text-neutral-400 hover:text-selens-yellow transition rounded-[4px]"
+                            className="w-9 h-9 rounded-full inline-flex items-center justify-center text-[#121315] hover:bg-[#FFD100] transition cursor-pointer"
                             title="Edit Project"
+                            aria-label="Edit Project"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           {canDelete && (
                             <button
+                              type="button"
                               onClick={() => handleDelete(item.id)}
-                              className="p-1.5 text-neutral-400 hover:text-red-400 transition rounded-[4px]"
+                              className="w-9 h-9 rounded-full inline-flex items-center justify-center text-[#4d5158] hover:bg-red-100 hover:text-red-700 transition cursor-pointer"
                               title="Delete Project"
+                              aria-label="Delete Project"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -310,10 +297,10 @@ export default function AdminProjects() {
               </table>
             </div>
           )}
-        </Card>
+        </div>
 
-        <div className="pt-4 border-t border-selens-line text-xs text-neutral-500 text-right">
-          SELENS Projects Directory • A.Y. 2026–2027
+        <div className="pt-2 text-xs text-[#4d5158] text-right">
+          SELENS Projects Directory · A.Y. 2026–2027
         </div>
       </div>
     </div>

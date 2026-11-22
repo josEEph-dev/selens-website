@@ -9,28 +9,41 @@ export { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Reveal }
  * - On public pages (.selens-paper-page): renders Hush's rounded 28px deep-ink banner inset on the #e7e8ea mist ground.
  * - On Admin pages (outside .selens-paper-page): preserves the full-bleed dark Admin banner cleanly.
  */
-export function PageHeader({ title, description, action }) {
+export function PageHeader({ title, description, subtitle, breadcrumbs, action, compactTop = false }) {
+  const descText = description || subtitle
+  const crumbs =
+    Array.isArray(breadcrumbs) && breadcrumbs.length > 0
+      ? breadcrumbs
+      : [{ label: 'Home', href: '/' }, { label: title }]
+
   return (
-    <div className="selens-page-header">
+    <div className={`selens-page-header ${compactTop ? 'selens-page-header--compact' : ''}`}>
       <div className="selens-container">
         <div className="selens-page-header-inner hush-dark-scope flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="min-w-0 max-w-3xl space-y-3">
             <nav
               aria-label="Breadcrumb"
-              className="m-text-6 selens-page-header-crumb flex items-center gap-2"
+              className="m-text-6 selens-page-header-crumb flex flex-wrap items-center gap-2"
             >
-              <Link to="/" className="m-link text-white/80 hover:text-white">
-                Home
-              </Link>
-              <span aria-hidden="true">/</span>
-              <span className="truncate">{title}</span>
+              {crumbs.map((crumb, index) => (
+                <span key={`${crumb.label}-${index}`} className="inline-flex items-center gap-2 min-w-0">
+                  {index > 0 && <span aria-hidden="true">/</span>}
+                  {crumb.href ? (
+                    <Link to={crumb.href} className="m-link text-white/80 hover:text-white">
+                      {crumb.label}
+                    </Link>
+                  ) : (
+                    <span className="truncate">{crumb.label}</span>
+                  )}
+                </span>
+              ))}
             </nav>
             <h1 className="selens-fluid-h1 selens-page-header-title break-words [overflow-wrap:anywhere]">
               {title}
             </h1>
-            {description && (
+            {descText && (
               <p className="m-text selens-page-header-desc max-w-2xl">
-                {description}
+                {descText}
               </p>
             )}
           </div>

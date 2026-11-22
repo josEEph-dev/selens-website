@@ -50,14 +50,12 @@ export default function Navbar() {
   const lastYRef = useRef(0)
 
   const menuOpen = openMenuPath === location.pathname
-  const isAdminRoute = location.pathname.startsWith('/dashboard')
 
   const closeMenu = () => setOpenMenuPath(null)
   const openMenu = () => setOpenMenuPath(location.pathname)
 
-  // Auto-hide floating header on scroll down, reveal on scroll up (public routes)
+  // Auto-hide floating header on scroll down, reveal on scroll up
   useEffect(() => {
-    if (isAdminRoute) return undefined
     let rafId = 0
     lastYRef.current = window.scrollY
 
@@ -83,7 +81,7 @@ export default function Navbar() {
       window.removeEventListener('scroll', onScroll)
       if (rafId) window.cancelAnimationFrame(rafId)
     }
-  }, [isAdminRoute, location.pathname])
+  }, [location.pathname])
 
   // Escape key & scroll lock when full-screen menu is open
   useEffect(() => {
@@ -106,56 +104,6 @@ export default function Navbar() {
   const toggleContrast = () => {
     setContrastHigh((prev) => !prev)
     document.documentElement.classList.toggle('contrast-high')
-  }
-
-  // Keep Admin routes on a clean dark sticky header so Admin CMS layout is untouched
-  if (isAdminRoute) {
-    return (
-      <header className="sticky top-0 z-50 w-full bg-[#121315] border-b border-selens-line text-white">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[70] focus:bg-selens-yellow focus:text-[#121315] focus:font-medium focus:text-sm focus:px-4 focus:py-2.5 focus:rounded-full"
-        >
-          Skip to main content
-        </a>
-        <div className="selens-container h-[70px] flex items-center justify-between gap-4">
-          <Link to="/" className="inline-flex items-center gap-2.5 text-white no-underline">
-            <img
-              src="/website-assets/selens-logo.png"
-              alt="SELENS Logo"
-              className="h-8 w-8 object-contain"
-            />
-            <span className="text-xl font-semibold tracking-[-0.04em] leading-none">
-              SELENS<span className="text-selens-yellow">.</span>
-            </span>
-          </Link>
-
-          <nav aria-label="Officer navigation" className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-300">
-            <Link to="/" className="hover:text-selens-yellow transition-colors">Public Site</Link>
-            <Link to="/dashboard" className="hover:text-selens-yellow transition-colors">Dashboard</Link>
-            <Link to="/portal" className="hover:text-selens-yellow transition-colors">Portal</Link>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            {user && (
-              <>
-                <span className="hidden sm:inline text-xs text-neutral-400">
-                  {profile?.full_name || user.email}
-                </span>
-                <button
-                  type="button"
-                  onClick={signOut}
-                  className="inline-flex items-center gap-1.5 text-xs font-medium px-3.5 py-2 rounded-full bg-white/10 hover:bg-selens-yellow hover:text-[#121315] transition-colors cursor-pointer"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  <span>Sign out</span>
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      </header>
-    )
   }
 
   return (
