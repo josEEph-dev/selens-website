@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/useAuth'
-import { PageHeader, Card } from '../../components/SharedUI'
+import { PageHeader } from '../../components/SharedUI'
 import { useNoIndex } from './useNoIndex'
 
 export default function PortalReset() {
@@ -43,25 +43,24 @@ export default function PortalReset() {
   return (
     <div id="main-content" className="selens-paper-page min-h-[75vh]">
       <PageHeader
-        eyebrow="Student Portal"
         title="Set New Password"
         description="Choose a new password for your SELENS account."
       />
 
       <div className="selens-container py-12 sm:py-16 flex justify-center">
-        <Card hover={false} className="max-w-md w-full p-6 sm:p-8 space-y-6">
+        <div className="m-panel-light m-shadow max-w-md w-full p-7 sm:p-9 space-y-6">
           {loading ? (
             <div className="flex flex-col items-center gap-3 py-6">
-              <div className="h-8 w-8 animate-spin rounded-[3px] border-2 border-selens-paper-rule border-t-selens-paper-ink" />
-              <p className="text-sm font-sans text-selens-paper-muted">Verifying recovery link...</p>
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#cdd0d4] border-t-[#121315]" />
+              <p className="m-text-6 text-[#4d5158]">Verifying recovery link...</p>
             </div>
           ) : !canReset ? (
-            <div className="space-y-4">
-              <div className="rounded-[3px] border-l-4 border-selens-yellow bg-selens-paper-alt px-4 py-4 text-sm font-sans text-selens-paper-ink leading-relaxed">
+            <div className="space-y-5">
+              <div className="rounded-[14px] border-l-4 border-[#FFD100] bg-[#e7e8ea] px-4 py-4 m-text-6 text-[#121315]">
                 This password reset link is invalid or has expired. Request a new reset link to continue.
               </div>
-              <Link to="/portal/forgot" className="selens-btn-ink">
-                Request reset link
+              <Link to="/portal/forgot" className="m-btn">
+                <span className="m-btn__label">Request reset link</span>
               </Link>
             </div>
           ) : (
@@ -69,15 +68,15 @@ export default function PortalReset() {
               {error && (
                 <div
                   role="alert"
-                  className="rounded-[3px] border border-red-300 bg-red-50 px-4 py-3 text-sm font-sans text-red-800 leading-relaxed"
+                  className="rounded-[14px] border border-red-200 bg-red-50 px-4 py-3 m-text-6 text-red-800"
                 >
                   {error}
                 </div>
               )}
 
               <form onSubmit={handleSubmit} noValidate className="space-y-5">
-                <div>
-                  <label htmlFor="reset-password" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
+                <div className="m-field">
+                  <label htmlFor="reset-password" className="m-field__label">
                     New Password
                   </label>
                   <input
@@ -89,12 +88,12 @@ export default function PortalReset() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Minimum 8 characters"
-                    className="selens-input font-sans"
+                    className="m-field__control"
                   />
                 </div>
 
-                <div>
-                  <label htmlFor="reset-confirm-password" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
+                <div className="m-field">
+                  <label htmlFor="reset-confirm-password" className="m-field__label">
                     Confirm New Password
                   </label>
                   <input
@@ -106,21 +105,23 @@ export default function PortalReset() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Re-enter your new password"
-                    className="selens-input font-sans"
+                    className="m-field__control"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="selens-btn-ink w-full disabled:opacity-50"
+                  className="m-btn w-full"
                 >
-                  {submitting ? 'Updating password...' : 'Update password'}
+                  <span className="m-btn__label">
+                    {submitting ? 'Updating password...' : 'Update password'}
+                  </span>
                 </button>
               </form>
             </>
           )}
-        </Card>
+        </div>
       </div>
     </div>
   )

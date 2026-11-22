@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
-import { PageHeader, Card, PrimaryButton } from '../components/SharedUI'
+import { PageHeader } from '../components/SharedUI'
 import { LogIn, AlertCircle, CheckCircle2 } from 'lucide-react'
 
 export default function Login() {
@@ -42,46 +42,46 @@ export default function Login() {
   return (
     <div id="main-content" className="selens-paper-page min-h-[80vh]">
       <PageHeader
-        eyebrow="Administration"
         title="Officer Login"
         description="Sign in with your officer credentials to manage organization content and records."
       />
 
       <div className="selens-container py-12 sm:py-16 flex justify-center">
-        <div className="w-full max-w-md space-y-6">
-          <Card className="p-6 sm:p-8 space-y-6" hover={false}>
+        <div className="w-full max-w-md">
+          <div className="m-panel-light m-shadow p-7 sm:p-9 space-y-6">
             {user ? (
               <div className="space-y-6 text-center">
-                <div className="w-12 h-12 rounded-[3px] bg-selens-paper-ink text-selens-yellow flex items-center justify-center mx-auto">
+                <div className="w-12 h-12 rounded-full bg-[#121315] text-[#FFD100] flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
-                  <h2 className="font-serif font-bold text-xl text-selens-paper-ink">
+                  <h2 className="m-text-5 text-[#121315]">
                     Signed in as {profile?.full_name || 'Officer'}
                   </h2>
-                  <p className="text-sm text-selens-paper-muted font-sans break-all">
+                  <p className="m-text-6 text-[#4d5158] break-all">
                     {profile?.email}
                   </p>
                 </div>
 
-                <div className="p-4 bg-selens-paper-alt border border-selens-paper-rule rounded-[3px] space-y-2 text-left text-sm">
+                <div className="p-4 bg-[#e7e8ea] rounded-[14px] space-y-2 text-left m-text-6">
                   <div className="flex justify-between">
-                    <span className="text-selens-paper-muted">Role</span>
-                    <span className="font-bold text-selens-paper-ink capitalize">{profile?.role}</span>
+                    <span className="text-[#4d5158]">Role</span>
+                    <span className="font-medium text-[#121315] capitalize">{profile?.role}</span>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-3 pt-2">
-                  <PrimaryButton
+                <div className="flex flex-col gap-3 pt-1">
+                  <button
+                    type="button"
                     onClick={() => navigate('/dashboard')}
-                    className="w-full min-h-[44px]"
+                    className="m-btn w-full"
                   >
-                    Go to Dashboard
-                  </PrimaryButton>
+                    <span className="m-btn__label">Go to Dashboard</span>
+                  </button>
                   <button
                     type="button"
                     onClick={signOut}
-                    className="w-full min-h-[44px] rounded-[3px] border border-red-300 bg-red-50 text-red-700 font-semibold text-sm hover:bg-red-100 transition-colors cursor-pointer"
+                    className="min-h-[44px] w-full rounded-full border border-red-300 bg-red-50 text-red-700 font-medium text-sm hover:bg-red-100 transition-colors cursor-pointer"
                   >
                     Sign out
                   </button>
@@ -92,7 +92,7 @@ export default function Login() {
                 {error && (
                   <div
                     role="alert"
-                    className="p-4 bg-red-50 border border-red-300 rounded-[3px] flex items-start gap-3 text-sm text-red-800 leading-relaxed"
+                    className="p-4 bg-red-50 border border-red-200 rounded-[14px] flex items-start gap-3 m-text-6 text-red-800"
                   >
                     <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-red-600" />
                     <span>{error}</span>
@@ -100,8 +100,8 @@ export default function Login() {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-1.5">
-                    <label htmlFor="officer-email" className="block text-sm font-semibold text-selens-paper-ink">
+                  <div className="m-field">
+                    <label htmlFor="officer-email" className="m-field__label">
                       Officer email address
                     </label>
                     <input
@@ -112,12 +112,12 @@ export default function Login() {
                       placeholder="e.g. officer@msugensan.edu.ph"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="selens-input font-sans"
+                      className="m-field__control"
                     />
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label htmlFor="officer-password" className="block text-sm font-semibold text-selens-paper-ink">
+                  <div className="m-field">
+                    <label htmlFor="officer-password" className="m-field__label">
                       Password
                     </label>
                     <input
@@ -128,22 +128,24 @@ export default function Login() {
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="selens-input font-sans"
+                      className="m-field__control"
                     />
                   </div>
 
-                  <PrimaryButton
+                  <button
                     type="submit"
                     disabled={loading}
-                    className="w-full min-h-[44px] gap-2 mt-2"
+                    className="m-btn w-full mt-2"
                   >
-                    <LogIn className="w-4 h-4" />
-                    <span>{loading ? 'Signing in...' : 'Sign in'}</span>
-                  </PrimaryButton>
+                    <span className="m-btn__label">
+                      <LogIn className="w-4 h-4" />
+                      <span>{loading ? 'Signing in...' : 'Sign in'}</span>
+                    </span>
+                  </button>
                 </form>
               </div>
             )}
-          </Card>
+          </div>
         </div>
       </div>
     </div>

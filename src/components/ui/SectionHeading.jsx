@@ -1,7 +1,9 @@
 import Reveal from './Reveal'
 
 /**
- * Clean institutional SectionHeading (no stamped yellow bars or fake numbered eyebrows).
+ * Quiet Hush-style SectionHeading:
+ * Regular-weight tightly-tracked Host Grotesk display heading + slate caption,
+ * zero uppercase eyebrows, zero decorative rules or borders.
  */
 export default function SectionHeading({
   title,
@@ -14,17 +16,16 @@ export default function SectionHeading({
 }) {
   const isCentered = align === 'center'
   const isPaper = tone === 'paper'
-  const headingColor = isPaper ? 'text-selens-paper-ink' : 'text-selens-white'
-  const descColor = isPaper ? 'text-selens-paper-muted' : 'text-neutral-300'
-  const ruleColor = isPaper ? 'border-selens-paper-rule' : 'border-selens-line'
+  const headingColor = isPaper ? 'text-[#121315]' : 'text-white'
+  const descColor = isPaper ? 'text-[#4d5158]' : 'text-[#a2a7ae]'
 
   const content = isCentered ? (
-    <div className={`text-center max-w-2xl mx-auto space-y-2 ${className}`}>
-      <h2 className={`font-serif selens-fluid-h2 font-bold ${headingColor}`}>
+    <div className={`text-center max-w-2xl mx-auto space-y-3 ${className}`}>
+      <h2 className={`m-text-3 ${headingColor}`}>
         {title}
       </h2>
       {description && (
-        <p className={`text-sm sm:text-base ${descColor} font-sans leading-relaxed`}>
+        <p className={`m-text ${descColor}`}>
           {description}
         </p>
       )}
@@ -32,14 +33,14 @@ export default function SectionHeading({
     </div>
   ) : (
     <div
-      className={`flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b ${ruleColor} pb-3.5 ${className}`}
+      className={`flex flex-col md:flex-row md:items-end justify-between gap-4 ${className}`}
     >
-      <div className="max-w-2xl space-y-1">
-        <h2 className={`font-serif selens-fluid-h2 font-bold ${headingColor}`}>
+      <div className="max-w-2xl space-y-2">
+        <h2 className={`m-text-3 ${headingColor}`}>
           {title}
         </h2>
         {description && (
-          <p className={`text-sm sm:text-base ${descColor} font-sans leading-relaxed`}>
+          <p className={`m-text ${descColor}`}>
             {description}
           </p>
         )}

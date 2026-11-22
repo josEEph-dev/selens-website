@@ -1,8 +1,7 @@
 import { useState } from 'react'
 
 /**
- * ImageFrame: 16:9 image area used by list cards.
- * Shows the image (object-cover) or a neutral dark placeholder with a faint SELENS logo.
+ * ImageFrame: rounded photo container used by cards and detail pages.
  */
 export default function ImageFrame({
   src,
@@ -20,8 +19,8 @@ export default function ImageFrame({
     <div
       className={`relative w-full ${aspect} overflow-hidden ${
         isPaper
-          ? 'bg-selens-paper-alt border border-selens-paper-rule'
-          : 'bg-neutral-950 border-b border-selens-line'
+          ? 'bg-[#e7e8ea] rounded-[16px]'
+          : 'bg-[#121315] border-b border-selens-line'
       } ${className}`}
     >
       {showImage ? (
@@ -37,7 +36,7 @@ export default function ImageFrame({
           <img
             src="/website-assets/selens-logo.png"
             alt=""
-            className={`w-12 h-12 object-contain grayscale ${isPaper ? 'opacity-20' : 'opacity-10'}`}
+            className={`w-12 h-12 object-contain grayscale ${isPaper ? 'opacity-20' : 'opacity-15'}`}
           />
         </div>
       )}

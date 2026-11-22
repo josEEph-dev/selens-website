@@ -13,7 +13,6 @@ export default function Awards() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Discover all distinct academic years
   useEffect(() => {
     let ignore = false
     async function loadYears() {
@@ -81,8 +80,8 @@ export default function Awards() {
       />
 
       <div className="selens-container py-10 sm:py-14 space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200 pb-4">
-          <span className="text-sm font-semibold text-neutral-700">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#cdd0d4] pb-5">
+          <span className="m-text-4 text-[#121315]">
             Academic Year {selectedYear}
           </span>
           <YearSelector
@@ -93,17 +92,17 @@ export default function Awards() {
         </div>
 
         {isArchive && (
-          <div className="p-4 bg-selens-paper-alt border border-selens-paper-rule rounded-[3px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-selens-paper-ink">
-            <span className="flex items-center gap-2">
-              <Archive className="w-4 h-4 text-selens-yellow-ink shrink-0" />
+          <div className="m-surface flex flex-col sm:flex-row sm:items-center justify-between gap-3 m-text-6">
+            <span className="flex items-center gap-2 text-[#121315]">
+              <Archive className="w-4 h-4 text-[#4d5158] shrink-0" />
               <span>
-                Viewing awards archive for <strong>A.Y. {selectedYear}</strong>
+                Viewing awards archive for <strong className="font-medium">A.Y. {selectedYear}</strong>
               </span>
             </span>
             <button
               type="button"
               onClick={() => setSelectedYear(CURRENT_ACADEMIC_YEAR)}
-              className="font-bold underline decoration-selens-yellow decoration-2 underline-offset-4 hover:text-selens-paper-muted cursor-pointer"
+              className="m-link m-text-4 text-[#121315] w-fit cursor-pointer"
             >
               Back to current A.Y. {CURRENT_ACADEMIC_YEAR}
             </button>
@@ -111,17 +110,17 @@ export default function Awards() {
         )}
 
         {loading ? (
-          <div className="divide-y divide-selens-paper-rule border-t-2 border-selens-paper-ink">
+          <div className="space-y-4">
             {[1, 2, 3].map((n) => (
-              <div key={n} className="py-7 h-28 bg-selens-paper-alt/60 animate-pulse my-2 rounded-[2px]" />
+              <div key={n} className="h-36 bg-white rounded-[20px] animate-pulse" />
             ))}
           </div>
         ) : error ? (
-          <div className="border-y border-red-300 bg-red-50 p-8 text-center text-sm text-red-800">
+          <div className="m-surface text-center m-text-6 text-red-700">
             {error}
           </div>
         ) : awards.length === 0 ? (
-          <div className="border-y border-selens-paper-rule py-12 text-center text-sm text-selens-paper-muted space-y-3">
+          <div className="m-surface py-12 text-center m-text-6 text-[#4d5158] space-y-4">
             <p>
               {selectedYear === CURRENT_ACADEMIC_YEAR
                 ? `New updates for A.Y. ${CURRENT_ACADEMIC_YEAR} are coming soon.`
@@ -132,28 +131,27 @@ export default function Awards() {
                 <button
                   type="button"
                   onClick={() => setSelectedYear(pastYear)}
-                  className="selens-editorial-link text-xs"
+                  className="m-btn-2 m-btn-2--mist cursor-pointer"
                 >
-                  View archive for A.Y. {pastYear}
+                  <span className="m-btn-2__label">View archive for A.Y. {pastYear}</span>
                 </button>
               </div>
             )}
           </div>
         ) : (
-          <Section tone="paper" title="Institutional Honors &amp; Citations">
-            <div className="divide-y divide-selens-paper-rule border-t-2 border-b border-selens-paper-ink">
+          <Section tone="paper" title="Institutional honors &amp; citations.">
+            <div className="grid grid-cols-1 gap-4">
               {awards.map((award, idx) => (
                 <Reveal
                   key={award.id}
                   index={idx}
-                  className="py-7 sm:py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+                  className="m-surface grid grid-cols-1 lg:grid-cols-12 gap-6 items-center"
                 >
-                  {/* Date & Awarding Body Meta Column */}
-                  <div className="lg:col-span-3 space-y-1.5">
+                  <div className="lg:col-span-3 space-y-2">
                     {award.date_awarded && (
                       <time
                         dateTime={award.date_awarded}
-                        className="font-mono text-xs font-bold uppercase tracking-wider text-selens-paper-ink block"
+                        className="inline-flex items-center px-3 py-1 rounded-full bg-[#e7e8ea] text-[#121315] m-text-4"
                       >
                         {new Date(award.date_awarded).toLocaleDateString('en-US', {
                           month: 'long',
@@ -162,30 +160,28 @@ export default function Awards() {
                       </time>
                     )}
                     {award.awarding_body && (
-                      <p className="text-xs text-selens-paper-muted font-sans leading-relaxed">
+                      <p className="m-text-6 text-[#4d5158]">
                         {award.awarding_body}
                       </p>
                     )}
                     {award.academic_year && award.academic_year !== CURRENT_ACADEMIC_YEAR && (
-                      <span className="inline-block font-mono text-[11px] font-bold bg-selens-paper-ink text-selens-yellow px-2 py-0.5 rounded-[2px]">
+                      <span className="inline-block px-3 py-0.5 rounded-full bg-[#121315] text-[#FFD100] text-xs font-medium">
                         A.Y. {award.academic_year}
                       </span>
                     )}
                   </div>
 
-                  {/* Citation Title & Description */}
                   <div className={`${award.image_url ? 'lg:col-span-6' : 'lg:col-span-9'} space-y-2`}>
-                    <h3 className="font-serif text-lg sm:text-xl font-bold text-selens-paper-ink leading-snug">
+                    <h3 className="m-text-5 text-[#121315]">
                       {award.title}
                     </h3>
                     {award.description && (
-                      <p className="text-sm sm:text-base text-selens-paper-muted font-sans leading-relaxed">
+                      <p className="m-text text-[#4d5158]">
                         {award.description}
                       </p>
                     )}
                   </div>
 
-                  {/* Optional Citation Image (only rendered when uploaded) */}
                   {award.image_url && (
                     <div className="lg:col-span-3">
                       <ImageFrame
@@ -194,7 +190,6 @@ export default function Awards() {
                         alt={award.title}
                         aspect="aspect-[4/3]"
                         fit="contain"
-                        className="rounded-[3px]"
                       />
                     </div>
                   )}

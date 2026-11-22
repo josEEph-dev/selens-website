@@ -25,10 +25,10 @@ export default function PhotoSlot({
 
   return (
     <figure
-      className={`relative w-full overflow-hidden rounded-[3px] border ${
+      className={`relative w-full overflow-hidden ${
         isPaper
-          ? 'bg-selens-paper-alt border-selens-paper-rule'
-          : 'bg-selens-ink border-selens-line'
+          ? 'rounded-[20px] bg-[#e7e8ea]'
+          : 'rounded-[6px] border bg-selens-ink border-selens-line'
       } ${aspectClass} ${className}`}
     >
       {src ? (

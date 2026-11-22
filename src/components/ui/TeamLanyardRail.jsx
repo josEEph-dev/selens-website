@@ -1426,17 +1426,17 @@ export function TeamLanyardRail({
       data-mode={size.carousel ? 'carousel' : 'rail'}
       data-active={active ?? ''}
       data-flipped={flipped ?? ''}
-      className={`relative isolate w-full overflow-hidden rounded-[4px] border border-selens-line bg-selens-surface text-foreground ${className}`}
+      className={`relative isolate w-full overflow-hidden rounded-[28px] bg-[#121315] text-foreground hush-dark-scope ${className}`}
     >
       {(eyebrow || heading) && (
         <header className="relative z-10 flex flex-col items-center gap-2 px-6 pt-7 text-center">
           {eyebrow && (
-            <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.28em] text-neutral-400">
+            <p className="m-text-6 text-[#a2a7ae]">
               {eyebrow}
             </p>
           )}
           {heading && (
-            <h3 className="font-serif text-balance text-2xl font-bold tracking-tight text-selens-white md:text-3xl">
+            <h3 className="m-text-5 text-balance text-white md:text-3xl">
               {heading}
             </h3>
           )}
@@ -1841,7 +1841,7 @@ export function TeamLanyardRail({
           <>
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-y-0 left-0 z-50 w-10 bg-selens-surface/80"
+              className="pointer-events-none absolute inset-y-0 left-0 z-50 w-10 bg-[#121315]/85"
               style={{
                 maskImage: 'linear-gradient(to right, black 25%, transparent)',
                 WebkitMaskImage: 'linear-gradient(to right, black 25%, transparent)',
@@ -1849,7 +1849,7 @@ export function TeamLanyardRail({
             />
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-y-0 right-0 z-50 w-10 bg-selens-surface/80"
+              className="pointer-events-none absolute inset-y-0 right-0 z-50 w-10 bg-[#121315]/85"
               style={{
                 maskImage: 'linear-gradient(to left, black 25%, transparent)',
                 WebkitMaskImage: 'linear-gradient(to left, black 25%, transparent)',
@@ -1874,7 +1874,7 @@ export function TeamLanyardRail({
               const prev = (curr - 1 + count) % count
               setActive(prev)
             }}
-            className="min-w-[36px] min-h-[36px] inline-flex items-center justify-center rounded-[4px] border border-selens-line bg-selens-ink text-neutral-300 hover:border-selens-yellow hover:text-selens-yellow transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="min-w-[40px] min-h-[40px] inline-flex items-center justify-center rounded-full bg-white text-[#121315] hover:bg-[#FFD100] transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <svg
               aria-hidden="true"
@@ -1907,15 +1907,15 @@ export function TeamLanyardRail({
                   <span
                     className={`block h-1.5 rounded-full transition-[width,background-color] duration-300 motion-reduce:transition-none ${
                       centerIndex === i
-                        ? 'w-6 bg-selens-yellow'
-                        : 'w-1.5 bg-neutral-600 hover:bg-neutral-400'
+                        ? 'w-6 bg-[#FFD100]'
+                        : 'w-1.5 bg-white/25 hover:bg-white/50'
                     }`}
                   />
                 </button>
               ))}
             </div>
           ) : (
-            <span className="font-mono text-xs tabular-nums text-neutral-400 min-w-[4.5rem] text-center">
+            <span className="m-text-6 tabular-nums text-[#a2a7ae] min-w-[4.5rem] text-center">
               {(centerIndex ?? 0) + 1} / {count}
             </span>
           )}
@@ -1929,7 +1929,7 @@ export function TeamLanyardRail({
               const next = (curr + 1) % count
               setActive(next)
             }}
-            className="min-w-[36px] min-h-[36px] inline-flex items-center justify-center rounded-[4px] border border-selens-line bg-selens-ink text-neutral-300 hover:border-selens-yellow hover:text-selens-yellow transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="min-w-[40px] min-h-[40px] inline-flex items-center justify-center rounded-full bg-white text-[#121315] hover:bg-[#FFD100] transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <svg
               aria-hidden="true"
@@ -1947,12 +1947,12 @@ export function TeamLanyardRail({
         </div>
       )}
 
-      <div className="relative z-10 flex flex-col items-center gap-3 px-6 pb-7 pt-3 text-center">
+      <div className="relative z-10 flex flex-col items-center gap-3 px-6 pb-8 pt-3 text-center">
         <div id={`${uid}-caption`} aria-live="polite" className="min-h-[2.75rem]">
-          <p className="font-serif text-sm sm:text-base font-bold text-selens-white">
+          <p className="text-sm sm:text-base font-medium tracking-[-0.015em] text-white">
             {line1}
           </p>
-          <p className="mt-0.5 font-sans text-xs sm:text-[13px] text-neutral-400">
+          <p className="mt-0.5 m-text-6 text-[#a2a7ae]">
             {line2}
           </p>
           {showingBack && person?.bio && (

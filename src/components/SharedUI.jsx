@@ -5,32 +5,37 @@ import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Reveal } from './
 export { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Reveal }
 
 /**
- * Clean institutional PageHeader:
- * - Light gray header with breadcrumb on public pages (.selens-paper-page)
- * - Dark header on Admin pages (no decorative waveform or fake glows)
+ * PageHeader:
+ * - On public pages (.selens-paper-page): renders Hush's rounded 28px deep-ink banner inset on the #e7e8ea mist ground.
+ * - On Admin pages (outside .selens-paper-page): preserves the full-bleed dark Admin banner cleanly.
  */
 export function PageHeader({ title, description, action }) {
   return (
     <div className="selens-page-header">
-      <div className="selens-container py-8 sm:py-11 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-        <div className="min-w-0 max-w-3xl space-y-2.5">
-          <nav aria-label="Breadcrumb" className="text-xs font-sans selens-page-header-crumb flex items-center gap-1.5">
-            <Link to="/" className="hover:underline">
-              Home
-            </Link>
-            <span aria-hidden="true">/</span>
-            <span className="truncate">{title}</span>
-          </nav>
-          <h1 className="font-serif selens-fluid-h1 font-bold selens-page-header-title break-words">
-            {title}
-          </h1>
-          {description && (
-            <p className="text-sm sm:text-base selens-page-header-desc font-sans max-w-2xl leading-relaxed">
-              {description}
-            </p>
-          )}
+      <div className="selens-container">
+        <div className="selens-page-header-inner hush-dark-scope flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div className="min-w-0 max-w-3xl space-y-3">
+            <nav
+              aria-label="Breadcrumb"
+              className="m-text-6 selens-page-header-crumb flex items-center gap-2"
+            >
+              <Link to="/" className="m-link text-white/80 hover:text-white">
+                Home
+              </Link>
+              <span aria-hidden="true">/</span>
+              <span className="truncate">{title}</span>
+            </nav>
+            <h1 className="selens-fluid-h1 selens-page-header-title break-words">
+              {title}
+            </h1>
+            {description && (
+              <p className="m-text selens-page-header-desc max-w-2xl">
+                {description}
+              </p>
+            )}
+          </div>
+          {action && <div className="shrink-0">{action}</div>}
         </div>
-        {action && <div className="shrink-0">{action}</div>}
       </div>
     </div>
   )
@@ -38,7 +43,7 @@ export function PageHeader({ title, description, action }) {
 
 export function Section({ title, description, action, children, tone = 'dark', className = '' }) {
   return (
-    <section className={`space-y-6 ${className}`}>
+    <section className={`space-y-7 ${className}`}>
       <SectionHeading title={title} description={description} action={action} tone={tone} />
       {children}
     </section>
@@ -60,20 +65,20 @@ export function StatCard({ numeral, title, description, linkTo, linkText = 'View
   return (
     <div className="selens-card p-6 space-y-4 flex flex-col justify-between">
       <div className="space-y-2">
-        <div className="font-serif font-bold text-3xl sm:text-4xl text-selens-yellow">
+        <div className="m-text-7 text-selens-yellow">
           {numeral}
         </div>
-        <h3 className="font-serif font-bold text-lg text-selens-white">
+        <h3 className="m-text-5 text-selens-white">
           {title}
         </h3>
-        <p className="text-sm text-neutral-300 leading-relaxed font-sans">
+        <p className="m-text-6 text-neutral-300">
           {description}
         </p>
       </div>
       {linkTo && (
         <Link
           to={linkTo}
-          className="text-sm font-semibold text-selens-yellow hover:text-selens-white flex items-center gap-1.5 transition-colors pt-2"
+          className="m-text-4 text-selens-yellow hover:text-selens-white flex items-center gap-1.5 transition-colors pt-2"
         >
           <span>{linkText}</span>
           <ArrowRight className="w-4 h-4" />
@@ -84,7 +89,7 @@ export function StatCard({ numeral, title, description, linkTo, linkText = 'View
 }
 
 export function PrimaryButton({ children, to, href, className = '', ...props }) {
-  const baseClasses = 'selens-btn-primary text-sm px-5 py-2.5 cursor-pointer'
+  const baseClasses = 'selens-btn-primary text-sm cursor-pointer'
 
   if (to) {
     return (
@@ -110,7 +115,7 @@ export function PrimaryButton({ children, to, href, className = '', ...props }) 
 }
 
 export function SecondaryButton({ children, to, href, className = '', ...props }) {
-  const baseClasses = 'selens-btn-secondary text-sm px-5 py-2.5 cursor-pointer'
+  const baseClasses = 'selens-btn-secondary text-sm cursor-pointer'
 
   if (to) {
     return (

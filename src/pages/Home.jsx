@@ -3,41 +3,29 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { CURRENT_ACADEMIC_YEAR, formatCommitteeLabel } from '../lib/config'
 import { SectionHeading, Reveal, TeamLanyardRail } from '../components/ui'
-import {
-  ArrowRight,
-  MapPin,
-  Clock,
-  Mail,
-  ExternalLink,
-  Download,
-} from 'lucide-react'
-
-const QUICK_LINKS = [
-  { label: 'Student Portal', to: '/portal' },
-  { label: 'TEEchPoints Tracking', to: '/portal/teechpoints' },
-  { label: 'Digital Document Requests', to: '/portal/documents' },
-  { label: 'People & Leadership Directory', to: '/people' },
-  { label: 'Accreditations & Awards', to: '/awards' },
-  { label: 'Frequently Asked Questions', to: '/faq' },
-]
+import { ArrowUpRight, ArrowRight, Download } from 'lucide-react'
 
 const INITIATIVES = [
   {
+    num: '01',
     title: 'ElectroStock',
     text: 'A hardware lending library providing multimeters, oscilloscope probes, microcontrollers, and circuit modules for laboratory experiments and capstone design projects.',
     to: '/projects#electrostock',
   },
   {
+    num: '02',
     title: 'EEngiquest',
     text: 'The annual flagship academic showdown where students across all year levels test their problem-solving skills in circuits, mathematics, power systems, and engineering design.',
     to: '/projects#eengiquest',
   },
   {
+    num: '03',
     title: 'TEEchPoints',
     text: 'Our digital recognition system tracking active membership. Earn points by attending technical seminars, volunteering for community drives, and representing the department.',
     to: '/projects#teechpoints',
   },
   {
+    num: '04',
     title: 'Community outreach',
     text: 'Extending engineering beyond the campus through rural electrification assistance, energy conservation campaigns, and STEM workshops for local high schools.',
     to: '/projects#outreach',
@@ -230,371 +218,453 @@ export default function Home() {
 
   return (
     <div id="main-content" className="selens-paper-page">
-      {/* 1. REAL PHOTOGRAPHIC CAMPUS BANNER + INSTITUTIONAL WELCOME BAR */}
-      <section className="bg-neutral-950 border-b border-neutral-200">
-        <div className="relative w-full overflow-hidden bg-neutral-950">
-          <img
-            src="/website-assets/hero-background.jpg"
-            alt="Society of Electrical Engineering Students, Mindanao State University - General Santos"
-            className="w-full max-h-[460px] object-cover object-center block mx-auto"
-          />
-        </div>
+      {/* 1. OPENING — Hush Notched Dark Field with 3 Docked Fact Cards */}
+      <section className="hush-opening" aria-labelledby="op-title">
+        <div className="hush-op-grid hush-dark-scope">
+          <div className="hush-op-field" aria-hidden="true" />
 
-        <div className="bg-white border-t border-neutral-200">
-          <div className="selens-container py-8 sm:py-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div className="max-w-3xl space-y-2.5">
-              <h1 className="font-serif selens-fluid-hero font-bold text-neutral-950">
-                Society of Electrical Engineering Students
-              </h1>
-              <p className="text-sm sm:text-base text-neutral-600 leading-relaxed font-sans">
-                SELENS is the official student organization of Electrical Engineering students at MSU-General Santos. We organize academic events, build practical tools for our members, and celebrate our board exam topnotchers. Together, we empower students to excel in technical innovation and community leadership.
-              </p>
+          {/* Left Docked White Card */}
+          <Link
+            to="/portal"
+            className="hush-op-fact hush-op-fact--1 m-surface no-underline group transition-shadow hover:shadow-[0_22px_44px_-24px_rgba(18,19,21,0.45)]"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <h2 className="m-text-5 text-[#121315]">Student Portal</h2>
+              <ArrowUpRight className="w-4 h-4 text-[#4d5158] group-hover:text-[#121315] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0 mt-1" />
             </div>
+            <p className="m-text-6 text-[#4d5158]">
+              Access your SELENS student account, TEEchPoints tracking, and digital document requests.
+            </p>
+          </Link>
 
-            <div className="flex flex-wrap items-center gap-3 shrink-0">
-              <Link to="/portal" className="selens-btn-ink px-5">
-                Student Portal
+          {/* Center Dark Pill Fact */}
+          <div className="hush-op-fact hush-op-fact--3">
+            <p className="m-text-5 text-white">
+              92.16%<span className="text-[#FFD100]">.</span> Top 2 National
+            </p>
+            <p className="m-text-6 text-[#a2a7ae]">
+              MSU-GSC Electrical Engineering · April 2025 PRC REELE Performing School.
+            </p>
+          </div>
+
+          {/* Right Docked White Card */}
+          <Link
+            to="/topnotchers"
+            className="hush-op-fact hush-op-fact--2 m-surface no-underline group transition-shadow hover:shadow-[0_22px_44px_-24px_rgba(18,19,21,0.45)]"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <h2 className="m-text-5 text-[#121315]">Legion of Topnotchers</h2>
+              <ArrowUpRight className="w-4 h-4 text-[#4d5158] group-hover:text-[#121315] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0 mt-1" />
+            </div>
+            <p className="m-text-6 text-[#4d5158]">
+              {topnotchersCount > 0
+                ? `${topnotchersCount} national PRC board exam topnotchers celebrated across generations.`
+                : 'Celebrating MSU-General Santos graduates who placed in the national PRC top 10.'}
+            </p>
+          </Link>
+
+          {/* Bottom-Left Giant Quiet Display Headline */}
+          <h1 id="op-title" className="m-text-2 hush-op-title text-white">
+            Society of Electrical Engineering Students<span className="text-[#FFD100]">.</span>
+          </h1>
+
+          {/* Bottom-Right Official Intro + Pill CTAs */}
+          <div className="hush-op-aside">
+            <p className="m-text text-[#a2a7ae]">
+              SELENS is the official student organization of Electrical Engineering students at MSU-General Santos. We organize academic events, build practical tools for our members, and celebrate our board exam topnotchers.
+            </p>
+            <div className="flex flex-wrap gap-2.5">
+              <Link to="/portal" className="m-btn-2 m-btn-2--dark">
+                <span className="m-btn-2__label">Student Portal</span>
+                <span className="m-btn-2__icon" aria-hidden="true">
+                  <ArrowUpRight className="w-4 h-4" />
+                </span>
               </Link>
-              <a href="#news-updates" className="selens-btn-paper-outline px-5">
-                See latest news
+              <a href="#news-updates" className="m-btn-2 m-btn-2--dark">
+                <span className="m-btn-2__label">Latest news</span>
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. UNIVERSITY BULLETIN & SIDEBAR LAYOUT (Classic PH University Portal Architecture) */}
-      <section className="selens-section bg-white">
+      {/* 2. CAMPUS BANNER & PRC REELE PERFORMANCE — Hush Notched Photo Panel Pattern */}
+      <section className="selens-section">
         <div className="selens-container">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-            {/* LEFT 8 COLUMNS: Primary Institutional Stream */}
-            <div className="lg:col-span-8 space-y-14">
-              {/* News & Announcements */}
-              <div id="news-updates" className="space-y-5 scroll-mt-28">
-                <SectionHeading
-                  tone="paper"
-                  title="News & Updates"
-                  description={`Announcements and event advisories for A.Y. ${CURRENT_ACADEMIC_YEAR}.`}
-                  action={
-                    <Link to="/news" className="selens-editorial-link">
-                      <span>All news</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  }
-                />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+            {/* Left 7 Cols: Notched Photo Panel + Real REELE Chart Below */}
+            <div className="lg:col-span-7 space-y-5">
+              <div className="hush-bt-media">
+                <figure className="hush-bt-panel">
+                  <img
+                    src="/website-assets/hero-background.jpg"
+                    alt="Society of Electrical Engineering Students, Mindanao State University - General Santos"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </figure>
+                <div className="hush-bt-note">
+                  <span className="m-text-7 text-[#121315]">
+                    92.16%<span className="text-[#FFD100]">.</span>
+                  </span>
+                  <p className="m-text-6 text-[#4d5158]">
+                    Top 2 National Performing School (Apr 2025) and 90.32% Top 4 (Apr 2026) in PRC REELE.
+                  </p>
+                </div>
+              </div>
 
+              {/* Clean pure white 20px surface framing the real REELE chart */}
+              <div className="m-surface space-y-3">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 className="m-text-5 text-[#121315]">PRC REELE Passing Rates</h3>
+                  <Link to="/topnotchers" className="m-link m-text-4 text-[#121315]">
+                    <span>Legion of Topnotchers</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+                <img
+                  src="/website-assets/passing-rates.png"
+                  alt="MSU-GSC REELE University Passing Rates: 89.91% (2022), 81.25% (2023), 92.86% (2024), 92.16% Top 2 National Performing School (2025), 90.32% Top 4 Performing School (2026)"
+                  loading="lazy"
+                  className="w-full h-auto rounded-[12px] block"
+                />
+              </div>
+            </div>
+
+            {/* Right 5 Cols: Quiet Copy + Hairline-Divided Index */}
+            <div className="lg:col-span-5 space-y-6 lg:pt-3">
+              <div className="space-y-4">
+                <h2 className="m-text-3 text-[#121315]">
+                  Engineered for excellence at MSU-GSC.
+                </h2>
+                <p className="m-text text-[#4d5158]">
+                  Together, we empower Electrical Engineering students to excel in technical innovation, licensure readiness, and community leadership for A.Y. {CURRENT_ACADEMIC_YEAR}.
+                </p>
+              </div>
+
+              <ol className="border-t border-[#cdd0d4] divide-y divide-[#cdd0d4]">
+                <li className="grid grid-cols-[36px_1fr] gap-x-3 gap-y-1 py-5">
+                  <span className="m-text-4 text-[#121315] row-span-2 pt-0.5">01</span>
+                  <Link to="/about" className="m-text-5 text-[#121315] no-underline hover:underline underline-offset-4">
+                    About SELENS &amp; Org Charts
+                  </Link>
+                  <p className="m-text-6 text-[#4d5158]">
+                    Our founding constitutional mandate, core objectives, and official student &amp; faculty structure.
+                  </p>
+                </li>
+                <li className="grid grid-cols-[36px_1fr] gap-x-3 gap-y-1 py-5">
+                  <span className="m-text-4 text-[#121315] row-span-2 pt-0.5">02</span>
+                  <Link to="/awards" className="m-text-5 text-[#121315] no-underline hover:underline underline-offset-4">
+                    Accreditations &amp; Awards
+                  </Link>
+                  <p className="m-text-6 text-[#4d5158]">
+                    Institutional rankings, national recognitions, and chapter citations across academic years.
+                  </p>
+                </li>
+                <li className="grid grid-cols-[36px_1fr] gap-x-3 gap-y-1 py-5">
+                  <span className="m-text-4 text-[#121315] row-span-2 pt-0.5">03</span>
+                  <a
+                    href="/website-assets/constitution-and-by-laws-of-selens.pdf"
+                    download
+                    className="m-text-5 text-[#121315] no-underline hover:underline underline-offset-4 inline-flex items-center gap-2"
+                  >
+                    <span>Constitution &amp; By-Laws</span>
+                    <Download className="w-4 h-4 text-[#4d5158]" />
+                  </a>
+                  <p className="m-text-6 text-[#4d5158]">
+                    Download the official governing PDF outlining policies, officer duties, and assembly operations.
+                  </p>
+                </li>
+              </ol>
+
+              <div className="flex flex-wrap gap-3 pt-1">
+                <Link to="/about" className="m-btn">
+                  <span className="m-btn__label">About the organization</span>
+                </Link>
+                <Link to="/faq" className="m-btn-2">
+                  <span className="m-btn-2__label">Read FAQ</span>
+                  <span className="m-btn-2__icon" aria-hidden="true">
+                    <ArrowRight className="w-4 h-4" />
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. NEWS & ACCOMPLISHMENTS — Hush Twin White + Dark 28px Split Contrast Cards */}
+      <section id="news-updates" className="selens-section pt-0 scroll-mt-24">
+        <div className="selens-container space-y-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
+            <h2 className="m-text-3 text-[#121315] lg:col-span-7">
+              Dispatches and chapter milestones.
+            </h2>
+            <p className="m-text text-[#4d5158] lg:col-span-5">
+              Official announcements, event advisories, and student accomplishments for A.Y. {CURRENT_ACADEMIC_YEAR}.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 items-stretch">
+            {/* LEFT PURE WHITE PANEL: News & Updates */}
+            <article className="m-panel-light p-6 sm:p-10 grid grid-rows-[auto_1fr_auto] gap-6">
+              <div className="space-y-1.5">
+                <h3 className="m-text-3 text-[#121315]">News &amp; updates</h3>
+                <p className="m-text-6 text-[#4d5158]">
+                  Announcements and event advisories from SELENS committees.
+                </p>
+              </div>
+
+              <div>
                 {loadingNews ? (
-                  <div className="space-y-3">
-                    <div className="h-16 bg-neutral-100 rounded-[4px] animate-pulse" />
-                    <div className="h-16 bg-neutral-100 rounded-[4px] animate-pulse" />
+                  <div className="space-y-3 py-4">
+                    <div className="h-16 bg-[#e7e8ea] rounded-[14px] animate-pulse" />
+                    <div className="h-16 bg-[#e7e8ea] rounded-[14px] animate-pulse" />
                   </div>
                 ) : newsError ? (
-                  <p className="text-sm text-red-700 py-4">{newsError}</p>
+                  <p className="m-text-6 text-red-700 py-4">{newsError}</p>
                 ) : news.length > 0 ? (
-                  <div className="divide-y divide-neutral-200">
-                    {news.map((item, idx) => (
-                      <Reveal
-                        key={item.id}
-                        index={idx}
-                        className="py-5 first:pt-1 flex flex-col sm:flex-row gap-4 items-start group"
-                      >
-                        {item.thumbnail_url && (
-                          <Link
-                            to={`/news/${item.slug}`}
-                            tabIndex={-1}
-                            aria-hidden="true"
-                            className="w-full sm:w-36 aspect-[16/10] shrink-0 rounded-[4px] overflow-hidden border border-neutral-200 bg-neutral-100"
-                          >
-                            <img
-                              src={item.thumbnail_url}
-                              alt=""
-                              loading="lazy"
-                              className="w-full h-full object-cover"
-                            />
-                          </Link>
-                        )}
-                        <div className="min-w-0 flex-1 space-y-1.5">
-                          <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-500">
+                  <ul className="hush-ow-list">
+                    {news.map((item) => (
+                      <li key={item.id}>
+                        <span className="hush-ow-dot" aria-hidden="true" />
+                        <div className="min-w-0 flex-1 space-y-1">
+                          <div className="flex flex-wrap items-center gap-2 m-text-6 text-[#4d5158]">
                             {item.published_at ? (
                               <time dateTime={item.published_at}>
                                 {new Date(item.published_at).toLocaleDateString('en-US', {
-                                  month: 'long',
+                                  month: 'short',
                                   day: 'numeric',
                                   year: 'numeric',
                                 })}
                               </time>
                             ) : (
-                              <span>Recent announcement</span>
+                              <span>Recent update</span>
                             )}
                             {item.committee && (
-                              <span className="font-semibold text-neutral-800 bg-neutral-100 border border-neutral-200 px-2 py-0.5 rounded-[3px]">
+                              <span className="px-2.5 py-0.5 rounded-full bg-[#e7e8ea] text-[#121315] text-xs font-medium">
                                 {formatCommitteeLabel(item.committee)}
                               </span>
                             )}
                           </div>
-                          <h3 className="font-serif text-lg font-bold text-neutral-950 group-hover:underline decoration-selens-yellow decoration-2 underline-offset-4 leading-snug">
-                            <Link to={`/news/${item.slug}`}>{item.title}</Link>
-                          </h3>
+                          <Link
+                            to={`/news/${item.slug}`}
+                            className="m-text-5 text-[#121315] no-underline hover:underline underline-offset-4 block break-words"
+                          >
+                            {item.title}
+                          </Link>
                           {item.excerpt && (
-                            <p className="text-sm text-neutral-600 line-clamp-2 leading-relaxed">
+                            <p className="m-text-6 text-[#4d5158] line-clamp-2">
                               {item.excerpt}
                             </p>
                           )}
                         </div>
-                      </Reveal>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 ) : (
-                  <p className="text-sm text-neutral-600 py-4 border-b border-neutral-200">
+                  <p className="m-text-6 text-[#4d5158] border-t border-[#cdd0d4] py-6">
                     New updates for A.Y. {CURRENT_ACADEMIC_YEAR} are coming soon.
                   </p>
                 )}
               </div>
 
-              {/* Latest Accomplishments */}
-              <div className="space-y-5">
-                <SectionHeading
-                  tone="paper"
-                  title="Latest Accomplishments"
-                  description={`Student achievements and chapter milestones for A.Y. ${CURRENT_ACADEMIC_YEAR}.`}
-                  action={
-                    <Link to="/accomplishments" className="selens-editorial-link">
-                      <span>View all</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  }
-                />
+              <div className="pt-2">
+                <Link to="/news" className="m-btn">
+                  <span className="m-btn__label">All news &amp; events</span>
+                </Link>
+              </div>
+            </article>
 
+            {/* RIGHT DEEP INK PANEL: Latest Accomplishments */}
+            <article className="m-panel-dark hush-dark-scope p-6 sm:p-10 grid grid-rows-[auto_1fr_auto] gap-6">
+              <div className="space-y-1.5">
+                <h3 className="m-text-3 text-white">Accomplishments</h3>
+                <p className="m-text-6 text-[#a2a7ae]">
+                  Student wins, competitions, and community outreach records.
+                </p>
+              </div>
+
+              <div>
                 {loadingAccomplishments ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="h-28 bg-neutral-100 rounded-[4px] animate-pulse" />
-                    <div className="h-28 bg-neutral-100 rounded-[4px] animate-pulse" />
+                  <div className="space-y-3 py-4">
+                    <div className="h-16 bg-white/10 rounded-[14px] animate-pulse" />
+                    <div className="h-16 bg-white/10 rounded-[14px] animate-pulse" />
                   </div>
                 ) : accomplishmentsError ? (
-                  <p className="text-sm text-red-700 py-4">{accomplishmentsError}</p>
+                  <p className="m-text-6 text-red-400 py-4">{accomplishmentsError}</p>
                 ) : accomplishments.length > 0 ? (
-                  <div className="divide-y divide-neutral-200">
-                    {accomplishments.map((item, idx) => (
-                      <Reveal key={item.id} index={idx} className="py-4 first:pt-1">
-                        <Link
-                          to={`/accomplishments/${item.slug}`}
-                          className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 group"
-                        >
-                          <div className="space-y-1 min-w-0">
-                            <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-500">
-                              <span className="font-semibold text-neutral-900 uppercase tracking-wide">
-                                {item.category?.replace('_', ' ')}
+                  <ul className="hush-ow-list hush-ow-list--dark">
+                    {accomplishments.map((item) => (
+                      <li key={item.id}>
+                        <span className="hush-ow-dot" aria-hidden="true" />
+                        <div className="min-w-0 flex-1 space-y-1">
+                          <div className="flex flex-wrap items-center gap-2 m-text-6 text-[#a2a7ae]">
+                            {item.category && (
+                              <span className="capitalize text-white/90 font-medium">
+                                {item.category.replace('_', ' ')}
                               </span>
-                              {item.accomplished_on && (
-                                <span>
-                                  ·{' '}
-                                  {new Date(item.accomplished_on).toLocaleDateString('en-US', {
-                                    month: 'short',
-                                    year: 'numeric',
-                                  })}
-                                </span>
-                              )}
-                            </div>
-                            <h3 className="font-serif text-base sm:text-lg font-bold text-neutral-950 group-hover:underline decoration-selens-yellow decoration-2 underline-offset-4">
-                              {item.title}
-                            </h3>
-                            {item.summary && (
-                              <p className="text-sm text-neutral-600 line-clamp-2">
-                                {item.summary}
-                              </p>
+                            )}
+                            {item.accomplished_on && (
+                              <span>
+                                ·{' '}
+                                {new Date(item.accomplished_on).toLocaleDateString('en-US', {
+                                  month: 'short',
+                                  year: 'numeric',
+                                })}
+                              </span>
                             )}
                           </div>
-                          <span className="text-xs font-semibold text-neutral-800 shrink-0 inline-flex items-center gap-1 min-h-[28px]">
-                            Read <ArrowRight className="w-3.5 h-3.5" />
-                          </span>
-                        </Link>
-                      </Reveal>
+                          <Link
+                            to={`/accomplishments/${item.slug}`}
+                            className="m-text-5 text-white no-underline hover:text-[#FFD100] transition-colors block break-words"
+                          >
+                            {item.title}
+                          </Link>
+                          {item.summary && (
+                            <p className="m-text-6 text-[#a2a7ae] line-clamp-2">
+                              {item.summary}
+                            </p>
+                          )}
+                        </div>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 ) : (
-                  <p className="text-sm text-neutral-600 py-4 border-b border-neutral-200">
+                  <p className="m-text-6 text-[#a2a7ae] border-t border-white/15 py-6">
                     New accomplishments for A.Y. {CURRENT_ACADEMIC_YEAR} will be posted here soon.
                   </p>
                 )}
               </div>
 
-              {/* Flagship Student Programs */}
-              <div className="space-y-5">
-                <SectionHeading
-                  tone="paper"
-                  title="Projects & Initiatives"
-                  description={
-                    programsCount > 0
-                      ? `${programsCount} active student-driven programs for A.Y. ${CURRENT_ACADEMIC_YEAR}.`
-                      : `Student-driven programs supporting laboratory exploration, academics, and outreach.`
-                  }
-                  action={
-                    <Link to="/projects" className="selens-editorial-link">
-                      <span>Explore all programs</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  }
-                />
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {INITIATIVES.map((prog, idx) => (
-                    <Reveal
-                      key={prog.title}
-                      index={idx}
-                      className="border border-neutral-200 rounded-[4px] bg-neutral-50/70 p-5 flex flex-col justify-between gap-3 hover:border-neutral-400 transition-colors"
-                    >
-                      <div className="space-y-1.5">
-                        <h3 className="font-serif text-base font-bold text-neutral-950">
-                          {prog.title}
-                        </h3>
-                        <p className="text-sm text-neutral-600 leading-relaxed">
-                          {prog.text}
-                        </p>
-                      </div>
-                      <div>
-                        <Link to={prog.to} className="selens-editorial-link text-xs">
-                          <span>Learn more</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
-                      </div>
-                    </Reveal>
-                  ))}
-                </div>
-              </div>
-
-              {/* Past Academic Year Archive (when records exist) */}
-              {pastYearHighlights && pastYearHighlights.items?.length > 0 && (
-                <div className="space-y-4 pt-2">
-                  <SectionHeading
-                    tone="paper"
-                    title={`From A.Y. ${pastYearHighlights.year}`}
-                    action={
-                      <Link to="/news" className="selens-editorial-link text-xs">
-                        <span>See archive</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
-                    }
-                  />
-                  <ul className="divide-y divide-neutral-200 border-b border-neutral-200">
-                    {pastYearHighlights.items.map((item) => (
-                      <li key={item.id}>
-                        <Link
-                          to={item.link}
-                          className="py-3 flex items-baseline justify-between gap-4 hover:bg-neutral-50 transition-colors group"
-                        >
-                          <span className="font-serif text-sm sm:text-base font-bold text-neutral-900 group-hover:underline decoration-selens-yellow decoration-2 underline-offset-4">
-                            {item.title}
-                          </span>
-                          <span className="text-xs text-neutral-500 shrink-0">
-                            {item.type}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            {/* RIGHT 4 COLUMNS: Real MSU-GSC Institutional Sidebar */}
-            <aside className="lg:col-span-4 space-y-6">
-              {/* REAL REELE Board Exam Passing Rates Graphic */}
-              <div className="border border-neutral-200 rounded-[4px] bg-white overflow-hidden">
-                <div className="bg-neutral-950 text-white px-4 py-3 flex items-center justify-between gap-2">
-                  <h2 className="font-serif text-sm font-bold">
-                    PRC REELE Passing Rates
-                  </h2>
-                  <span className="text-[11px] font-bold bg-selens-yellow text-neutral-950 px-2 py-0.5 rounded-[2px]">
-                    MSU-GSC
+              <div className="pt-2">
+                <Link to="/accomplishments" className="m-btn-2 m-btn-2--dark">
+                  <span className="m-btn-2__label">View all accomplishments</span>
+                  <span className="m-btn-2__icon" aria-hidden="true">
+                    <ArrowUpRight className="w-4 h-4" />
                   </span>
-                </div>
-                <div className="p-3 bg-neutral-50 border-b border-neutral-200">
-                  <img
-                    src="/website-assets/passing-rates.png"
-                    alt="MSU-GSC REELE University Passing Rates: 89.91% (2022), 81.25% (2023), 92.86% (2024), 92.16% Top 2 National Performing School (2025), 90.32% Top 4 Performing School (2026)"
-                    loading="lazy"
-                    className="w-full h-auto rounded-[2px] border border-neutral-200"
-                  />
-                </div>
-                <div className="p-4 space-y-3">
-                  <p className="text-xs text-neutral-600 leading-relaxed">
-                    Top 2 National Performing School in April 2025 (92.16%) and Top 4 Performing School in April 2026 (90.32%).
-                    {topnotchersCount > 0 ? ` ${topnotchersCount} national board topnotchers on record.` : ''}
-                  </p>
-                  <Link to="/topnotchers" className="selens-editorial-link text-xs">
-                    <span>View Legion of Topnotchers</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
+                </Link>
               </div>
+            </article>
+          </div>
 
-              {/* Quick Student Services & Links */}
-              <div className="border border-neutral-200 rounded-[4px] bg-neutral-50 p-5 space-y-3">
-                <h2 className="font-serif text-base font-bold text-neutral-950 border-b border-neutral-200 pb-2">
-                  Quick Links
-                </h2>
-                <ul className="divide-y divide-neutral-200 text-sm">
-                  {QUICK_LINKS.map((item) => (
-                    <li key={item.to}>
-                      <Link
-                        to={item.to}
-                        className="min-h-[38px] py-2 flex items-center justify-between text-neutral-700 hover:text-neutral-950 font-medium transition-colors group"
-                      >
-                        <span>{item.label}</span>
-                        <ArrowRight className="w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-950" />
-                      </Link>
-                    </li>
-                  ))}
-                  <li>
-                    <a
-                      href="/website-assets/constitution-and-by-laws-of-selens.pdf"
-                      download
-                      className="min-h-[38px] py-2 flex items-center justify-between text-neutral-700 hover:text-neutral-950 font-medium transition-colors"
-                    >
-                      <span>Constitution &amp; By-Laws (PDF)</span>
-                      <Download className="w-3.5 h-3.5 text-neutral-500" />
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Department Office Quick Info */}
-              <div className="border border-neutral-200 rounded-[4px] bg-white p-5 space-y-2.5 text-sm">
-                <h2 className="font-serif text-base font-bold text-neutral-950">
-                  About SELENS
-                </h2>
-                <p className="text-xs text-neutral-600 leading-relaxed">
-                  Empowering Electrical Engineering students at MSU-General Santos through academic support, technical services, and student leadership for A.Y. {CURRENT_ACADEMIC_YEAR}.
-                </p>
-                <Link to="/about" className="selens-editorial-link text-xs">
-                  <span>About the organization &amp; org chart</span>
+          {/* Past Academic Year Highlights Strip (when records exist) */}
+          {pastYearHighlights && pastYearHighlights.items?.length > 0 && (
+            <div className="m-surface space-y-4">
+              <div className="flex flex-wrap items-baseline justify-between gap-3">
+                <h3 className="m-text-5 text-[#121315]">
+                  From A.Y. {pastYearHighlights.year}
+                </h3>
+                <Link to="/news" className="m-link m-text-4 text-[#121315]">
+                  <span>See archive</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
-            </aside>
+              <ul className="divide-y divide-[#cdd0d4] border-t border-[#cdd0d4]">
+                {pastYearHighlights.items.map((item) => (
+                  <li key={item.id}>
+                    <Link
+                      to={item.link}
+                      className="py-3.5 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 no-underline group"
+                    >
+                      <span className="m-text font-medium text-[#121315] group-hover:underline underline-offset-4">
+                        {item.title}
+                      </span>
+                      <span className="m-text-6 text-[#4d5158] shrink-0">
+                        {item.type}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 4. FLAGSHIP STUDENT PROGRAMS — 4 Pure White 20px Surfaces on Mist */}
+      <section className="selens-section pt-0">
+        <div className="selens-container space-y-10">
+          <SectionHeading
+            tone="paper"
+            title="Projects & initiatives."
+            description={
+              programsCount > 0
+                ? `${programsCount} active student-driven programs supporting laboratory exploration, academics, and outreach for A.Y. ${CURRENT_ACADEMIC_YEAR}.`
+                : 'Student-driven programs supporting laboratory exploration, academics, and community outreach.'
+            }
+            action={
+              <Link to="/projects" className="m-btn-2">
+                <span className="m-btn-2__label">Explore all programs</span>
+                <span className="m-btn-2__icon" aria-hidden="true">
+                  <ArrowUpRight className="w-4 h-4" />
+                </span>
+              </Link>
+            }
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            {INITIATIVES.map((prog, idx) => (
+              <Reveal
+                key={prog.title}
+                index={idx}
+                className="m-surface flex flex-col justify-between gap-6 transition-shadow hover:shadow-[0_22px_44px_-24px_rgba(18,19,21,0.45)]"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#e7e8ea] m-text-4 text-[#121315]">
+                      {prog.num}
+                    </span>
+                    <Link
+                      to={prog.to}
+                      aria-label={`Learn more about ${prog.title}`}
+                      className="m-icon-btn"
+                    >
+                      <span className="m-icon-btn__icon" aria-hidden="true">
+                        <ArrowUpRight className="w-4 h-4" />
+                      </span>
+                      <span className="m-icon-btn__icon" aria-hidden="true">
+                        <ArrowUpRight className="w-4 h-4" />
+                      </span>
+                    </Link>
+                  </div>
+                  <h3 className="m-text-5 text-[#121315] pt-1">{prog.title}</h3>
+                  <p className="m-text-6 text-[#4d5158] max-w-prose">
+                    {prog.text}
+                  </p>
+                </div>
+
+                <div>
+                  <Link to={prog.to} className="m-link m-text-4 text-[#121315]">
+                    Learn more
+                  </Link>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 3. MEET YOUR OFFICERS — Interactive TeamLanyardRail Showcase */}
-      <section className="w-full bg-neutral-100 border-y border-neutral-200 selens-section">
-        <div className="selens-container space-y-6">
+      {/* 5. EXECUTIVE BOARD — Interactive TeamLanyardRail Framed as Rounded 28px Dark Stage */}
+      <section className="selens-section pt-0">
+        <div className="selens-container space-y-8">
           <SectionHeading
             tone="paper"
-            title="Executive Board"
+            title="Executive Board."
             description={`Officers serving the Society of Electrical Engineering Students for A.Y. ${CURRENT_ACADEMIC_YEAR}.`}
             action={
-              <Link to="/people" className="selens-editorial-link">
-                <span>Full officer &amp; faculty directory</span>
-                <ArrowRight className="w-4 h-4" />
+              <Link to="/people" className="m-btn-2">
+                <span className="m-btn-2__label">Full officer &amp; faculty directory</span>
+                <span className="m-btn-2__icon" aria-hidden="true">
+                  <ArrowUpRight className="w-4 h-4" />
+                </span>
               </Link>
             }
           />
 
           {loadingOfficers ? (
-            <div className="h-[340px] bg-neutral-200 rounded-[4px] animate-pulse" />
+            <div className="h-[340px] bg-[#d9dce0] rounded-[28px] animate-pulse" />
           ) : officersError ? (
-            <div className="p-6 text-center text-sm text-red-700 bg-white border border-red-200 rounded-[4px]">
+            <div className="m-surface text-center m-text-6 text-red-700">
               {officersError}
             </div>
           ) : officerLanyardItems.length > 0 ? (
@@ -603,88 +673,87 @@ export default function Home() {
               caption="Hover, drag, pull down, or click a badge to flip"
             />
           ) : (
-            <div className="text-center py-8 text-neutral-600 bg-white border border-neutral-200 rounded-[4px]">
+            <div className="m-surface text-center py-10 m-text-6 text-[#4d5158]">
               Officer directory will be updated shortly.
             </div>
           )}
         </div>
       </section>
 
-      {/* 4. CAMPUS HEADQUARTERS & REAL INTERACTIVE GOOGLE MAP */}
-      <section className="bg-white selens-section">
-        <div className="selens-container space-y-8">
-          <SectionHeading
-            tone="paper"
-            title="Visit the DEE Office"
-            description="College of Engineering Building, Mindanao State University – General Santos, Fatima Campus."
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div className="lg:col-span-5 divide-y divide-neutral-200 border-t border-b border-neutral-200">
-              <div className="py-4 flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-neutral-800 shrink-0 mt-0.5" aria-hidden="true" />
-                <div className="space-y-0.5">
-                  <h3 className="font-serif font-bold text-sm text-neutral-950">
-                    Headquarters
-                  </h3>
-                  <p className="text-sm text-neutral-600 leading-relaxed">
-                    DEE Office, College of Engineering Building<br />
-                    Mindanao State University - General Santos<br />
-                    Fatima, General Santos City, 9500 Philippines
-                  </p>
-                </div>
-              </div>
-
-              <div className="py-4 flex items-start gap-3">
-                <Clock className="w-5 h-5 text-neutral-800 shrink-0 mt-0.5" aria-hidden="true" />
-                <div className="space-y-0.5">
-                  <h3 className="font-serif font-bold text-sm text-neutral-950">
-                    Office &amp; Consultation Hours
-                  </h3>
-                  <p className="text-sm text-neutral-600 leading-relaxed">
-                    Monday to Friday: 8:00 AM – 5:00 PM<br />
-                    During regular academic semester periods.
-                  </p>
-                </div>
-              </div>
-
-              <div className="py-4 flex items-start gap-3">
-                <Mail className="w-5 h-5 text-neutral-800 shrink-0 mt-0.5" aria-hidden="true" />
-                <div className="space-y-0.5">
-                  <h3 className="font-serif font-bold text-sm text-neutral-950">
-                    Official Email
-                  </h3>
-                  <a
-                    href="mailto:iieeasteeg@msugensan.edu.ph"
-                    className="selens-editorial-link text-sm"
-                  >
-                    iieeasteeg@msugensan.edu.ph
-                  </a>
-                </div>
-              </div>
-
-              <div className="py-4">
-                <a
-                  href="https://msugensan.edu.ph"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="selens-editorial-link text-xs"
-                >
-                  <span>Visit MSU-General Santos Official Website</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
+      {/* 6. VISIT THE DEE OFFICE — Hush Notched Map Panel + Docked White Info Card */}
+      <section className="selens-section pt-0 pb-4">
+        <div className="selens-container space-y-7">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <h2 className="m-text-3 text-[#121315]">
+              Visit the DEE Office.
+            </h2>
+            <div className="grid gap-0.5 m-text-6 text-[#4d5158] sm:text-right">
+              <strong className="font-medium text-[#121315]">
+                College of Engineering Building, MSU-GSC
+              </strong>
+              <span>Fatima, General Santos City · Mon–Fri, 8:00 AM–5:00 PM</span>
             </div>
+          </div>
 
-            <div className="lg:col-span-7 border border-neutral-200 rounded-[4px] overflow-hidden bg-neutral-100">
+          <div className="hush-cn-wrap">
+            <div className="hush-cn-panel">
               <iframe
                 title="Mindanao State University - General Santos Fatima Campus Map"
                 src="https://maps.google.com/maps?q=Mindanao%20State%20University%20General%20Santos%20Fatima&t=&z=16&ie=UTF8&iwloc=&output=embed"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-[320px] sm:h-[360px] border-0 block"
+                className="w-full h-full min-h-[320px] lg:min-h-[520px] border-0 block"
               />
             </div>
+
+            <aside className="hush-cn-card m-surface m-shadow space-y-5">
+              <div className="space-y-1">
+                <h3 className="m-text-5 text-[#121315]">Headquarters &amp; hours</h3>
+                <p className="m-text-6 text-[#4d5158]">
+                  Drop by for student consultations, laboratory tool borrowing, or membership inquiries.
+                </p>
+              </div>
+
+              <dl className="divide-y divide-[#cdd0d4] border-t border-b border-[#cdd0d4] m-text-6">
+                <div className="py-3 grid gap-0.5">
+                  <dt className="font-medium text-[#121315]">Location</dt>
+                  <dd className="text-[#4d5158]">
+                    DEE Office, College of Engineering Building, MSU-General Santos, Fatima, General Santos City, 9500
+                  </dd>
+                </div>
+                <div className="py-3 grid gap-0.5">
+                  <dt className="font-medium text-[#121315]">Consultation hours</dt>
+                  <dd className="text-[#4d5158]">
+                    Monday to Friday: 8:00 AM – 5:00 PM (regular academic semester)
+                  </dd>
+                </div>
+                <div className="py-3 grid gap-0.5">
+                  <dt className="font-medium text-[#121315]">Official email</dt>
+                  <dd>
+                    <a
+                      href="mailto:iieeasteeg@msugensan.edu.ph"
+                      className="m-link text-[#121315] font-medium"
+                    >
+                      iieeasteeg@msugensan.edu.ph
+                    </a>
+                  </dd>
+                </div>
+              </dl>
+
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <Link to="/portal" className="m-btn">
+                  <span className="m-btn__label">Open Student Portal</span>
+                </Link>
+                <a
+                  href="https://msugensan.edu.ph"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="m-link m-text-4 text-[#121315]"
+                >
+                  msugensan.edu.ph
+                </a>
+              </div>
+            </aside>
           </div>
         </div>
       </section>

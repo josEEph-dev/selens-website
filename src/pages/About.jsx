@@ -1,20 +1,23 @@
-import { PageHeader, PrimaryButton, Reveal } from '../components/SharedUI'
-import { Download, ExternalLink } from 'lucide-react'
+import { PageHeader, Reveal } from '../components/SharedUI'
+import { Download, ArrowUpRight } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR } from '../lib/config'
 
 export default function About() {
   const objectives = [
     {
+      num: '01',
       title: 'Academic excellence & board preparation',
       description:
         'We organize collaborative study groups, technical tutorials, and mock licensure examinations to help students build a solid foundation for their courses and the PRC Registered Electrical Engineer examinations.',
     },
     {
+      num: '02',
       title: 'Technical skills & hands-on innovation',
       description:
         'We bridge classroom theory and practical engineering through circuit design workshops, equipment loaning, and competitions aligned with the latest industry practices and safety codes.',
     },
     {
+      num: '03',
       title: 'Community service & electrification',
       description:
         'We bring engineering expertise to local communities through volunteer technical assistance, solar energy awareness, and high school STEM outreach programs.',
@@ -28,137 +31,146 @@ export default function About() {
         description="The Society of Electrical Engineering Students (SELENS) is the official student organization of Electrical Engineering at Mindanao State University - General Santos."
       />
 
-      <div className="selens-container py-12 sm:py-16 space-y-16">
-        {/* Preamble */}
-        <section id="mission" className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-4 space-y-1.5">
-            <h2 className="font-serif selens-fluid-h2 font-bold text-neutral-950">
-              Constitutional Preamble
-            </h2>
-            <p className="text-sm text-neutral-600">
-              Founding mandate of the organization.
-            </p>
-          </div>
+      <div className="selens-container py-10 sm:py-16 space-y-16">
+        {/* Preamble — Pure White 28px Panel */}
+        <section id="mission" className="m-panel-light p-7 sm:p-11 scroll-mt-28">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-4 space-y-2">
+              <h2 className="m-text-3 text-[#121315]">
+                Constitutional Preamble.
+              </h2>
+              <p className="m-text-6 text-[#4d5158]">
+                Founding mandate of the organization.
+              </p>
+            </div>
 
-          <Reveal index={0} className="lg:col-span-8">
-            <blockquote className="font-serif italic text-base sm:text-xl text-neutral-900 border-l-4 border-selens-yellow pl-5 sm:pl-7 py-2 leading-relaxed bg-neutral-50 pr-5 rounded-r-[4px]">
-              &ldquo;We, the Electrical Engineering students of Mindanao State University - General Santos, in order to establish an organization that shall embody our ideals, foster academic excellence, promote technical innovation and ethical responsibility, protect member rights and welfare, and contribute to community development, do hereby establish this Constitution and By-Laws.&rdquo;
-            </blockquote>
-          </Reveal>
+            <Reveal index={0} className="lg:col-span-8">
+              <blockquote className="text-xl sm:text-2xl lg:text-[26px] font-normal tracking-[-0.025em] leading-[1.35] text-[#121315] border-l-[3px] border-[#FFD100] pl-5 sm:pl-7">
+                &ldquo;We, the Electrical Engineering students of Mindanao State University - General Santos, in order to establish an organization that shall embody our ideals, foster academic excellence, promote technical innovation and ethical responsibility, protect member rights and welfare, and contribute to community development, do hereby establish this Constitution and By-Laws.&rdquo;
+              </blockquote>
+            </Reveal>
+          </div>
         </section>
 
-        {/* Core Objectives */}
-        <section className="space-y-6 border-t border-neutral-200 pt-12">
-          <div className="max-w-2xl space-y-1.5">
-            <h2 className="font-serif selens-fluid-h2 font-bold text-neutral-950">
-              Our Core Objectives
+        {/* Core Objectives — 3 Pure White 20px Surfaces on Mist */}
+        <section className="space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
+            <h2 className="m-text-3 text-[#121315] lg:col-span-7">
+              Our core objectives.
             </h2>
-            <p className="text-sm sm:text-base text-neutral-600 font-sans leading-relaxed">
+            <p className="m-text text-[#4d5158] lg:col-span-5">
               Three central pillars guide our initiatives, events, and member programs throughout the academic year.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
             {objectives.map((obj, idx) => (
               <Reveal
                 key={obj.title}
                 index={idx}
-                className="border border-neutral-200 rounded-[4px] bg-white p-6 space-y-2.5"
+                className="m-surface flex flex-col justify-between gap-5"
               >
-                <h3 className="font-serif font-bold text-base sm:text-lg text-neutral-950 leading-snug">
-                  {obj.title}
-                </h3>
-                <p className="text-sm text-neutral-600 leading-relaxed font-sans">
-                  {obj.description}
-                </p>
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#121315] text-white m-text-4">
+                  {obj.num}
+                </span>
+                <div className="space-y-2.5">
+                  <h3 className="m-text-5 text-[#121315]">
+                    {obj.title}
+                  </h3>
+                  <p className="m-text-6 text-[#4d5158]">
+                    {obj.description}
+                  </p>
+                </div>
               </Reveal>
             ))}
           </div>
         </section>
 
         {/* Official Organizational Charts (Real SELENS & DEE Assets) */}
-        <section className="space-y-6 border-t border-neutral-200 pt-12">
-          <div className="max-w-2xl space-y-1.5">
-            <h2 className="font-serif selens-fluid-h2 font-bold text-neutral-950">
-              Organizational Structure
+        <section className="space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
+            <h2 className="m-text-3 text-[#121315] lg:col-span-7">
+              Organizational structure.
             </h2>
-            <p className="text-sm sm:text-base text-neutral-600 font-sans leading-relaxed">
+            <p className="m-text text-[#4d5158] lg:col-span-5">
               Official organizational charts for the Society of Electrical Engineering Students and the Department of Electrical Engineering faculty.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            <figure className="lg:col-span-8 border border-neutral-200 rounded-[4px] bg-white overflow-hidden">
-              <div className="px-4 py-3 bg-neutral-50 border-b border-neutral-200 flex items-center justify-between gap-2">
-                <figcaption className="font-serif text-sm font-bold text-neutral-900">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+            <figure className="lg:col-span-8 m-panel-light p-5 sm:p-7 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <figcaption className="m-text-5 text-[#121315]">
                   SELENS Organizational Chart
                 </figcaption>
                 <a
                   href="/website-assets/selens-org-chart.png"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-xs font-semibold text-neutral-700 hover:text-neutral-950 inline-flex items-center gap-1"
+                  className="m-link m-text-4 text-[#121315]"
                 >
                   <span>View full size</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <ArrowUpRight className="w-4 h-4" />
                 </a>
               </div>
-              <div className="p-3 bg-white">
+              <div className="rounded-[16px] overflow-hidden bg-[#e7e8ea]/50 p-2">
                 <img
                   src="/website-assets/selens-org-chart.png"
                   alt="SELENS Set of Officers Organizational Chart"
                   loading="lazy"
-                  className="w-full h-auto block"
+                  className="w-full h-auto rounded-[12px] block"
                 />
               </div>
             </figure>
 
-            <figure className="lg:col-span-4 border border-neutral-200 rounded-[4px] bg-white overflow-hidden">
-              <div className="px-4 py-3 bg-neutral-50 border-b border-neutral-200 flex items-center justify-between gap-2">
-                <figcaption className="font-serif text-sm font-bold text-neutral-900">
-                  DEE Faculty &amp; Staff Chart
+            <figure className="lg:col-span-4 m-panel-light p-5 sm:p-7 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <figcaption className="m-text-5 text-[#121315]">
+                  DEE Faculty &amp; Staff
                 </figcaption>
                 <a
                   href="/website-assets/faculty-org-chart.png"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-xs font-semibold text-neutral-700 hover:text-neutral-950 inline-flex items-center gap-1"
+                  className="m-link m-text-4 text-[#121315]"
                 >
-                  <span>View full size</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Full size</span>
+                  <ArrowUpRight className="w-4 h-4" />
                 </a>
               </div>
-              <div className="p-3 bg-white">
+              <div className="rounded-[16px] overflow-hidden bg-[#e7e8ea]/50 p-2">
                 <img
                   src="/website-assets/faculty-org-chart.png"
                   alt="Department of Electrical Engineering Faculty Organizational Chart"
                   loading="lazy"
-                  className="w-full h-auto block"
+                  className="w-full h-auto rounded-[12px] block"
                 />
               </div>
             </figure>
           </div>
         </section>
 
-        {/* Governing Documents */}
-        <section className="border-t border-neutral-200 pt-12">
-          <div className="border border-neutral-200 bg-neutral-950 text-white rounded-[4px] p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-            <div className="space-y-1.5 max-w-xl">
-              <h2 className="font-serif font-bold text-lg sm:text-xl text-white">
-                SELENS Constitution &amp; By-Laws
+        {/* Governing Documents — Deep Ink 28px Panel */}
+        <section>
+          <div className="m-panel-dark hush-dark-scope p-7 sm:p-11 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+            <div className="space-y-2.5 max-w-2xl">
+              <h2 className="m-text-3 text-white">
+                Constitution &amp; By-Laws<span className="text-[#FFD100]">.</span>
               </h2>
-              <p className="text-sm text-neutral-300 leading-relaxed">
+              <p className="m-text text-[#a2a7ae]">
                 Official governing document outlining student organization policies, officer duties, and assembly operations for A.Y. {CURRENT_ACADEMIC_YEAR}.
               </p>
             </div>
-            <PrimaryButton
+            <a
               href="/website-assets/constitution-and-by-laws-of-selens.pdf"
               download
-              className="gap-2 shrink-0 min-h-[44px]"
+              className="m-btn-2 m-btn-2--dark shrink-0 self-start lg:self-auto"
             >
-              <Download className="w-4 h-4" />
-              <span>Download constitution (PDF)</span>
-            </PrimaryButton>
+              <span className="m-btn-2__label">Download constitution (PDF)</span>
+              <span className="m-btn-2__icon" aria-hidden="true">
+                <Download className="w-4 h-4" />
+              </span>
+            </a>
           </div>
         </section>
       </div>

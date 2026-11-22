@@ -41,49 +41,56 @@ export default function Topnotchers() {
         description="Celebrating our Electrical Engineering graduates who achieved national top 10 ranks in the Professional Regulation Commission (PRC) Licensure Examinations."
       />
 
-      <div className="selens-container py-12 sm:py-16 space-y-14">
-        {/* Real MSU-GSC REELE Performance + Summary */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border border-neutral-200 rounded-[4px] bg-neutral-50 p-5 sm:p-7">
-          <div className="lg:col-span-7">
+      <div className="selens-container py-10 sm:py-16 space-y-16">
+        {/* Split White Chart + Dark Performance Summary (Hush Twin Panel Pattern) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+          <div className="lg:col-span-7 m-panel-light p-5 sm:p-7 flex flex-col justify-between gap-4">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <h2 className="m-text-5 text-[#121315]">PRC REELE Passing Rates</h2>
+              <span className="m-text-6 text-[#4d5158]">2022 – 2026</span>
+            </div>
             <img
               src="/website-assets/passing-rates.png"
               alt="MSU-GSC REELE University Passing Rates from April 2022 to April 2026"
-              className="w-full h-auto rounded-[4px] border border-neutral-200 bg-white block"
+              className="w-full h-auto rounded-[16px] block"
             />
           </div>
 
-          <div className="lg:col-span-5 space-y-5">
-            <div className="space-y-1.5">
-              <h2 className="font-serif text-xl sm:text-2xl font-bold text-neutral-950">
-                Sustained National Board Performance
+          <div className="lg:col-span-5 m-panel-dark hush-dark-scope p-7 sm:p-9 flex flex-col justify-between gap-6">
+            <div className="space-y-3">
+              <div className="m-text-7 text-white">
+                92.16%<span className="text-[#FFD100]">.</span>
+              </div>
+              <h2 className="m-text-5 text-white">
+                Sustained national board performance
               </h2>
-              <p className="text-sm text-neutral-600 leading-relaxed">
+              <p className="m-text-6 text-[#a2a7ae]">
                 MSU-General Santos consistently ranks among the top-performing Electrical Engineering schools in the Philippines in the PRC Registered Electrical Engineer Licensure Examination (REELE).
               </p>
             </div>
 
-            <dl className="divide-y divide-neutral-200 border-t border-b border-neutral-200 text-sm">
-              <div className="py-2.5 flex items-baseline justify-between gap-4">
-                <dt className="text-neutral-600">April 2025 REELE</dt>
-                <dd className="font-bold text-neutral-950 text-right">
+            <dl className="divide-y divide-white/15 border-t border-b border-white/15 m-text-6">
+              <div className="py-3 flex items-baseline justify-between gap-4">
+                <dt className="text-[#a2a7ae]">April 2025 REELE</dt>
+                <dd className="font-medium text-white text-right">
                   92.16% · Top 2 National
                 </dd>
               </div>
-              <div className="py-2.5 flex items-baseline justify-between gap-4">
-                <dt className="text-neutral-600">April 2026 REELE</dt>
-                <dd className="font-bold text-neutral-950 text-right">
+              <div className="py-3 flex items-baseline justify-between gap-4">
+                <dt className="text-[#a2a7ae]">April 2026 REELE</dt>
+                <dd className="font-medium text-white text-right">
                   90.32% · Top 4 National
                 </dd>
               </div>
-              <div className="py-2.5 flex items-baseline justify-between gap-4">
-                <dt className="text-neutral-600">Topnotchers on record</dt>
-                <dd className="font-bold text-neutral-950 tabular-nums">
+              <div className="py-3 flex items-baseline justify-between gap-4">
+                <dt className="text-[#a2a7ae]">Topnotchers on record</dt>
+                <dd className="font-medium text-[#FFD100] tabular-nums">
                   {loading ? '—' : topnotchers.length}
                 </dd>
               </div>
-              <div className="py-2.5 flex items-baseline justify-between gap-4">
-                <dt className="text-neutral-600">Academic Year</dt>
-                <dd className="font-semibold text-neutral-900">
+              <div className="py-3 flex items-baseline justify-between gap-4">
+                <dt className="text-[#a2a7ae]">Academic Year</dt>
+                <dd className="font-medium text-white">
                   A.Y. {CURRENT_ACADEMIC_YEAR}
                 </dd>
               </div>
@@ -91,31 +98,28 @@ export default function Topnotchers() {
           </div>
         </div>
 
-        {/* Roll of Honor Table / Ledger */}
+        {/* Roll of Honor — Pure White 20px Floating Cards (Hush Wall Pattern) */}
         <Section
           tone="paper"
-          title="Roll of Honor"
+          title="Roll of Honor."
           description="Honoring MSU-General Santos Electrical Engineering board top examinees."
         >
           {loading ? (
-            <div className="divide-y divide-neutral-200 border-t border-neutral-200">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[1, 2, 3].map((n) => (
-                <div key={n} className="py-5 flex items-center gap-6 animate-pulse">
-                  <div className="w-16 h-8 bg-neutral-100 rounded-[3px]" />
-                  <div className="flex-1 h-8 bg-neutral-100 rounded-[3px]" />
-                </div>
+                <div key={n} className="h-44 bg-white rounded-[20px] animate-pulse" />
               ))}
             </div>
           ) : error ? (
-            <div className="border border-red-200 bg-red-50 rounded-[4px] p-8 text-center text-sm text-red-800">
+            <div className="m-surface text-center m-text-6 text-red-700">
               {error}
             </div>
           ) : topnotchers.length === 0 ? (
-            <div className="border-y border-neutral-200 py-10 text-center text-sm text-neutral-600">
+            <div className="m-surface py-12 text-center m-text-6 text-[#4d5158]">
               No topnotcher records on file currently.
             </div>
           ) : (
-            <div className="divide-y divide-neutral-200 border-b border-neutral-200">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {topnotchers.map((top, idx) => {
                 const rankLabel = top.rank != null ? `Rank ${top.rank}` : 'Topnotcher'
                 const initials = top.full_name
@@ -131,10 +135,24 @@ export default function Topnotchers() {
                   <Reveal
                     key={top.id}
                     index={idx}
-                    className="py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-neutral-50 transition-colors px-2 sm:px-3"
+                    className="m-surface m-shadow flex flex-col justify-between gap-6"
                   >
-                    <div className="flex items-center gap-4 min-w-0">
-                      <div className="w-14 h-14 rounded-full border border-neutral-200 bg-neutral-950 overflow-hidden shrink-0 flex items-center justify-center">
+                    <div className="flex items-start justify-between gap-3">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#FFD100] text-[#121315] m-text-4">
+                        {rankLabel}
+                      </span>
+                      {top.rating != null && (
+                        <div className="text-right">
+                          <span className="m-text-7 text-[#121315] tabular-nums block">
+                            {top.rating}%
+                          </span>
+                          <span className="m-text-6 text-[#4d5158]">Rating</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <div className="w-14 h-14 rounded-full bg-[#121315] overflow-hidden shrink-0 flex items-center justify-center">
                         {top.photo_url ? (
                           <img
                             src={top.photo_url}
@@ -143,36 +161,21 @@ export default function Topnotchers() {
                             className="w-full h-full object-cover object-top"
                           />
                         ) : (
-                          <span className="font-serif font-bold text-sm text-selens-yellow">
+                          <span className="m-text-4 text-[#FFD100]">
                             {initials}
                           </span>
                         )}
                       </div>
-
-                      <div className="min-w-0 space-y-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-xs font-bold bg-selens-yellow text-neutral-950 px-2 py-0.5 rounded-[2px]">
-                            {rankLabel}
-                          </span>
-                          <span className="text-xs text-neutral-500">
-                            {top.exam_year || 'PRC Licensure Examination'}
-                            {top.batch ? ` · Batch ${top.batch}` : ''}
-                          </span>
-                        </div>
-                        <h3 className="font-serif text-lg font-bold text-neutral-950 break-words leading-snug">
+                      <div className="min-w-0 space-y-0.5">
+                        <h3 className="m-text-5 text-[#121315] break-words">
                           {top.full_name}
                         </h3>
+                        <p className="m-text-6 text-[#4d5158]">
+                          {top.exam_year || 'PRC Licensure Examination'}
+                          {top.batch ? ` · Batch ${top.batch}` : ''}
+                        </p>
                       </div>
                     </div>
-
-                    {top.rating != null && (
-                      <div className="sm:text-right shrink-0 pl-[4.5rem] sm:pl-0">
-                        <span className="text-xs text-neutral-500 block">Rating</span>
-                        <span className="font-serif font-bold text-xl text-neutral-950 tabular-nums">
-                          {top.rating}%
-                        </span>
-                      </div>
-                    )}
                   </Reveal>
                 )
               })}

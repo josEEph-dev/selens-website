@@ -4,7 +4,7 @@ import { PageHeader } from '../components/SharedUI'
 import { ImageFrame, Reveal } from '../components/ui'
 import YearSelector from '../components/YearSelector'
 import CommitteeFilter from '../components/CommitteeFilter'
-import { ExternalLink, Archive } from 'lucide-react'
+import { ArrowUpRight, Archive } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR, getGroupForCommittee, formatCommitteeLabel } from '../lib/config'
 
 export default function Projects() {
@@ -16,7 +16,6 @@ export default function Projects() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Discover all distinct academic years
   useEffect(() => {
     let ignore = false
     async function loadYears() {
@@ -76,13 +75,11 @@ export default function Projects() {
     }
   }, [selectedYear])
 
-  // Reset group and committee filters when year changes
   useEffect(() => {
     setSelectedGroup('all')
     setSelectedCommittee('all')
   }, [selectedYear])
 
-  // Filter projects by group and committee
   const filteredProjects = useMemo(() => {
     return projects.filter((item) => {
       const itemGroup = getGroupForCommittee(item.committee)
@@ -107,8 +104,8 @@ export default function Projects() {
       />
 
       <div className="selens-container py-10 sm:py-14 space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200 pb-4">
-          <span className="text-sm font-semibold text-neutral-700">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#cdd0d4] pb-5">
+          <span className="m-text-4 text-[#121315]">
             Academic Year {selectedYear}
           </span>
           <YearSelector
@@ -118,7 +115,6 @@ export default function Projects() {
           />
         </div>
 
-        {/* Group and Committee Chips */}
         <CommitteeFilter
           items={projects}
           selectedGroup={selectedGroup}
@@ -128,17 +124,17 @@ export default function Projects() {
         />
 
         {isArchive && (
-          <div className="p-4 bg-selens-paper-alt border border-selens-paper-rule rounded-[3px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-selens-paper-ink">
-            <span className="flex items-center gap-2">
-              <Archive className="w-4 h-4 text-selens-yellow-ink shrink-0" />
+          <div className="m-surface flex flex-col sm:flex-row sm:items-center justify-between gap-3 m-text-6">
+            <span className="flex items-center gap-2 text-[#121315]">
+              <Archive className="w-4 h-4 text-[#4d5158] shrink-0" />
               <span>
-                Viewing projects archive for <strong>A.Y. {selectedYear}</strong>
+                Viewing projects archive for <strong className="font-medium">A.Y. {selectedYear}</strong>
               </span>
             </span>
             <button
               type="button"
               onClick={() => setSelectedYear(CURRENT_ACADEMIC_YEAR)}
-              className="font-bold underline decoration-selens-yellow decoration-2 underline-offset-4 hover:text-selens-paper-muted cursor-pointer"
+              className="m-link m-text-4 text-[#121315] w-fit cursor-pointer"
             >
               Back to current A.Y. {CURRENT_ACADEMIC_YEAR}
             </button>
@@ -146,20 +142,20 @@ export default function Projects() {
         )}
 
         {loading ? (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {[1, 2, 3].map((n) => (
               <div
                 key={n}
-                className="h-36 bg-selens-paper-alt rounded-[3px] animate-pulse"
+                className="h-44 bg-white rounded-[28px] animate-pulse"
               />
             ))}
           </div>
         ) : error ? (
-          <div className="border-y border-red-300 bg-red-50 p-8 text-center text-sm text-red-800">
+          <div className="m-surface text-center m-text-6 text-red-700">
             {error}
           </div>
         ) : projects.length === 0 ? (
-          <div className="border-y border-selens-paper-rule py-12 text-center text-sm text-selens-paper-muted space-y-3">
+          <div className="m-surface py-12 text-center m-text-6 text-[#4d5158] space-y-4">
             <p>
               {selectedYear === CURRENT_ACADEMIC_YEAR
                 ? `New updates for A.Y. ${CURRENT_ACADEMIC_YEAR} are coming soon.`
@@ -170,64 +166,66 @@ export default function Projects() {
                 <button
                   type="button"
                   onClick={() => setSelectedYear(pastYear)}
-                  className="selens-editorial-link text-xs"
+                  className="m-btn-2 m-btn-2--mist cursor-pointer"
                 >
-                  View archive for A.Y. {pastYear}
+                  <span className="m-btn-2__label">View archive for A.Y. {pastYear}</span>
                 </button>
               </div>
             )}
           </div>
         ) : filteredProjects.length === 0 ? (
-          <div className="border-y border-selens-paper-rule py-12 text-center text-sm text-selens-paper-muted">
+          <div className="m-surface py-12 text-center m-text-6 text-[#4d5158]">
             No projects matching the selected committee filter.
           </div>
         ) : (
-          <div className="divide-y divide-neutral-200 border-t border-b border-neutral-200">
+          <div className="grid grid-cols-1 gap-4">
             {filteredProjects.map((item, idx) => (
               <Reveal
                 key={item.id}
                 index={idx}
-                className="py-7 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+                className="m-panel-light p-6 sm:p-9 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center"
               >
-                <div className={`${item.cover_image_url ? 'lg:col-span-8' : 'lg:col-span-12'} space-y-2.5`}>
+                <div className={`${item.cover_image_url ? 'lg:col-span-8' : 'lg:col-span-12'} space-y-3`}>
                   <div className="flex flex-wrap items-center gap-2">
                     {item.committee && (
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded-[3px] bg-neutral-100 border border-neutral-200 text-neutral-800">
+                      <span className="px-3 py-1 rounded-full bg-[#e7e8ea] text-[#121315] text-xs font-medium">
                         {formatCommitteeLabel(item.committee)}
                       </span>
                     )}
                     {item.status && item.status !== 'active' && (
-                      <span className="text-xs font-semibold capitalize px-2 py-0.5 rounded-[3px] bg-selens-yellow text-neutral-950">
+                      <span className="px-3 py-1 rounded-full bg-[#FFD100] text-[#121315] text-xs font-medium capitalize">
                         {item.status}
                       </span>
                     )}
                     {item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR && (
-                      <span className="text-xs text-neutral-500">
+                      <span className="m-text-6 text-[#4d5158]">
                         A.Y. {item.academic_year}
                       </span>
                     )}
                   </div>
 
-                  <h2 className="font-serif text-xl font-bold text-neutral-950 break-words leading-snug">
+                  <h2 className="m-text-5 text-[#121315] break-words">
                     {item.name}
                   </h2>
 
                   {item.description && (
-                    <p className="text-sm sm:text-base text-neutral-600 leading-relaxed font-sans max-w-2xl">
+                    <p className="m-text text-[#4d5158] max-w-2xl">
                       {item.description}
                     </p>
                   )}
 
                   {item.link_url && (
-                    <div className="pt-1">
+                    <div className="pt-2">
                       <a
                         href={item.link_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="selens-editorial-link"
+                        className="m-btn-2 m-btn-2--mist"
                       >
-                        <ExternalLink className="w-4 h-4" />
-                        <span>Learn more</span>
+                        <span className="m-btn-2__label">Learn more</span>
+                        <span className="m-btn-2__icon" aria-hidden="true">
+                          <ArrowUpRight className="w-4 h-4" />
+                        </span>
                       </a>
                     </div>
                   )}
@@ -240,7 +238,6 @@ export default function Projects() {
                       src={item.cover_image_url}
                       alt={item.name}
                       aspect="aspect-[16/10]"
-                      className="rounded-[4px]"
                     />
                   </div>
                 )}

@@ -1,513 +1,376 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
-import {
-  Menu,
-  X,
-  ChevronDown,
-  User,
-  LogOut,
-  Eye,
-} from 'lucide-react'
+import { ArrowUpRight, Eye, LogOut, User } from 'lucide-react'
+
+const PRIMARY_LINKS = [
+  { label: 'About', to: '/about' },
+  { label: 'People', to: '/people' },
+  { label: 'News', to: '/news' },
+  { label: 'Projects', to: '/projects' },
+]
+
+const ALL_MENU_LINKS = [
+  { label: 'Home', to: '/' },
+  { label: 'About SELENS', to: '/about' },
+  { label: 'People & Leadership', to: '/people' },
+  { label: 'News & Events', to: '/news' },
+  { label: 'Student Activities', to: '/news/student-activities' },
+  { label: 'Accomplishments', to: '/accomplishments' },
+  { label: 'Legion of Topnotchers', to: '/topnotchers' },
+  { label: 'Accreditations & Awards', to: '/awards' },
+  { label: 'Projects & Initiatives', to: '/projects' },
+  { label: 'FAQ', to: '/faq' },
+  { label: 'Student Portal', to: '/portal' },
+]
+
+function MenuBarsIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <path d="M5 9h14M5 15h9" />
+    </svg>
+  )
+}
+
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  )
+}
 
 export default function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [newsDropdownOpen, setNewsDropdownOpen] = useState(false)
-  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false)
-  const [contrastHigh, setContrastHigh] = useState(false)
-  const dropdownRef = useRef(null)
   const location = useLocation()
   const { user, profile, isOfficer, signOut } = useAuth()
+  const [openMenuPath, setOpenMenuPath] = useState(null)
+  const [contrastHigh, setContrastHigh] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const lastYRef = useRef(0)
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setMobileMenuOpen(false)
-      setNewsDropdownOpen(false)
-      setServicesDropdownOpen(false)
-    }, 0)
-    return () => clearTimeout(timer)
-  }, [location.pathname])
+  const menuOpen = openMenuPath === location.pathname
+  const isAdminRoute = location.pathname.startsWith('/dashboard')
 
-  // Close dropdowns on outside click
+  const closeMenu = () => setOpenMenuPath(null)
+  const openMenu = () => setOpenMenuPath(location.pathname)
+
+  // Auto-hide floating header on scroll down, reveal on scroll up (public routes)
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setNewsDropdownOpen(false)
-        setServicesDropdownOpen(false)
+    if (isAdminRoute) return undefined
+    let rafId = 0
+
+    const onScroll = () => {
+      if (rafId) return
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0
+        const y = window.scrollY
+        const prev = lastYRef.current
+        setScrolled(y > 24)
+        if (y > 140 && y > prev + 6) {
+          setHidden(true)
+        } else if (y < prev - 4 || y <= 80) {
+          setHidden(false)
+        }
+        lastYRef.current = y
+      })
+    }
+
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (rafId) window.cancelAnimationFrame(rafId)
+    }
+  }, [isAdminRoute])
+
+  // Escape key & scroll lock when full-screen menu is open
+  useEffect(() => {
+    if (!menuOpen) return undefined
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setOpenMenuPath(null)
       }
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [menuOpen])
 
   const toggleContrast = () => {
-    setContrastHigh(!contrastHigh)
+    setContrastHigh((prev) => !prev)
     document.documentElement.classList.toggle('contrast-high')
   }
 
-  const isActive = (path) => {
-    if (path === '/') return location.pathname === '/'
-    return location.pathname.startsWith(path)
+  // Keep Admin routes on a clean dark sticky header so Admin CMS layout is untouched
+  if (isAdminRoute) {
+    return (
+      <header className="sticky top-0 z-50 w-full bg-[#121315] border-b border-selens-line text-white">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[70] focus:bg-selens-yellow focus:text-[#121315] focus:font-medium focus:text-sm focus:px-4 focus:py-2.5 focus:rounded-full"
+        >
+          Skip to main content
+        </a>
+        <div className="selens-container h-[70px] flex items-center justify-between gap-4">
+          <Link to="/" className="inline-flex items-center gap-2.5 text-white no-underline">
+            <img
+              src="/website-assets/selens-logo.png"
+              alt="SELENS Logo"
+              className="h-8 w-8 object-contain"
+            />
+            <span className="text-xl font-semibold tracking-[-0.04em] leading-none">
+              SELENS<span className="text-selens-yellow">.</span>
+            </span>
+          </Link>
+
+          <nav aria-label="Officer navigation" className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-300">
+            <Link to="/" className="hover:text-selens-yellow transition-colors">Public Site</Link>
+            <Link to="/dashboard" className="hover:text-selens-yellow transition-colors">Dashboard</Link>
+            <Link to="/portal" className="hover:text-selens-yellow transition-colors">Portal</Link>
+          </nav>
+
+          <div className="flex items-center gap-3">
+            {user && (
+              <>
+                <span className="hidden sm:inline text-xs text-neutral-400">
+                  {profile?.full_name || user.email}
+                </span>
+                <button
+                  type="button"
+                  onClick={signOut}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium px-3.5 py-2 rounded-full bg-white/10 hover:bg-selens-yellow hover:text-[#121315] transition-colors cursor-pointer"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Sign out</span>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </header>
+    )
   }
 
   return (
     <header
-      className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-neutral-200 text-neutral-900"
-      ref={dropdownRef}
+      id="nav"
+      className={`hush-nav ${scrolled ? 'is-scrolled' : ''} ${hidden && !menuOpen ? 'is-hidden' : ''}`}
     >
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:bg-selens-yellow focus:text-selens-black focus:font-bold focus:text-sm focus:px-4 focus:py-2.5 focus:rounded-[4px]"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[70] focus:bg-[#ffffff] focus:text-[#121315] focus:font-medium focus:text-sm focus:px-4 focus:py-2.5 focus:rounded-full focus:pointer-events-auto"
       >
-        Skip to main content
+        Skip to content
       </a>
 
-      {/* University Top Utility Strip */}
-      <div className="bg-neutral-950 text-neutral-300 border-b-2 border-selens-yellow">
-        <div className="selens-container py-1.5 flex items-center justify-between gap-4 text-[11px] sm:text-xs">
-          <span className="truncate font-sans">
-            Mindanao State University – General Santos · College of Engineering
+      <div className="hush-nav__bar">
+        {/* Left: Circular Menu Trigger + 4 Quiet Links */}
+        <div className="hush-nav__left">
+          <button
+            type="button"
+            className="m-icon-btn"
+            aria-expanded={menuOpen}
+            aria-controls="hush-full-menu"
+            aria-label="Open navigation menu"
+            onClick={openMenu}
+          >
+            <span className="m-icon-btn__icon" aria-hidden="true">
+              <MenuBarsIcon />
+            </span>
+            <span className="m-icon-btn__icon" aria-hidden="true">
+              <MenuBarsIcon />
+            </span>
+          </button>
+
+          <nav className="hush-nav__links" aria-label="Main navigation">
+            {PRIMARY_LINKS.map((item) => {
+              const active = location.pathname.startsWith(item.to)
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`m-link m-text-4 ${active ? 'text-[#121315]' : 'text-[#121315]/80 hover:text-[#121315]'}`}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
+          </nav>
+        </div>
+
+        {/* Center: Official SELENS Mark + Wordmark */}
+        <Link to="/" className="hush-nav__logo" aria-label="SELENS Home">
+          <img
+            src="/website-assets/selens-logo.png"
+            alt=""
+            className="h-7 w-7 sm:h-8 sm:w-8 object-contain"
+          />
+          <span className="hush-nav__word">
+            SELENS<span className="text-[#FFD100]">.</span>
           </span>
-          <div className="hidden sm:flex items-center gap-4 shrink-0">
-            <a
-              href="/website-assets/constitution-and-by-laws-of-selens.pdf"
-              download
-              className="hover:text-selens-yellow transition-colors"
-            >
-              Constitution (PDF)
-            </a>
-            <a
-              href="https://msugensan.edu.ph"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-selens-yellow transition-colors"
-            >
-              msugensan.edu.ph
-            </a>
-            <button
-              type="button"
-              onClick={toggleContrast}
-              title="Toggle high contrast"
-              aria-label="Toggle high contrast"
-              className="inline-flex items-center gap-1 hover:text-selens-yellow transition-colors cursor-pointer"
-            >
-              <Eye className="w-3.5 h-3.5" />
-              <span>{contrastHigh ? 'Standard' : 'Contrast'}</span>
-            </button>
-          </div>
+        </Link>
+
+        {/* Right: Contrast Icon + Student Portal / Dashboard Pill */}
+        <div className="hush-nav__right">
+          <button
+            type="button"
+            onClick={toggleContrast}
+            title={contrastHigh ? 'Switch to standard contrast' : 'Switch to high contrast'}
+            aria-label="Toggle high contrast"
+            aria-pressed={contrastHigh}
+            className="m-icon-btn m-icon-btn--light hidden sm:inline-grid"
+          >
+            <span className="m-icon-btn__icon" aria-hidden="true">
+              <Eye className="w-[18px] h-[18px]" />
+            </span>
+            <span className="m-icon-btn__icon" aria-hidden="true">
+              <Eye className="w-[18px] h-[18px]" />
+            </span>
+          </button>
+
+          {user ? (
+            <>
+              <Link
+                to={isOfficer ? '/dashboard' : '/portal'}
+                className="m-btn-2"
+              >
+                <span className="m-btn-2__label">
+                  {isOfficer ? 'Dashboard' : profile?.full_name?.split(' ')[0] || 'Portal'}
+                </span>
+                <span className="m-btn-2__icon" aria-hidden="true">
+                  <User className="w-4 h-4" />
+                </span>
+              </Link>
+              <button
+                type="button"
+                onClick={signOut}
+                title="Sign out"
+                aria-label="Sign out"
+                className="m-icon-btn m-icon-btn--light hidden sm:inline-grid"
+              >
+                <span className="m-icon-btn__icon" aria-hidden="true">
+                  <LogOut className="w-[17px] h-[17px]" />
+                </span>
+                <span className="m-icon-btn__icon" aria-hidden="true">
+                  <LogOut className="w-[17px] h-[17px]" />
+                </span>
+              </button>
+            </>
+          ) : (
+            <Link to="/portal" className="m-btn-2">
+              <span className="m-btn-2__label">
+                <span className="hidden sm:inline">Student Portal</span>
+                <span className="sm:hidden">Portal</span>
+              </span>
+              <span className="m-btn-2__icon" aria-hidden="true">
+                <ArrowUpRight className="w-4 h-4" />
+              </span>
+            </Link>
+          )}
         </div>
       </div>
 
-      {/* Main Institutional White Navigation Bar */}
-      <div className="selens-container">
-        <div className="flex items-center justify-between h-[68px] gap-4">
-          {/* Official Seals & Department Masthead */}
-          <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
-            <div className="flex items-center gap-1.5 shrink-0">
-              <img
-                src="/website-assets/university-seal.png"
-                alt="MSU-GSC Seal"
-                className="h-8 w-8 sm:h-9 sm:w-9 object-contain"
-              />
-              <img
-                src="/website-assets/coe-logo.png"
-                alt="College of Engineering Logo"
-                className="h-8 w-8 sm:h-9 sm:w-9 object-contain hidden sm:block"
-              />
-              <img
-                src="/website-assets/selens-logo.png"
-                alt="SELENS Logo"
-                className="h-8 w-8 sm:h-9 sm:w-9 object-contain"
-              />
-            </div>
-            <div className="flex flex-col border-l border-neutral-200 pl-2.5 sm:pl-3">
-              <span className="font-serif text-base sm:text-lg font-bold text-neutral-950 tracking-tight leading-none">
-                SELENS
-              </span>
-              <span className="text-[11px] text-neutral-600 font-sans leading-tight mt-0.5">
-                Dept. of Electrical Engineering
-              </span>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav
-            aria-label="Primary navigation"
-            className="hidden lg:flex items-center space-x-1"
-          >
+      {/* Full-Screen Dark Menu Overlay (Hush / 8B Signature) */}
+      {menuOpen && (
+        <div
+          id="hush-full-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site navigation"
+          className="hush-menu hush-dark-scope"
+        >
+          <div className="hush-menu__top">
             <Link
               to="/"
-              data-active={isActive('/') && location.pathname === '/'}
-              className="selens-nav-link"
+              onClick={closeMenu}
+              className="inline-flex items-center gap-2.5 text-white no-underline"
             >
-              Home
+              <img
+                src="/website-assets/selens-logo.png"
+                alt=""
+                className="h-8 w-8 object-contain"
+              />
+              <span className="hush-nav__word text-white">
+                SELENS<span className="text-[#FFD100]">.</span>
+              </span>
             </Link>
 
-            <Link
-              to="/about"
-              data-active={isActive('/about')}
-              className="selens-nav-link"
-            >
-              About
-            </Link>
-
-            <Link
-              to="/people"
-              data-active={isActive('/people')}
-              className="selens-nav-link"
-            >
-              People
-            </Link>
-
-            {/* Services & Portals Dropdown */}
-            <div className="relative">
+            <div className="flex items-center gap-2.5">
               <button
                 type="button"
-                aria-expanded={servicesDropdownOpen}
-                data-active={isActive('/portal') || isActive('/services')}
-                onClick={() => {
-                  setServicesDropdownOpen(!servicesDropdownOpen)
-                  setNewsDropdownOpen(false)
-                }}
-                className="selens-nav-link gap-1 cursor-pointer"
+                onClick={toggleContrast}
+                className="m-btn-2 m-btn-2--dark text-xs"
               >
-                <span>Services &amp; Portals</span>
-                <ChevronDown
-                  className={`w-3.5 h-3.5 transition-transform duration-150 ${
-                    servicesDropdownOpen ? 'rotate-180' : ''
-                  }`}
-                />
+                <span className="m-btn-2__label">
+                  {contrastHigh ? 'Standard contrast' : 'High contrast'}
+                </span>
               </button>
-
-              {servicesDropdownOpen && (
-                <div className="absolute left-0 top-full mt-1 w-60 bg-white border border-neutral-200 rounded-[4px] py-1.5 z-50 shadow-lg">
-                  <Link
-                    to="/portal"
-                    className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 transition-colors"
-                  >
-                    Student Portal
-                  </Link>
-                  <Link
-                    to="/portal/teechpoints"
-                    className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 transition-colors"
-                  >
-                    TEEchPoints Tracking
-                  </Link>
-                  <Link
-                    to="/portal/documents"
-                    className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 transition-colors"
-                  >
-                    Digital Document Requests
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            {/* News & Info Dropdown */}
-            <div className="relative">
               <button
                 type="button"
-                aria-expanded={newsDropdownOpen}
-                data-active={
-                  isActive('/news') ||
-                  isActive('/accomplishments') ||
-                  isActive('/awards') ||
-                  isActive('/topnotchers') ||
-                  isActive('/faq')
-                }
-                onClick={() => {
-                  setNewsDropdownOpen(!newsDropdownOpen)
-                  setServicesDropdownOpen(false)
-                }}
-                className="selens-nav-link gap-1 cursor-pointer"
+                className="m-icon-btn m-icon-btn--light"
+                aria-label="Close navigation menu"
+                onClick={closeMenu}
               >
-                <span>News &amp; Info</span>
-                <ChevronDown
-                  className={`w-3.5 h-3.5 transition-transform duration-150 ${
-                    newsDropdownOpen ? 'rotate-180' : ''
-                  }`}
-                />
+                <span className="m-icon-btn__icon" aria-hidden="true">
+                  <CloseIcon />
+                </span>
+                <span className="m-icon-btn__icon" aria-hidden="true">
+                  <CloseIcon />
+                </span>
               </button>
-
-              {newsDropdownOpen && (
-                <div className="absolute left-0 top-full mt-1 w-60 bg-white border border-neutral-200 rounded-[4px] py-1.5 z-50 shadow-lg">
-                  <Link
-                    to="/news"
-                    className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 transition-colors"
-                  >
-                    News &amp; Events
-                  </Link>
-                  <Link
-                    to="/news?category=student_activities"
-                    className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 transition-colors"
-                  >
-                    Student Activities
-                  </Link>
-                  <Link
-                    to="/accomplishments"
-                    className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 transition-colors"
-                  >
-                    Accomplishments
-                  </Link>
-                  <Link
-                    to="/topnotchers"
-                    className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 transition-colors"
-                  >
-                    Legion of Topnotchers
-                  </Link>
-                  <Link
-                    to="/awards"
-                    className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 transition-colors"
-                  >
-                    Accreditations &amp; Awards
-                  </Link>
-                  <Link
-                    to="/faq"
-                    className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 transition-colors"
-                  >
-                    FAQ
-                  </Link>
-                </div>
-              )}
             </div>
+          </div>
 
-            <Link
-              to="/projects"
-              data-active={isActive('/projects')}
-              className="selens-nav-link"
-            >
-              Projects
-            </Link>
-          </nav>
-
-          {/* Right Action: Student Portal CTA / Signed-in User */}
-          <div className="hidden lg:flex items-center gap-3 shrink-0">
-            {user ? (
-              <div className="flex items-center gap-3">
-                {isOfficer ? (
-                  <Link
-                    to="/dashboard"
-                    className="selens-btn-ink text-xs px-3.5 py-2 min-h-[38px]"
-                  >
-                    Dashboard
-                  </Link>
-                ) : (
-                  <Link
-                    to="/portal"
-                    className="selens-btn-ink text-xs px-3.5 py-2 min-h-[38px]"
-                  >
-                    Student Portal
-                  </Link>
-                )}
-                <div className="flex items-center gap-2 text-sm text-neutral-700 pl-2 border-l border-neutral-200">
-                  <Link
-                    to="/portal"
-                    className="flex items-center gap-1.5 hover:text-neutral-950 font-medium transition-colors"
-                    title="Student Portal"
-                  >
-                    <User className="w-4 h-4 text-neutral-900" />
-                    <span>{profile?.full_name?.split(' ')[0] || 'Member'}</span>
-                  </Link>
-                  <button
-                    onClick={signOut}
-                    title="Sign Out"
-                    aria-label="Sign Out"
-                    className="p-1.5 text-neutral-500 hover:text-neutral-950 transition-colors cursor-pointer"
-                  >
-                    <LogOut className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ) : (
+          <nav className="hush-menu__list" aria-label="All pages">
+            {ALL_MENU_LINKS.map((item) => (
               <Link
-                to="/portal"
-                className="selens-btn-ink text-sm px-4 py-2 min-h-[40px]"
+                key={item.to}
+                to={item.to}
+                onClick={closeMenu}
               >
-                Student Portal
+                {item.label}
+              </Link>
+            ))}
+            {isOfficer && (
+              <Link to="/dashboard" onClick={closeMenu} className="!text-[#FFD100]">
+                Officer Dashboard
               </Link>
             )}
-          </div>
+          </nav>
 
-          {/* Mobile Menu Controls */}
-          <div className="lg:hidden flex items-center gap-1 shrink-0">
-            <button
-              onClick={toggleContrast}
-              className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-neutral-600 hover:text-neutral-950 transition-colors rounded-[4px]"
-              aria-label="Toggle high contrast"
+          <div className="hush-menu__foot m-text-6">
+            <a className="m-link text-white" href="mailto:iieeasteeg@msugensan.edu.ph">
+              iieeasteeg@msugensan.edu.ph
+            </a>
+            <a
+              className="m-link text-white"
+              href="/website-assets/constitution-and-by-laws-of-selens.pdf"
+              download
             >
-              <Eye className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-neutral-900 hover:bg-neutral-100 transition-colors rounded-[4px]"
-              aria-label="Toggle menu"
-              aria-expanded={mobileMenuOpen}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+              Constitution &amp; By-Laws (PDF)
+            </a>
+            <span>DEE Office, College of Engineering, MSU-General Santos</span>
+            {user && (
+              <button
+                type="button"
+                onClick={() => {
+                  closeMenu()
+                  signOut()
+                }}
+                className="m-link text-[#FFD100] cursor-pointer"
+              >
+                Sign out ({profile?.full_name?.split(' ')[0] || 'Member'})
+              </button>
+            )}
           </div>
         </div>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <nav
-            aria-label="Mobile navigation"
-            className="lg:hidden py-4 border-t border-neutral-200 bg-white divide-y divide-neutral-200 text-sm font-semibold"
-          >
-            <div className="pb-3 space-y-0.5">
-              <Link
-                to="/"
-                className={`min-h-[44px] px-2 flex items-center rounded-[4px] ${
-                  isActive('/') && location.pathname === '/'
-                    ? 'text-neutral-950 bg-neutral-100'
-                    : 'text-neutral-700 hover:text-neutral-950'
-                }`}
-              >
-                Home
-              </Link>
-              <Link
-                to="/about"
-                className={`min-h-[44px] px-2 flex items-center rounded-[4px] ${
-                  isActive('/about')
-                    ? 'text-neutral-950 bg-neutral-100'
-                    : 'text-neutral-700 hover:text-neutral-950'
-                }`}
-              >
-                About
-              </Link>
-              <Link
-                to="/people"
-                className={`min-h-[44px] px-2 flex items-center rounded-[4px] ${
-                  isActive('/people')
-                    ? 'text-neutral-950 bg-neutral-100'
-                    : 'text-neutral-700 hover:text-neutral-950'
-                }`}
-              >
-                People
-              </Link>
-              <Link
-                to="/projects"
-                className={`min-h-[44px] px-2 flex items-center rounded-[4px] ${
-                  isActive('/projects')
-                    ? 'text-neutral-950 bg-neutral-100'
-                    : 'text-neutral-700 hover:text-neutral-950'
-                }`}
-              >
-                Projects &amp; Initiatives
-              </Link>
-            </div>
-
-            <div className="py-3 space-y-0.5">
-              <span className="px-2 pb-1 text-xs font-sans uppercase tracking-wider text-neutral-500 block">
-                Services &amp; Portals
-              </span>
-              <Link
-                to="/portal"
-                className="min-h-[44px] px-3 flex items-center text-neutral-700 hover:text-neutral-950"
-              >
-                Student Portal
-              </Link>
-              <Link
-                to="/portal/teechpoints"
-                className="min-h-[44px] px-3 flex items-center text-neutral-700 hover:text-neutral-950"
-              >
-                TEEchPoints Tracking
-              </Link>
-              <Link
-                to="/portal/documents"
-                className="min-h-[44px] px-3 flex items-center text-neutral-700 hover:text-neutral-950"
-              >
-                Digital Document Requests
-              </Link>
-            </div>
-
-            <div className="py-3 space-y-0.5">
-              <span className="px-2 pb-1 text-xs font-sans uppercase tracking-wider text-neutral-500 block">
-                News &amp; Info
-              </span>
-              <Link
-                to="/news"
-                className="min-h-[44px] px-3 flex items-center text-neutral-700 hover:text-neutral-950"
-              >
-                News &amp; Events
-              </Link>
-              <Link
-                to="/news?category=student_activities"
-                className="min-h-[44px] px-3 flex items-center text-neutral-700 hover:text-neutral-950"
-              >
-                Student Activities
-              </Link>
-              <Link
-                to="/accomplishments"
-                className="min-h-[44px] px-3 flex items-center text-neutral-700 hover:text-neutral-950"
-              >
-                Accomplishments
-              </Link>
-              <Link
-                to="/topnotchers"
-                className="min-h-[44px] px-3 flex items-center text-neutral-700 hover:text-neutral-950"
-              >
-                Legion of Topnotchers
-              </Link>
-              <Link
-                to="/awards"
-                className="min-h-[44px] px-3 flex items-center text-neutral-700 hover:text-neutral-950"
-              >
-                Accreditations &amp; Awards
-              </Link>
-              <Link
-                to="/faq"
-                className="min-h-[44px] px-3 flex items-center text-neutral-700 hover:text-neutral-950"
-              >
-                FAQ
-              </Link>
-            </div>
-
-            <div className="pt-4">
-              {user ? (
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between px-2">
-                    <Link
-                      to="/portal"
-                      className="min-h-[44px] inline-flex items-center text-sm text-neutral-700 hover:text-neutral-950"
-                    >
-                      Signed in as {profile?.full_name || 'Member'}
-                    </Link>
-                    <button
-                      onClick={signOut}
-                      className="min-h-[44px] px-3 text-sm text-red-700 font-bold cursor-pointer"
-                    >
-                      Sign Out
-                    </button>
-                  </div>
-                  {isOfficer ? (
-                    <Link
-                      to="/dashboard"
-                      className="selens-btn-ink min-h-[44px] w-full text-sm"
-                    >
-                      Officer Dashboard
-                    </Link>
-                  ) : (
-                    <Link
-                      to="/portal"
-                      className="selens-btn-ink min-h-[44px] w-full text-sm"
-                    >
-                      Student Portal
-                    </Link>
-                  )}
-                </div>
-              ) : (
-                <Link
-                  to="/portal"
-                  className="selens-btn-ink min-h-[44px] w-full text-sm"
-                >
-                  Student Portal
-                </Link>
-              )}
-            </div>
-          </nav>
-        )}
-      </div>
+      )}
     </header>
   )
 }

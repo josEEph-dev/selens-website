@@ -5,10 +5,9 @@ import { PageHeader } from '../components/SharedUI'
 import { ImageFrame, Reveal } from '../components/ui'
 import YearSelector from '../components/YearSelector'
 import CommitteeFilter from '../components/CommitteeFilter'
-import { ArrowRight, Archive } from 'lucide-react'
+import { ArrowUpRight, Archive } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR, getGroupForCommittee, formatCommitteeLabel } from '../lib/config'
 
-// initialCategory prop is passed by the /news/student-activities route alias
 export default function News({ initialCategory } = {}) {
   const [news, setNews] = useState([])
   const [availableYears, setAvailableYears] = useState([CURRENT_ACADEMIC_YEAR])
@@ -19,10 +18,8 @@ export default function News({ initialCategory } = {}) {
   const [error, setError] = useState(null)
   const [searchParams] = useSearchParams()
 
-  // On /news, category defaults to 'news_events'; on /news/student-activities it is 'student_activities'
   const currentCategory = initialCategory || searchParams.get('category') || 'news_events'
 
-  // Discover all distinct academic years in news_posts
   useEffect(() => {
     let ignore = false
     async function loadYears() {
@@ -83,13 +80,11 @@ export default function News({ initialCategory } = {}) {
     }
   }, [currentCategory, selectedYear])
 
-  // Reset group and committee filters when switching category or year
   useEffect(() => {
     setSelectedGroup('all')
     setSelectedCommittee('all')
   }, [currentCategory, selectedYear])
 
-  // Filter news items by group and committee
   const filteredNews = useMemo(() => {
     return news.filter((item) => {
       const itemGroup = getGroupForCommittee(item.committee)
@@ -119,14 +114,12 @@ export default function News({ initialCategory } = {}) {
   return (
     <div id="main-content" className="selens-paper-page min-h-screen">
       <PageHeader
-        eyebrow="Dispatches & Advisories"
         title={pageTitle}
         description="Latest announcements, academic events, and student activities from the Society of Electrical Engineering Students."
       />
 
-      <div className="selens-container py-12 sm:py-16 space-y-8">
-        {/* Filter tabs and Year Selector */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-selens-paper-rule pb-5">
+      <div className="selens-container py-10 sm:py-14 space-y-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#cdd0d4] pb-5">
           <nav className="selens-chip-row" aria-label="News categories">
             {TABS.map((tab) => {
               const isActive = currentCategory === tab.id
@@ -150,7 +143,6 @@ export default function News({ initialCategory } = {}) {
           />
         </div>
 
-        {/* Group and Committee Chips */}
         <CommitteeFilter
           items={news}
           selectedGroup={selectedGroup}
@@ -159,19 +151,18 @@ export default function News({ initialCategory } = {}) {
           onCommitteeChange={setSelectedCommittee}
         />
 
-        {/* Archive notice header if past year */}
         {isArchive && (
-          <div className="p-4 bg-selens-paper-alt border border-selens-paper-rule rounded-[3px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-selens-paper-ink">
-            <span className="flex items-center gap-2">
-              <Archive className="w-4 h-4 text-selens-yellow-ink shrink-0" />
+          <div className="m-surface flex flex-col sm:flex-row sm:items-center justify-between gap-3 m-text-6">
+            <span className="flex items-center gap-2 text-[#121315]">
+              <Archive className="w-4 h-4 text-[#4d5158] shrink-0" />
               <span>
-                Viewing archive records for <strong>A.Y. {selectedYear}</strong>
+                Viewing archive records for <strong className="font-medium">A.Y. {selectedYear}</strong>
               </span>
             </span>
             <button
               type="button"
               onClick={() => setSelectedYear(CURRENT_ACADEMIC_YEAR)}
-              className="min-h-[36px] sm:min-h-0 text-left font-bold underline decoration-selens-yellow decoration-2 underline-offset-4 hover:text-selens-paper-muted cursor-pointer"
+              className="m-link m-text-4 text-[#121315] w-fit cursor-pointer"
             >
               Back to current A.Y. {CURRENT_ACADEMIC_YEAR}
             </button>
@@ -179,17 +170,17 @@ export default function News({ initialCategory } = {}) {
         )}
 
         {loading ? (
-          <div className="divide-y divide-selens-paper-rule border-t-2 border-selens-paper-ink">
+          <div className="space-y-4">
             {[1, 2, 3].map((n) => (
-              <div key={n} className="h-24 bg-selens-paper-alt/70 my-3 rounded-[2px] animate-pulse" />
+              <div key={n} className="h-36 bg-white rounded-[20px] animate-pulse" />
             ))}
           </div>
         ) : error ? (
-          <div className="border-y border-red-300 bg-red-50 p-8 text-center text-sm text-red-800">
+          <div className="m-surface text-center m-text-6 text-red-700">
             {error}
           </div>
         ) : news.length === 0 ? (
-          <div className="border-y border-selens-paper-rule py-12 text-center text-sm text-selens-paper-muted space-y-3">
+          <div className="m-surface py-12 text-center m-text-6 text-[#4d5158] space-y-4">
             <p>
               {selectedYear === CURRENT_ACADEMIC_YEAR
                 ? `New updates for A.Y. ${CURRENT_ACADEMIC_YEAR} are coming soon.`
@@ -200,45 +191,45 @@ export default function News({ initialCategory } = {}) {
                 <button
                   type="button"
                   onClick={() => setSelectedYear(pastYear)}
-                  className="selens-editorial-link text-xs"
+                  className="m-btn-2 m-btn-2--mist cursor-pointer"
                 >
-                  View archive for A.Y. {pastYear}
+                  <span className="m-btn-2__label">View archive for A.Y. {pastYear}</span>
                 </button>
               </div>
             )}
           </div>
         ) : filteredNews.length === 0 ? (
-          <div className="border-y border-selens-paper-rule py-12 text-center text-sm text-selens-paper-muted">
+          <div className="m-surface py-12 text-center m-text-6 text-[#4d5158]">
             No news items matching the selected committee filter.
           </div>
         ) : (
-          <div className="divide-y divide-selens-paper-rule border-t-2 border-b border-selens-paper-ink">
+          <div className="grid grid-cols-1 gap-4">
             {filteredNews.map((item, idx) => (
               <Reveal
                 index={idx}
                 key={item.id}
-                className="py-6 sm:py-7 px-2 sm:px-3 hover:bg-selens-paper-alt/70 transition-colors grid grid-cols-1 md:grid-cols-12 gap-5 items-start md:items-center group"
+                className="m-surface grid grid-cols-1 md:grid-cols-12 gap-5 items-center transition-shadow hover:shadow-[0_22px_44px_-24px_rgba(18,19,21,0.45)] group"
               >
                 {item.thumbnail_url && (
                   <Link
                     to={`/news/${item.slug}`}
                     tabIndex={-1}
                     aria-hidden="true"
-                    className="md:col-span-3 rounded-[3px] overflow-hidden block"
+                    className="md:col-span-3 block"
                   >
                     <ImageFrame tone="paper" src={item.thumbnail_url} aspect="aspect-[16/10]" />
                   </Link>
                 )}
 
                 <div className={`${item.thumbnail_url ? 'md:col-span-7' : 'md:col-span-10'} min-w-0 space-y-2`}>
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-selens-paper-muted font-mono">
+                  <div className="flex flex-wrap items-center gap-2 m-text-6 text-[#4d5158]">
                     {item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR && (
-                      <span className="font-mono text-[11px] font-semibold border border-selens-paper-rule px-2 py-0.5 rounded-[2px]">
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#e7e8ea] text-[#121315] text-xs font-medium">
                         A.Y. {item.academic_year}
                       </span>
                     )}
                     {item.committee && (
-                      <span className="font-sans text-[11px] font-bold bg-selens-paper-ink text-selens-yellow px-2 py-0.5 rounded-[2px]">
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#121315] text-[#FFD100] text-xs font-medium">
                         {formatCommitteeLabel(item.committee)}
                       </span>
                     )}
@@ -255,21 +246,31 @@ export default function News({ initialCategory } = {}) {
                     )}
                   </div>
 
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-selens-paper-ink group-hover:underline decoration-selens-yellow decoration-2 underline-offset-4 line-clamp-2 break-words leading-snug">
-                    <Link to={`/news/${item.slug}`}>{item.title}</Link>
+                  <h2 className="m-text-5 text-[#121315] group-hover:underline underline-offset-4 line-clamp-2 break-words">
+                    <Link to={`/news/${item.slug}`} className="no-underline text-inherit">
+                      {item.title}
+                    </Link>
                   </h2>
 
                   {item.excerpt && (
-                    <p className="text-sm sm:text-base text-selens-paper-muted line-clamp-2 leading-relaxed">
+                    <p className="m-text-6 text-[#4d5158] line-clamp-2">
                       {item.excerpt}
                     </p>
                   )}
                 </div>
 
-                <div className="md:col-span-2 md:text-right shrink-0">
-                  <Link to={`/news/${item.slug}`} className="selens-editorial-link text-xs">
-                    <span>Read update</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                <div className="md:col-span-2 flex md:justify-end shrink-0">
+                  <Link
+                    to={`/news/${item.slug}`}
+                    aria-label={`Read ${item.title}`}
+                    className="m-icon-btn"
+                  >
+                    <span className="m-icon-btn__icon" aria-hidden="true">
+                      <ArrowUpRight className="w-4 h-4" />
+                    </span>
+                    <span className="m-icon-btn__icon" aria-hidden="true">
+                      <ArrowUpRight className="w-4 h-4" />
+                    </span>
                   </Link>
                 </div>
               </Reveal>

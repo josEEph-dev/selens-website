@@ -45,17 +45,18 @@ export default function People() {
   const [activeId, setActiveId] = useState(null)
   const [showTop, setShowTop] = useState(false)
   const lockUntil = useRef(0)
-  const navHeightRef = useRef(80)
+  const navHeightRef = useRef(76)
   const menuScrollRef = useRef(null)
   const tabRefs = useRef({})
 
-  // Measure the real navbar height with ResizeObserver and store in --nav-h
+  // Measure the real floating navbar height and store in --nav-h
   useEffect(() => {
-    const headerEl = document.querySelector('header')
+    const headerEl =
+      document.querySelector('header .hush-nav__bar') || document.querySelector('header')
     if (!headerEl) return
 
     const updateNavHeight = () => {
-      const h = Math.round(headerEl.getBoundingClientRect().height) || 80
+      const h = Math.round(headerEl.getBoundingClientRect().height) || 76
       navHeightRef.current = h
       document.documentElement.style.setProperty('--nav-h', `${h}px`)
     }
@@ -94,7 +95,6 @@ export default function People() {
     }
   }, [])
 
-  // Group people by category
   const categorized = useMemo(() => {
     const map = {}
     people.forEach((p) => {
@@ -106,7 +106,6 @@ export default function People() {
     return map
   }, [people])
 
-  // Build memoized lanyard badge items for every subgroup so scroll updates never re-create arrays
   const lanyardByCategory = useMemo(() => {
     const map = {}
     GROUPS.forEach((group) => {
@@ -137,18 +136,16 @@ export default function People() {
     return map
   }, [categorized])
 
-  // Determine non-empty groups for anchor menu and rendering
   const activeGroups = GROUPS.filter((g) =>
     g.subgroups.some((sg) => (categorized[sg.category] || []).length > 0)
   )
 
-  // Track which group is in view, and when to show "Back to top"
   useEffect(() => {
     if (activeGroups.length === 0) return
     const onScroll = () => {
       if (Date.now() < lockUntil.current) return
       setShowTop(window.scrollY > 600)
-      const navOffset = navHeightRef.current || 80
+      const navOffset = navHeightRef.current || 76
       let current = activeGroups[0].id
       for (const g of activeGroups) {
         const el = document.getElementById(g.id)
@@ -156,7 +153,6 @@ export default function People() {
           current = g.id
         }
       }
-      // At the very bottom of the page, the last group is the active one
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
         current = activeGroups[activeGroups.length - 1].id
       }
@@ -168,7 +164,6 @@ export default function People() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [people])
 
-  // Keep active tab scrolled horizontally into view inside the sticky menu
   useEffect(() => {
     if (!activeId) return
     const container = menuScrollRef.current
@@ -193,29 +188,29 @@ export default function People() {
       <div className="selens-container py-10 sm:py-14 space-y-12">
         {loading ? (
           <div className="space-y-8">
-            <div className="h-[340px] bg-neutral-100 border border-neutral-200 rounded-[4px] animate-pulse" />
-            <div className="h-[340px] bg-neutral-100 border border-neutral-200 rounded-[4px] animate-pulse" />
+            <div className="h-[340px] bg-[#d9dce0] rounded-[28px] animate-pulse" />
+            <div className="h-[340px] bg-[#d9dce0] rounded-[28px] animate-pulse" />
           </div>
         ) : error ? (
-          <div className="border border-red-200 bg-red-50 rounded-[4px] p-8 text-center text-sm text-red-800">
+          <div className="m-surface text-center m-text-6 text-red-700">
             {error}
           </div>
         ) : people.length === 0 ? (
-          <div className="border-y border-neutral-200 py-12 text-center text-sm text-neutral-600">
+          <div className="m-surface text-center py-12 m-text-6 text-[#4d5158]">
             The officer directory has not been published yet. Check back soon.
           </div>
         ) : (
           <>
-            {/* Sticky Group Menu */}
+            {/* Sticky Pill Group Menu */}
             {activeGroups.length > 0 && (
               <nav
-                className="sticky z-30 -mx-4 px-4 sm:mx-0 sm:px-0 bg-white/95 backdrop-blur-md border-b border-neutral-200"
-                style={{ top: 'var(--nav-h, 96px)' }}
+                className="sticky z-30 -mx-4 px-4 sm:mx-0 sm:px-0 py-3 bg-[#e7e8ea]/90 backdrop-blur-md"
+                style={{ top: 'calc(var(--nav-h, 76px) - 2px)' }}
                 aria-label="People Directory Navigation"
               >
                 <div
                   ref={menuScrollRef}
-                  className="flex items-center gap-2 overflow-x-auto whitespace-nowrap py-2.5 snap-x snap-mandatory selens-no-scrollbar selens-edge-fade"
+                  className="flex items-center gap-2 overflow-x-auto whitespace-nowrap snap-x snap-mandatory selens-no-scrollbar selens-edge-fade"
                 >
                   {activeGroups.map((group) => {
                     const isCurrent = activeId === group.id
@@ -233,13 +228,18 @@ export default function People() {
                             .getElementById(group.id)
                             ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                         }}
-                        className={`snap-start shrink-0 min-h-[42px] px-4 py-2 text-xs sm:text-sm font-semibold rounded-[4px] border transition-colors cursor-pointer ${
+                        className={`snap-start shrink-0 min-h-[42px] px-5 py-2 m-text-4 rounded-full transition-colors cursor-pointer ${
                           isCurrent
-                            ? 'bg-neutral-950 border-neutral-950 text-selens-yellow'
-                            : 'bg-white border-neutral-300 text-neutral-700 hover:border-neutral-950 hover:text-neutral-950'
+                            ? 'bg-[#121315] text-white'
+                            : 'bg-white text-[#121315] hover:bg-[#d9dce0]'
                         }`}
                       >
-                        {group.heading}
+                        <span className="inline-flex items-center gap-2">
+                          {isCurrent && (
+                            <span className="w-2 h-2 rounded-full bg-[#FFD100]" aria-hidden="true" />
+                          )}
+                          <span>{group.heading}</span>
+                        </span>
                       </button>
                     )
                   })}
@@ -247,13 +247,13 @@ export default function People() {
               </nav>
             )}
 
-            {/* Groups */}
+            {/* Branch Sections with Interactive TeamLanyardRail */}
             <div className="space-y-16">
               {activeGroups.map((group) => (
                 <section
                   key={group.id}
                   id={group.id}
-                  style={{ scrollMarginTop: 'calc(var(--nav-h, 96px) + 4.75rem)' }}
+                  style={{ scrollMarginTop: 'calc(var(--nav-h, 76px) + 5rem)' }}
                   className="space-y-8"
                 >
                   <SectionHeading
@@ -268,13 +268,13 @@ export default function People() {
                       if (items.length === 0) return null
 
                       return (
-                        <div key={subgroup.category} className="space-y-3">
+                        <div key={subgroup.category} className="space-y-3.5">
                           {subgroup.label && (
-                            <div className="flex items-baseline justify-between gap-3">
-                              <h3 className="font-serif text-base sm:text-lg font-bold text-neutral-900">
+                            <div className="flex items-baseline justify-between gap-3 px-1">
+                              <h3 className="m-text-5 text-[#121315]">
                                 {subgroup.label}
                               </h3>
-                              <span className="text-xs text-neutral-500">
+                              <span className="m-text-6 text-[#4d5158]">
                                 {items.length} {items.length === 1 ? 'member' : 'members'}
                               </span>
                             </div>
@@ -299,10 +299,12 @@ export default function People() {
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-6 right-6 z-40 min-h-[44px] inline-flex items-center gap-2 bg-neutral-950 text-selens-yellow text-sm font-bold px-4 py-2 rounded-[4px] border border-neutral-950 hover:bg-selens-yellow hover:text-neutral-950 hover:border-selens-yellow transition-colors cursor-pointer shadow-md"
+          className="fixed bottom-6 right-6 z-40 m-btn m-shadow"
         >
-          <ArrowUp className="w-4 h-4" />
-          <span>Back to top</span>
+          <span className="m-btn__label">
+            <ArrowUp className="w-4 h-4" />
+            <span>Back to top</span>
+          </span>
         </button>
       )}
     </div>

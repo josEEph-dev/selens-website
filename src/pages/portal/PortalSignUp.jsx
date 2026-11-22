@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/useAuth'
-import { PageHeader, Card } from '../../components/SharedUI'
+import { PageHeader } from '../../components/SharedUI'
 import { useNoIndex } from './useNoIndex'
 
 const SCHOOL_EMAIL_REGEX = /^[^@\s]+@msugensan\.edu\.ph$/i
@@ -84,35 +84,34 @@ export default function PortalSignUp() {
   return (
     <div id="main-content" className="selens-paper-page min-h-[75vh]">
       <PageHeader
-        eyebrow="Student Portal"
         title="Create Student Account"
         description="Register with your official MSU-General Santos email and student ID."
       />
 
       <div className="selens-container py-12 sm:py-16 flex justify-center">
-        <Card hover={false} className="max-w-lg w-full p-6 sm:p-8 space-y-6">
+        <div className="m-panel-light m-shadow max-w-lg w-full p-7 sm:p-9 space-y-6">
           {error && (
             <div
               role="alert"
-              className="rounded-[3px] border border-red-300 bg-red-50 px-4 py-3 text-sm font-sans text-red-800 leading-relaxed"
+              className="rounded-[14px] border border-red-200 bg-red-50 px-4 py-3 m-text-6 text-red-800"
             >
               {error}
             </div>
           )}
 
           {confirmationMessage ? (
-            <div className="space-y-4">
-              <div className="rounded-[3px] border-l-4 border-selens-yellow bg-selens-paper-alt px-4 py-4 text-sm font-sans text-selens-paper-ink leading-relaxed">
+            <div className="space-y-5">
+              <div className="rounded-[14px] border-l-4 border-[#FFD100] bg-[#e7e8ea] px-4 py-4 m-text-6 text-[#121315]">
                 {confirmationMessage}
               </div>
-              <Link to="/portal/signin" className="selens-btn-ink">
-                Go to Sign in
+              <Link to="/portal/signin" className="m-btn">
+                <span className="m-btn__label">Go to Sign in</span>
               </Link>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} noValidate className="space-y-5">
-              <div>
-                <label htmlFor="signup-full-name" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
+            <form onSubmit={handleSubmit} noValidate className="space-y-4">
+              <div className="m-field">
+                <label htmlFor="signup-full-name" className="m-field__label">
                   Full Name
                 </label>
                 <input
@@ -122,12 +121,12 @@ export default function PortalSignUp() {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Juan Dela Cruz"
-                  className="selens-input font-sans"
+                  className="m-field__control"
                 />
               </div>
 
-              <div>
-                <label htmlFor="signup-email" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
+              <div className="m-field">
+                <label htmlFor="signup-email" className="m-field__label">
                   School Email
                 </label>
                 <input
@@ -137,13 +136,13 @@ export default function PortalSignUp() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@msugensan.edu.ph"
-                  className="selens-input font-sans"
+                  className="m-field__control"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="signup-student-id" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
+                <div className="m-field">
+                  <label htmlFor="signup-student-id" className="m-field__label">
                     Student ID
                   </label>
                   <input
@@ -153,20 +152,20 @@ export default function PortalSignUp() {
                     value={studentId}
                     onChange={(e) => setStudentId(e.target.value)}
                     placeholder="2023-2774"
-                    className="selens-input font-sans"
+                    className="m-field__control"
                   />
-                  <p className="mt-1 text-xs font-sans text-selens-paper-muted">Example: 2023-2774</p>
+                  <p className="text-xs text-[#4d5158]">Example: 2023-2774</p>
                 </div>
 
-                <div>
-                  <label htmlFor="signup-year-level" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
+                <div className="m-field">
+                  <label htmlFor="signup-year-level" className="m-field__label">
                     Year Level
                   </label>
                   <select
                     id="signup-year-level"
                     value={yearLevel}
                     onChange={(e) => setYearLevel(e.target.value)}
-                    className="selens-input font-sans cursor-pointer"
+                    className="m-field__control cursor-pointer"
                   >
                     {YEAR_LEVELS.map((level) => (
                       <option key={level} value={level}>
@@ -177,8 +176,8 @@ export default function PortalSignUp() {
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="signup-password" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
+              <div className="m-field">
+                <label htmlFor="signup-password" className="m-field__label">
                   Password
                 </label>
                 <input
@@ -189,16 +188,16 @@ export default function PortalSignUp() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Minimum 8 characters"
-                  className="selens-input font-sans"
+                  className="m-field__control"
                 />
               </div>
 
-              <label className="flex items-start gap-3 text-xs sm:text-sm font-sans text-selens-paper-muted leading-relaxed cursor-pointer">
+              <label className="flex items-start gap-3 m-text-6 text-[#4d5158] cursor-pointer pt-1">
                 <input
                   type="checkbox"
                   checked={agreed}
                   onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-1 h-4 w-4 shrink-0 rounded-[2px] border border-selens-paper-rule accent-selens-paper-ink"
+                  className="mt-1 h-4 w-4 shrink-0 rounded border border-[#cdd0d4] accent-[#121315]"
                 />
                 <span className="break-words">
                   I agree that SELENS may use my name, school email, student ID, and year level to run student services. {'Questions about your data? Contact SELENS at iieeasteeg@msugensan.edu.ph or through facebook at https://www.facebook.com/selensmsugsc.'}
@@ -208,23 +207,25 @@ export default function PortalSignUp() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="selens-btn-ink w-full disabled:opacity-50"
+                className="m-btn w-full"
               >
-                {submitting ? 'Creating account...' : 'Create account'}
+                <span className="m-btn__label">
+                  {submitting ? 'Creating account...' : 'Create account'}
+                </span>
               </button>
 
-              <p className="text-center text-sm font-sans text-selens-paper-muted pt-1">
+              <p className="text-center m-text-6 text-[#4d5158] pt-1">
                 Already have an account?{' '}
                 <Link
                   to="/portal/signin"
-                  className="text-selens-paper-ink underline decoration-selens-yellow decoration-2 underline-offset-4 font-semibold"
+                  className="m-link text-[#121315] font-medium"
                 >
                   Sign in
                 </Link>
               </p>
             </form>
           )}
-        </Card>
+        </div>
       </div>
     </div>
   )

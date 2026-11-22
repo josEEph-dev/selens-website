@@ -41,11 +41,10 @@ export default function AccomplishmentDetail() {
 
   if (loading) {
     return (
-      <div id="main-content" className="selens-paper-page min-h-screen py-16">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-4">
-          <div className="h-4 w-32 bg-selens-paper-alt rounded-[2px] animate-pulse" />
-          <div className="h-10 w-3/4 bg-selens-paper-alt rounded-[2px] animate-pulse" />
-          <div className="h-64 bg-selens-paper-alt rounded-[3px] animate-pulse" />
+      <div id="main-content" className="selens-paper-page min-h-screen pt-28 pb-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-5">
+          <div className="h-10 w-44 bg-white rounded-full animate-pulse" />
+          <div className="h-96 bg-white rounded-[28px] animate-pulse" />
         </div>
       </div>
     )
@@ -53,17 +52,15 @@ export default function AccomplishmentDetail() {
 
   if (error || !item) {
     return (
-      <div id="main-content" className="selens-paper-page min-h-[70vh] flex items-center justify-center px-4 py-16">
-        <div className="max-w-md w-full text-center space-y-4 py-10 border-y-2 border-selens-paper-ink">
-          <h2 className="font-serif font-bold text-xl text-selens-paper-ink">
-            Record not found
-          </h2>
-          <p className="text-sm text-selens-paper-muted">
+      <div id="main-content" className="selens-paper-page min-h-[75vh] flex items-center justify-center px-4 pt-28 pb-16">
+        <div className="m-panel-light m-shadow max-w-md w-full text-center space-y-5 p-8 sm:p-10">
+          <h2 className="m-text-5 text-[#121315]">Record not found</h2>
+          <p className="m-text-6 text-[#4d5158]">
             {error || 'The accomplishment entry could not be found.'}
           </p>
-          <div className="pt-2">
-            <Link to="/accomplishments" className="selens-btn-ink">
-              Back to accomplishments
+          <div>
+            <Link to="/accomplishments" className="m-btn">
+              <span className="m-btn__label">Back to accomplishments</span>
             </Link>
           </div>
         </div>
@@ -82,86 +79,76 @@ export default function AccomplishmentDetail() {
   const isArchive = item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR
 
   return (
-    <div id="main-content" className="selens-paper-page min-h-screen">
-      {/* Back link */}
-      <div className="border-b border-selens-paper-rule bg-selens-paper-alt py-3">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <Link
-            to="/accomplishments"
-            className="min-h-[36px] inline-flex items-center gap-2 text-sm font-semibold text-selens-paper-ink hover:underline decoration-selens-yellow decoration-2 underline-offset-4"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to accomplishments</span>
+    <div id="main-content" className="selens-paper-page min-h-screen pt-24 sm:pt-28 pb-14">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6">
+        <div>
+          <Link to="/accomplishments" className="m-btn-2">
+            <span className="m-btn-2__label">
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to accomplishments</span>
+            </span>
           </Link>
         </div>
-      </div>
 
-      <article className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-8">
-        {/* Header Block */}
-        <header className="space-y-4">
-          <div className="flex flex-wrap items-center gap-3 text-xs text-selens-paper-muted font-mono">
-            {isArchive && (
-              <span className="border border-selens-paper-rule px-2 py-0.5 rounded-[2px]">
-                Archive: A.Y. {item.academic_year}
-              </span>
-            )}
-            {item.committee && (
-              <div className="flex items-center gap-1.5 font-sans">
-                <Building className="w-3.5 h-3.5 text-selens-paper-ink shrink-0" />
-                <span className="font-bold text-selens-paper-ink">
-                  {formatCommitteeLabel(item.committee)}
+        <article className="m-panel-light m-shadow p-6 sm:p-12 space-y-8">
+          <header className="space-y-4">
+            <div className="flex flex-wrap items-center gap-2.5 m-text-6 text-[#4d5158]">
+              {isArchive && (
+                <span className="px-3 py-0.5 rounded-full bg-[#e7e8ea] text-[#121315] text-xs font-medium">
+                  Archive: A.Y. {item.academic_year}
                 </span>
-              </div>
-            )}
-            {accomplishedDate && (
-              <div className="flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-selens-paper-ink shrink-0" />
-                <span>{accomplishedDate}</span>
-              </div>
-            )}
-            {item.category && (
-              <div className="flex items-center gap-1.5">
-                <Tag className="w-3.5 h-3.5 text-selens-paper-ink shrink-0" />
-                <span className="capitalize">{item.category.replace('_', ' ')}</span>
-              </div>
-            )}
-          </div>
+              )}
+              {item.committee && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#121315] text-[#FFD100] text-xs font-medium">
+                  <Building className="w-3.5 h-3.5 shrink-0" />
+                  <span>{formatCommitteeLabel(item.committee)}</span>
+                </span>
+              )}
+              {accomplishedDate && (
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-[#121315] shrink-0" />
+                  <span>{accomplishedDate}</span>
+                </div>
+              )}
+              {item.category && (
+                <div className="flex items-center gap-1.5">
+                  <Tag className="w-3.5 h-3.5 text-[#121315] shrink-0" />
+                  <span className="capitalize">{item.category.replace('_', ' ')}</span>
+                </div>
+              )}
+            </div>
 
-          <h1 className="font-serif selens-fluid-h1 font-bold text-selens-paper-ink break-words">
-            {item.title}
-          </h1>
+            <h1 className="m-text-3 text-[#121315] break-words">
+              {item.title}
+            </h1>
 
-          {item.summary && (
-            <p className="max-w-prose text-base sm:text-lg text-selens-paper-muted font-sans leading-relaxed border-l-4 border-selens-yellow pl-4 italic">
-              {item.summary}
-            </p>
+            {item.summary && (
+              <p className="max-w-prose text-base sm:text-lg text-[#4d5158] leading-relaxed border-l-[3px] border-[#FFD100] pl-4">
+                {item.summary}
+              </p>
+            )}
+          </header>
+
+          {item.image_url && (
+            <ImageFrame tone="paper" src={item.image_url} alt={item.title} className="rounded-[20px]" />
           )}
-        </header>
 
-        {/* Responsive 16:9 Hero image (only when uploaded) */}
-        {item.image_url && (
-          <div className="rounded-[3px] overflow-hidden">
-            <ImageFrame tone="paper" src={item.image_url} alt={item.title} />
-          </div>
-        )}
+          {item.body && (
+            <div className="selens-prose max-w-prose whitespace-pre-line break-words border-t border-[#cdd0d4] pt-8">
+              {item.body}
+            </div>
+          )}
 
-        {/* Body content (clean archival measure) */}
-        {item.body && (
-          <div className="selens-prose max-w-prose font-sans whitespace-pre-line break-words border-t border-selens-paper-rule pt-8">
-            {item.body}
-          </div>
-        )}
-
-        {/* Footer Navigation */}
-        <footer className="border-t-2 border-selens-paper-ink pt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <span className="font-mono text-xs text-selens-paper-muted">
-            Society of Electrical Engineering Students, MSU-GSC · A.Y. {item.academic_year || CURRENT_ACADEMIC_YEAR}
-          </span>
-          <Link to="/accomplishments" className="selens-btn-paper-outline self-start sm:self-auto">
-            View all accomplishments
-          </Link>
-        </footer>
-      </article>
+          <footer className="border-t border-[#cdd0d4] pt-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <span className="m-text-6 text-[#4d5158]">
+              Society of Electrical Engineering Students, MSU-GSC · A.Y. {item.academic_year || CURRENT_ACADEMIC_YEAR}
+            </span>
+            <Link to="/accomplishments" className="m-btn self-start sm:self-auto">
+              <span className="m-btn__label">View all accomplishments</span>
+            </Link>
+          </footer>
+        </article>
+      </div>
     </div>
   )
 }

@@ -1,228 +1,145 @@
-import { Link } from 'react-router-dom'
-import { Mail, MapPin, Globe } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
 import { CURRENT_ACADEMIC_YEAR } from '../lib/config'
-
-function FacebookIcon(props) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="16"
-      height="16"
-      stroke="currentColor"
-      strokeWidth="2"
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-    </svg>
-  )
-}
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+  const { pathname } = useLocation()
+  const isAdminRoute = pathname.startsWith('/dashboard')
 
   return (
-    <footer className="w-full bg-selens-black border-t-2 border-selens-yellow text-neutral-300 text-sm">
-      <div className="selens-container py-12 sm:py-16 space-y-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 divide-y divide-selens-line md:divide-y-0">
-          {/* Org Identity & Contact */}
-          <div className="lg:col-span-2 space-y-4 pb-2 md:pb-0">
-            <div className="flex items-center gap-3">
-              <img
-                src="/website-assets/university-seal.png"
-                alt="MSU-GSC Seal"
-                className="h-10 w-10 object-contain"
-              />
-              <img
-                src="/website-assets/coe-logo.png"
-                alt="College of Engineering Logo"
-                className="h-10 w-10 object-contain"
-              />
-              <img
-                src="/website-assets/selens-logo.png"
-                alt="SELENS Logo"
-                className="h-10 w-10 object-contain"
-              />
-            </div>
-            <div>
-              <h3 className="font-serif font-bold text-base text-selens-white">
-                Society of Electrical Engineering Students
-              </h3>
-              <p className="text-sm text-neutral-400 mt-1.5 leading-relaxed">
-                College of Engineering, Mindanao State University - General Santos<br />
-                Fatima, General Santos City, 9500 Philippines
-              </p>
-            </div>
-            <div className="space-y-1.5 text-xs text-neutral-400 pt-1">
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-selens-yellow shrink-0" />
-                <a
-                  href="mailto:iieeasteeg@msugensan.edu.ph"
-                  className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors"
-                >
-                  iieeasteeg@msugensan.edu.ph
-                </a>
-              </div>
-              <div className="flex items-center gap-2 min-h-[28px]">
-                <MapPin className="w-4 h-4 text-selens-yellow shrink-0" />
-                <span>DEE Office, College of Engineering Building</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 pt-2">
+    <div className={isAdminRoute ? 'bg-selens-black pt-8' : 'bg-[#e7e8ea] pt-12 sm:pt-16'}>
+      <footer id="footer" className="hush-footer hush-dark-scope">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
+          {/* Column 1: Explore */}
+          <div className="grid gap-2.5 content-start">
+            <h2 className="m-text-4 text-[#a2a7ae] mb-2">Explore</h2>
+            <Link to="/about" className="m-link m-text-6 text-white w-fit">
+              About SELENS
+            </Link>
+            <Link to="/people" className="m-link m-text-6 text-white w-fit">
+              People &amp; Leadership
+            </Link>
+            <Link to="/projects" className="m-link m-text-6 text-white w-fit">
+              Projects &amp; Initiatives
+            </Link>
+            <a
+              href="/website-assets/constitution-and-by-laws-of-selens.pdf"
+              download
+              className="m-link m-text-6 text-white w-fit"
+            >
+              Constitution (PDF)
+            </a>
+          </div>
+
+          {/* Column 2: News & Honors */}
+          <div className="grid gap-2.5 content-start">
+            <h2 className="m-text-4 text-[#a2a7ae] mb-2">News &amp; Honors</h2>
+            <Link to="/news" className="m-link m-text-6 text-white w-fit">
+              News &amp; Events
+            </Link>
+            <Link to="/news/student-activities" className="m-link m-text-6 text-white w-fit">
+              Student Activities
+            </Link>
+            <Link to="/accomplishments" className="m-link m-text-6 text-white w-fit">
+              Accomplishments
+            </Link>
+            <Link to="/topnotchers" className="m-link m-text-6 text-white w-fit">
+              Legion of Topnotchers
+            </Link>
+            <Link to="/awards" className="m-link m-text-6 text-white w-fit">
+              Accreditations &amp; Awards
+            </Link>
+            <Link to="/faq" className="m-link m-text-6 text-white w-fit">
+              FAQ
+            </Link>
+          </div>
+
+          {/* Column 3: Portals & Programs */}
+          <div className="grid gap-2.5 content-start">
+            <h2 className="m-text-4 text-[#a2a7ae] mb-2">Student Portal</h2>
+            <Link to="/portal" className="m-link m-text-6 text-white w-fit">
+              Portal Home
+            </Link>
+            <Link to="/portal/teechpoints" className="m-link m-text-6 text-white w-fit">
+              TEEchPoints Tracking
+            </Link>
+            <Link to="/portal/documents" className="m-link m-text-6 text-white w-fit">
+              Document Requests
+            </Link>
+            <Link to="/login" className="m-link m-text-6 text-white w-fit">
+              Officer Login
+            </Link>
+          </div>
+
+          {/* Column 4: Visit & Talk */}
+          <div className="grid gap-2.5 content-start">
+            <h2 className="m-text-4 text-[#a2a7ae] mb-2">Visit &amp; Contact</h2>
+            <p className="m-text-6 text-[#a2a7ae]">
+              DEE Office, College of Engineering Building<br />
+              Mindanao State University – General Santos<br />
+              Fatima, General Santos City, 9500
+            </p>
+            <a
+              href="mailto:iieeasteeg@msugensan.edu.ph"
+              className="m-link m-text-6 text-white w-fit mt-1"
+            >
+              iieeasteeg@msugensan.edu.ph
+            </a>
+            <div className="flex flex-wrap items-center gap-4 pt-1">
               <a
                 href="https://www.facebook.com/selensmsugsc"
                 target="_blank"
                 rel="noreferrer"
-                className="w-10 h-10 inline-flex items-center justify-center border border-selens-line rounded-[3px] text-neutral-300 hover:text-selens-yellow hover:border-selens-yellow transition-colors"
-                aria-label="Facebook Page"
+                className="m-link m-text-6 text-white w-fit"
               >
-                <FacebookIcon />
+                Facebook
               </a>
               <a
                 href="https://msugensan.edu.ph"
                 target="_blank"
                 rel="noreferrer"
-                className="w-10 h-10 inline-flex items-center justify-center border border-selens-line rounded-[3px] text-neutral-300 hover:text-selens-yellow hover:border-selens-yellow transition-colors"
-                aria-label="MSU-GSC Official Website"
+                className="m-link m-text-6 text-white w-fit"
               >
-                <Globe className="w-4 h-4" />
+                msugensan.edu.ph
               </a>
             </div>
           </div>
-
-          {/* Col 1: About */}
-          <div className="space-y-3 pt-6 md:pt-0 md:border-l md:border-selens-line md:pl-6">
-            <h4 className="font-serif font-bold text-selens-white text-sm">
-              About
-            </h4>
-            <ul className="space-y-1 text-sm text-neutral-400">
-              <li>
-                <Link to="/about" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  About SELENS
-                </Link>
-              </li>
-              <li>
-                <Link to="/people" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  People &amp; Advisers
-                </Link>
-              </li>
-              <li>
-                <a
-                  href="/website-assets/constitution-and-by-laws-of-selens.pdf"
-                  download
-                  className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors"
-                >
-                  Constitution (PDF)
-                </a>
-              </li>
-              <li>
-                <Link to="/about#mission" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  Mission &amp; Vision
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 2: Services & Portals */}
-          <div className="space-y-3 pt-6 md:pt-0 lg:border-l lg:border-selens-line lg:pl-6">
-            <h4 className="font-serif font-bold text-selens-white text-sm">
-              Services &amp; Portals
-            </h4>
-            <ul className="space-y-1 text-sm text-neutral-400">
-              <li>
-                <Link to="/portal" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  Student Portal
-                </Link>
-              </li>
-              <li>
-                <Link to="/portal/teechpoints" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  TEEchPoints Tracking
-                </Link>
-              </li>
-              <li>
-                <Link to="/portal/documents" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  Document Requests
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 3: News & Info */}
-          <div className="space-y-3 pt-6 md:pt-0 md:border-l md:border-selens-line md:pl-6">
-            <h4 className="font-serif font-bold text-selens-white text-sm">
-              News &amp; Info
-            </h4>
-            <ul className="space-y-1 text-sm text-neutral-400">
-              <li>
-                <Link to="/news" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  News &amp; Events
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/news?category=student_activities"
-                  className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors"
-                >
-                  Student Activities
-                </Link>
-              </li>
-              <li>
-                <Link to="/topnotchers" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  Legion of Topnotchers
-                </Link>
-              </li>
-              <li>
-                <Link to="/awards" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  Accreditations &amp; Awards
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  FAQ
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 4: Projects & Initiatives */}
-          <div className="space-y-3 pt-6 md:pt-0 lg:border-l lg:border-selens-line lg:pl-6">
-            <h4 className="font-serif font-bold text-selens-white text-sm">
-              Projects &amp; Initiatives
-            </h4>
-            <ul className="space-y-1 text-sm text-neutral-400">
-              <li>
-                <Link to="/projects#electrostock" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  ElectroStock
-                </Link>
-              </li>
-              <li>
-                <Link to="/projects#eengiquest" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  EEngiquest
-                </Link>
-              </li>
-              <li>
-                <Link to="/projects#teechpoints" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  TEEchPoints Initiative
-                </Link>
-              </li>
-              <li>
-                <Link to="/projects#outreach" className="min-h-[32px] inline-flex items-center hover:text-selens-yellow transition-colors">
-                  Community Outreach
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
 
-        {/* Bottom Bar: Copyright */}
-        <div className="border-t border-selens-line pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-400">
-          <div>
-            &copy; {currentYear} Society of Electrical Engineering Students, MSU-GSC • A.Y. {CURRENT_ACADEMIC_YEAR}
+        {/* Giant Edge-to-Edge Wordmark (Hush Signature) */}
+        <p className="hush-ft-word" aria-hidden="true">
+          SELENS<span className="text-[#FFD100]">.</span>
+        </p>
+
+        {/* Bottom Legal & Official Seals */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-white/10 pt-5 m-text-6 text-[#a2a7ae]">
+          <div className="flex items-center gap-3">
+            <img
+              src="/website-assets/university-seal.png"
+              alt="MSU-GSC Seal"
+              className="h-7 w-7 object-contain"
+            />
+            <img
+              src="/website-assets/coe-logo.png"
+              alt="College of Engineering Logo"
+              className="h-7 w-7 object-contain"
+            />
+            <img
+              src="/website-assets/selens-logo.png"
+              alt="SELENS Logo"
+              className="h-7 w-7 object-contain"
+            />
+            <span className="text-white/90">
+              Society of Electrical Engineering Students
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <span>&copy; {currentYear} SELENS · MSU-General Santos</span>
+            <span>A.Y. {CURRENT_ACADEMIC_YEAR}</span>
           </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </div>
   )
 }

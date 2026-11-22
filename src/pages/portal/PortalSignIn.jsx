@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/useAuth'
-import { PageHeader, Card } from '../../components/SharedUI'
+import { PageHeader } from '../../components/SharedUI'
 import { useNoIndex } from './useNoIndex'
 
 export default function PortalSignIn() {
@@ -42,25 +42,24 @@ export default function PortalSignIn() {
   return (
     <div id="main-content" className="selens-paper-page min-h-[75vh]">
       <PageHeader
-        eyebrow="Student Portal"
         title="Sign In"
         description="Sign in to your SELENS account."
       />
 
       <div className="selens-container py-12 sm:py-16 flex justify-center">
-        <Card hover={false} className="max-w-md w-full p-6 sm:p-8 space-y-6">
+        <div className="m-panel-light m-shadow max-w-md w-full p-7 sm:p-9 space-y-6">
           {error && (
             <div
               role="alert"
-              className="rounded-[3px] border border-red-300 bg-red-50 px-4 py-3 text-sm font-sans text-red-800 leading-relaxed"
+              className="rounded-[14px] border border-red-200 bg-red-50 px-4 py-3 m-text-6 text-red-800"
             >
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} noValidate className="space-y-5">
-            <div>
-              <label htmlFor="signin-email" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
+            <div className="m-field">
+              <label htmlFor="signin-email" className="m-field__label">
                 Email
               </label>
               <input
@@ -71,18 +70,18 @@ export default function PortalSignIn() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="selens-input font-sans"
+                className="m-field__control"
               />
             </div>
 
-            <div>
-              <div className="flex items-center justify-between mb-1.5 gap-2">
-                <label htmlFor="signin-password" className="block text-sm font-sans font-semibold text-selens-paper-ink">
+            <div className="m-field">
+              <div className="flex items-center justify-between gap-2">
+                <label htmlFor="signin-password" className="m-field__label">
                   Password
                 </label>
                 <Link
                   to="/portal/forgot"
-                  className="text-xs font-sans font-semibold text-selens-paper-ink underline decoration-selens-yellow decoration-2 underline-offset-4 hover:text-selens-paper-muted"
+                  className="m-link text-xs font-medium text-[#121315]"
                 >
                   Forgot password?
                 </Link>
@@ -95,29 +94,31 @@ export default function PortalSignIn() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="selens-input font-sans"
+                className="m-field__control"
               />
             </div>
 
             <button
               type="submit"
               disabled={submitting}
-              className="selens-btn-ink w-full disabled:opacity-50"
+              className="m-btn w-full"
             >
-              {submitting ? 'Signing in...' : 'Sign in'}
+              <span className="m-btn__label">
+                {submitting ? 'Signing in...' : 'Sign in'}
+              </span>
             </button>
 
-            <p className="text-center text-sm font-sans text-selens-paper-muted pt-1">
+            <p className="text-center m-text-6 text-[#4d5158] pt-1">
               Need a student account?{' '}
               <Link
                 to="/portal/signup"
-                className="text-selens-paper-ink underline decoration-selens-yellow decoration-2 underline-offset-4 font-semibold"
+                className="m-link text-[#121315] font-medium"
               >
                 Create account
               </Link>
             </p>
           </form>
-        </Card>
+        </div>
       </div>
     </div>
   )

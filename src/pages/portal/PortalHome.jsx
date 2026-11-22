@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/useAuth'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { PageHeader, Card } from '../../components/SharedUI'
+import { PageHeader } from '../../components/SharedUI'
+import { ArrowUpRight } from 'lucide-react'
 
 const PORTAL_CARDS = [
   {
@@ -50,10 +51,10 @@ export default function PortalHome() {
 
   if (loading) {
     return (
-      <div id="main-content" className="selens-paper-page flex min-h-[65vh] items-center justify-center">
+      <div id="main-content" className="selens-paper-page flex min-h-[70vh] items-center justify-center pt-24">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-[3px] border-2 border-selens-paper-rule border-t-selens-paper-ink" />
-          <p className="text-sm font-sans text-selens-paper-muted">Loading student portal...</p>
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#cdd0d4] border-t-[#121315]" />
+          <p className="m-text-6 text-[#4d5158]">Loading student portal...</p>
         </div>
       </div>
     )
@@ -67,26 +68,29 @@ export default function PortalHome() {
           description="Access your SELENS student account, services, and upcoming digital tools."
         />
 
-        <div className="selens-container py-14 flex justify-center">
-          <Card className="max-w-xl w-full space-y-6 p-6 sm:p-8" hover={false}>
+        <div className="selens-container py-12 sm:py-16 flex justify-center">
+          <div className="m-panel-light m-shadow max-w-xl w-full p-7 sm:p-10 space-y-6">
             <div className="space-y-2.5">
-              <h2 className="font-serif text-2xl font-bold text-neutral-950">
+              <h2 className="m-text-5 text-[#121315]">
                 Welcome to the SELENS Student Portal
               </h2>
-              <p className="text-sm sm:text-base text-neutral-600 font-sans leading-relaxed">
+              <p className="m-text text-[#4d5158]">
                 Sign in with your SELENS account or create a new student account using your @msugensan.edu.ph email address.
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <Link to="/portal/signin" className="selens-btn-ink justify-center">
-                Sign in
+            <div className="flex flex-wrap gap-3 pt-1">
+              <Link to="/portal/signin" className="m-btn">
+                <span className="m-btn__label">Sign in</span>
               </Link>
-              <Link to="/portal/signup" className="selens-btn-paper-outline justify-center">
-                Create account
+              <Link to="/portal/signup" className="m-btn-2 m-btn-2--mist">
+                <span className="m-btn-2__label">Create account</span>
+                <span className="m-btn-2__icon" aria-hidden="true">
+                  <ArrowUpRight className="w-4 h-4" />
+                </span>
               </Link>
             </div>
-          </Card>
+          </div>
         </div>
       </div>
     )
@@ -115,57 +119,65 @@ export default function PortalHome() {
         title="Student Portal"
         description="Your SELENS member dashboard and student services."
         action={
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             {isOfficer && (
-              <Link to="/dashboard" className="selens-btn-ink text-sm">
-                Officer Dashboard
+              <Link to="/dashboard" className="m-btn-2 m-btn-2--dark">
+                <span className="m-btn-2__label">Officer Dashboard</span>
+                <span className="m-btn-2__icon" aria-hidden="true">
+                  <ArrowUpRight className="w-4 h-4" />
+                </span>
               </Link>
             )}
             <button
               type="button"
               onClick={signOut}
-              className="selens-btn-paper-outline text-sm"
+              className="m-btn-2 m-btn-2--dark cursor-pointer"
             >
-              Sign out
+              <span className="m-btn-2__label">Sign out</span>
             </button>
           </div>
         }
       />
 
-      <div className="selens-container py-10 space-y-10">
-        <Card hover={false} className="space-y-4 p-6 sm:p-8">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-neutral-950 break-words">
+      <div className="selens-container py-10 sm:py-14 space-y-8">
+        <div className="m-panel-light m-shadow p-7 sm:p-10 space-y-6">
+          <h2 className="m-text-3 text-[#121315] break-words">
             Welcome, {displayName}
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-selens-paper-rule">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-5 border-t border-[#cdd0d4]">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-wider text-selens-paper-muted">Email</p>
-              <p className="text-sm font-semibold text-selens-paper-ink font-sans mt-1 break-all">{displayEmail}</p>
+              <p className="m-text-6 text-[#4d5158]">Email</p>
+              <p className="m-text font-medium text-[#121315] mt-1 break-all">{displayEmail}</p>
             </div>
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-wider text-selens-paper-muted">Student ID</p>
-              <p className="text-sm font-mono font-semibold text-selens-paper-ink mt-1">{displayStudentId}</p>
+              <p className="m-text-6 text-[#4d5158]">Student ID</p>
+              <p className="m-text font-medium text-[#121315] mt-1 tabular-nums">{displayStudentId}</p>
             </div>
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-wider text-selens-paper-muted">Year Level</p>
-              <p className="text-sm font-semibold text-selens-paper-ink font-sans mt-1">{displayYearLevel}</p>
+              <p className="m-text-6 text-[#4d5158]">Year Level</p>
+              <p className="m-text font-medium text-[#121315] mt-1">{displayYearLevel}</p>
             </div>
           </div>
-        </Card>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {PORTAL_CARDS.map((item) => (
-            <div key={item.title} className="border border-neutral-200 rounded-[4px] bg-white p-6 space-y-2.5">
-              <div className="flex items-center justify-between gap-2">
-                <h3 className="font-serif text-lg font-bold text-neutral-950">{item.title}</h3>
-                <span className="text-[11px] font-bold bg-neutral-950 text-selens-yellow px-2 py-0.5 rounded-[2px] shrink-0">
+            <div key={item.title} className="m-surface flex flex-col justify-between gap-5">
+              <div className="flex items-center justify-between gap-3">
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#e7e8ea] m-text-4 text-[#121315]">
+                  {item.num}
+                </span>
+                <span className="px-3 py-1 rounded-full bg-[#121315] text-[#FFD100] text-xs font-medium shrink-0">
                   {item.badge}
                 </span>
               </div>
-              <p className="text-sm text-neutral-600 font-sans leading-relaxed">
-                {item.description}
-              </p>
+              <div className="space-y-1.5">
+                <h3 className="m-text-5 text-[#121315]">{item.title}</h3>
+                <p className="m-text-6 text-[#4d5158]">
+                  {item.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>

@@ -11,16 +11,13 @@ export default function CommitteeFilter({
 }) {
   const groups = ['Executive / Appointive', 'Legislative', 'Judiciary / COMELEC', 'General']
 
-  // Count items per group in the current selection
   const groupCounts = groups.reduce((acc, g) => {
     acc[g] = items.filter((item) => getGroupForCommittee(item.committee) === g).length
     return acc
   }, {})
 
-  // Available groups are those with > 0 items
   const visibleGroups = groups.filter((g) => groupCounts[g] > 0)
 
-  // If there are no groups with items or only 1 item total, or all is empty, we still render All if items exist
   if (items.length === 0 || visibleGroups.length === 0) {
     return null
   }
@@ -29,9 +26,9 @@ export default function CommitteeFilter({
 
   return (
     <div className={`space-y-3 min-w-0 ${className}`}>
-      {/* First row: Group chips */}
-      <div className="space-y-1.5 sm:space-y-0 sm:flex sm:items-center sm:gap-3">
-        <span className="text-xs font-semibold uppercase tracking-wider selens-filter-label block sm:inline shrink-0">
+      {/* First row: Group pills */}
+      <div className="space-y-2 sm:space-y-0 sm:flex sm:items-center sm:gap-3">
+        <span className="m-text-6 font-medium selens-filter-label block sm:inline shrink-0">
           Group
         </span>
         <div className="selens-chip-row" role="group" aria-label="Filter by group">
@@ -66,8 +63,8 @@ export default function CommitteeFilter({
 
       {/* Second row: Legislative committees if Legislative is selected */}
       {selectedGroup === 'Legislative' && (
-        <div className="space-y-1.5 sm:space-y-0 sm:flex sm:items-center sm:gap-3 sm:pl-4 sm:border-l-2 sm:border-selens-yellow">
-          <span className="text-xs font-semibold uppercase tracking-wider selens-filter-label block sm:inline shrink-0">
+        <div className="space-y-2 sm:space-y-0 sm:flex sm:items-center sm:gap-3 sm:pl-4 sm:border-l-2 sm:border-[#FFD100]">
+          <span className="m-text-6 font-medium selens-filter-label block sm:inline shrink-0">
             Committees
           </span>
           <div className="selens-chip-row" role="group" aria-label="Filter by committee">
