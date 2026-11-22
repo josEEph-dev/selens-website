@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ProtectedRoute from './components/ProtectedRoute'
 import BackToTop from './components/BackToTop'
+import ScrollToTop from './components/ScrollToTop'
 
 // Public Pages
 import Home from './pages/Home'
@@ -74,6 +75,7 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <div className="min-h-screen flex flex-col bg-selens-black text-selens-white selection:bg-selens-yellow selection:text-selens-black">
           <Navbar />
           <main className="flex-grow">

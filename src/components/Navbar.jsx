@@ -59,6 +59,7 @@ export default function Navbar() {
   useEffect(() => {
     if (isAdminRoute) return undefined
     let rafId = 0
+    lastYRef.current = window.scrollY
 
     const onScroll = () => {
       if (rafId) return
@@ -82,7 +83,7 @@ export default function Navbar() {
       window.removeEventListener('scroll', onScroll)
       if (rafId) window.cancelAnimationFrame(rafId)
     }
-  }, [isAdminRoute])
+  }, [isAdminRoute, location.pathname])
 
   // Escape key & scroll lock when full-screen menu is open
   useEffect(() => {
