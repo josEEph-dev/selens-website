@@ -12,9 +12,9 @@ export { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Reveal }
  * - Faint waveform accent (hero SVG at low opacity) + subtle radial glow
  * Props unchanged: { title, description, action }
  */
-export function PageHeader({ title, description, action }) {
+export function PageHeader({ title, description, action, eyebrow }) {
   return (
-    <div className="relative overflow-hidden border-b border-selens-line bg-selens-black selens-header-glow">
+    <div className="relative overflow-hidden border-b-2 border-selens-yellow bg-selens-black text-selens-white selens-header-glow">
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <Waveform intensity={0.45} />
         <div
@@ -22,12 +22,17 @@ export function PageHeader({ title, description, action }) {
           style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, #000000 100%)' }}
         />
       </div>
-      <div className="relative selens-container pt-12 pb-10 sm:pt-16 sm:pb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+      <div className="relative selens-container pt-12 pb-10 sm:pt-16 sm:pb-14 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div className="min-w-0 max-w-3xl">
+          {eyebrow && (
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-selens-yellow mb-3">
+              {eyebrow}
+            </p>
+          )}
           <h1 className="font-serif selens-fluid-h1 font-bold text-selens-white break-words">
             {title}
           </h1>
-          <div className="w-12 h-1 bg-selens-yellow mt-3" aria-hidden="true" />
+          <div className="w-12 h-1 bg-selens-yellow mt-3.5" aria-hidden="true" />
           {description && (
             <p className="text-base sm:text-lg text-neutral-300 font-sans max-w-2xl leading-relaxed mt-4">
               {description}
@@ -45,10 +50,10 @@ export function PageHeader({ title, description, action }) {
  * - Serif H2
  * - Short yellow underline bar
  */
-export function Section({ title, description, action, children, className = '' }) {
+export function Section({ title, description, action, children, tone = 'dark', className = '' }) {
   return (
     <section className={`space-y-6 ${className}`}>
-      <SectionHeading title={title} description={description} action={action} />
+      <SectionHeading title={title} description={description} action={action} tone={tone} />
       {children}
     </section>
   )
@@ -56,18 +61,12 @@ export function Section({ title, description, action, children, className = '' }
 
 /**
  * Standardized Card:
- * - selens-ink surface
- * - 1px selens-line border
- * - 4px radius, yellow-tinted border + 2px lift on hover
+ * - Adapts automatically: dark selens-ink on Admin pages, crisp white card inside .selens-paper-page
  */
 export function Card({ children, className = '', hover = true, ...props }) {
   return (
     <div
-      className={`${
-        hover
-          ? 'selens-card'
-          : 'bg-selens-ink border border-selens-line rounded-[4px]'
-      } p-6 text-selens-white ${className}`}
+      className={`${hover ? 'selens-card' : 'selens-card-flat'} p-6 ${className}`}
       {...props}
     >
       {children}

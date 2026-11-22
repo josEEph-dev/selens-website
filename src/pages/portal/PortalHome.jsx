@@ -2,20 +2,23 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/useAuth'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { PageHeader, Card, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
+import { PageHeader, Card } from '../../components/SharedUI'
 
 const PORTAL_CARDS = [
   {
+    num: '01',
     title: 'TEEchPoints',
     badge: 'Coming soon',
     description: 'Track your participation and activity points across SELENS events.',
   },
   {
+    num: '02',
     title: 'Document Requests',
     badge: 'Coming soon',
     description: 'Request official organization certificates and endorsements online.',
   },
   {
+    num: '03',
     title: 'EEngiquest',
     badge: 'Coming soon',
     description: 'Use your SELENS account',
@@ -47,10 +50,10 @@ export default function PortalHome() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[65vh] items-center justify-center bg-selens-black">
+      <div id="main-content" className="selens-paper-page flex min-h-[65vh] items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-[4px] border-2 border-selens-line border-t-selens-yellow" />
-          <p className="text-sm font-sans text-neutral-300">Loading student portal...</p>
+          <div className="h-8 w-8 animate-spin rounded-[3px] border-2 border-selens-paper-rule border-t-selens-paper-ink" />
+          <p className="text-sm font-sans text-selens-paper-muted">Loading student portal...</p>
         </div>
       </div>
     )
@@ -58,8 +61,9 @@ export default function PortalHome() {
 
   if (!user) {
     return (
-      <div className="bg-selens-black text-selens-white min-h-[75vh]">
+      <div id="main-content" className="selens-paper-page min-h-[75vh]">
         <PageHeader
+          eyebrow="Member Services"
           title="Student Portal"
           description="Access your SELENS student account, services, and upcoming digital tools."
         />
@@ -67,21 +71,22 @@ export default function PortalHome() {
         <div className="selens-container py-14 flex justify-center">
           <Card className="max-w-xl w-full space-y-6 p-6 sm:p-8" hover={false}>
             <div className="space-y-3">
-              <h2 className="font-serif text-2xl font-bold text-selens-white">
+              <h2 className="font-serif text-2xl font-bold text-selens-paper-ink">
                 Welcome to the SELENS Student Portal
               </h2>
-              <p className="text-sm sm:text-base text-neutral-300 font-sans leading-relaxed">
+              <div className="w-12 h-1 bg-selens-yellow" aria-hidden="true" />
+              <p className="text-sm sm:text-base text-selens-paper-muted font-sans leading-relaxed">
                 Sign in with your SELENS account or create a new student account using your @msugensan.edu.ph email address.
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <PrimaryButton to="/portal/signin" className="justify-center min-h-[44px]">
+              <Link to="/portal/signin" className="selens-btn-ink justify-center">
                 Sign in
-              </PrimaryButton>
-              <SecondaryButton to="/portal/signup" className="justify-center min-h-[44px]">
+              </Link>
+              <Link to="/portal/signup" className="selens-btn-paper-outline justify-center">
                 Create account
-              </SecondaryButton>
+              </Link>
             </div>
           </Card>
         </div>
@@ -107,24 +112,22 @@ export default function PortalHome() {
     '—'
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-[75vh]">
+    <div id="main-content" className="selens-paper-page min-h-[75vh]">
       <PageHeader
+        eyebrow="Member Dashboard"
         title="Student Portal"
         description="Your SELENS member dashboard and student services."
         action={
           <div className="flex flex-wrap items-center gap-3">
             {isOfficer && (
-              <Link
-                to="/dashboard"
-                className="min-h-[44px] inline-flex items-center justify-center rounded-[4px] bg-selens-yellow px-4 py-2 text-sm font-sans font-bold text-selens-black hover:bg-selens-white transition-colors"
-              >
+              <Link to="/dashboard" className="selens-btn-primary text-sm">
                 Officer Dashboard
               </Link>
             )}
             <button
               type="button"
               onClick={signOut}
-              className="min-h-[44px] inline-flex items-center justify-center rounded-[4px] border border-selens-line bg-selens-ink px-4 py-2 text-sm font-sans font-semibold text-selens-white hover:border-selens-yellow hover:text-selens-yellow transition-colors cursor-pointer"
+              className="selens-btn-secondary text-sm"
             >
               Sign out
             </button>
@@ -132,46 +135,47 @@ export default function PortalHome() {
         }
       />
 
-      <div className="selens-container py-10 space-y-8">
-        <Card hover={false} className="space-y-4">
-          <div className="space-y-1">
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-selens-white break-words">
+      <div className="selens-container py-12 space-y-12">
+        <Card hover={false} className="space-y-5 p-6 sm:p-8">
+          <div className="space-y-1.5">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-selens-paper-ink break-words">
               Welcome, {displayName}
             </h2>
-            <div className="w-12 h-1 bg-selens-yellow" />
+            <div className="w-12 h-1 bg-selens-yellow" aria-hidden="true" />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-selens-line">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-selens-paper-rule">
             <div>
-              <p className="text-xs uppercase tracking-wider text-neutral-400 font-sans">Email</p>
-              <p className="text-sm text-selens-white font-sans mt-1 break-all">{displayEmail}</p>
+              <p className="font-mono text-[11px] uppercase tracking-wider text-selens-paper-muted">Email</p>
+              <p className="text-sm font-semibold text-selens-paper-ink font-sans mt-1 break-all">{displayEmail}</p>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wider text-neutral-400 font-sans">Student ID</p>
-              <p className="text-sm text-selens-white font-sans mt-1">{displayStudentId}</p>
+              <p className="font-mono text-[11px] uppercase tracking-wider text-selens-paper-muted">Student ID</p>
+              <p className="text-sm font-mono font-semibold text-selens-paper-ink mt-1">{displayStudentId}</p>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wider text-neutral-400 font-sans">Year Level</p>
-              <p className="text-sm text-selens-white font-sans mt-1">{displayYearLevel}</p>
+              <p className="font-mono text-[11px] uppercase tracking-wider text-selens-paper-muted">Year Level</p>
+              <p className="text-sm font-semibold text-selens-paper-ink font-sans mt-1">{displayYearLevel}</p>
             </div>
           </div>
         </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 auto-rows-fr gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-selens-paper-rule border-t-2 border-selens-paper-ink">
           {PORTAL_CARDS.map((item) => (
-            <Card key={item.title} hover={false} className="h-full flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="font-serif text-xl font-bold text-selens-white">{item.title}</h3>
-                  <span className="inline-block shrink-0 rounded-[4px] border border-selens-yellow px-2.5 py-0.5 text-xs font-sans font-semibold text-selens-yellow">
-                    {item.badge}
-                  </span>
-                </div>
-                <p className="text-sm text-neutral-300 font-sans leading-relaxed">
-                  {item.description}
-                </p>
+            <div key={item.title} className="py-6 md:px-6 first:md:pl-0 last:md:pr-0 space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-mono text-xs font-bold text-selens-paper-muted">
+                  {item.num}
+                </span>
+                <span className="font-mono text-[11px] font-bold uppercase tracking-wider bg-selens-paper-ink text-selens-yellow px-2 py-0.5 rounded-[2px]">
+                  {item.badge}
+                </span>
               </div>
-            </Card>
+              <h3 className="font-serif text-xl font-bold text-selens-paper-ink">{item.title}</h3>
+              <p className="text-sm text-selens-paper-muted font-sans leading-relaxed">
+                {item.description}
+              </p>
+            </div>
           ))}
         </div>
       </div>

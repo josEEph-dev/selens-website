@@ -31,7 +31,7 @@ export default function CommitteeFilter({
     <div className={`space-y-3 min-w-0 ${className}`}>
       {/* First row: Group chips */}
       <div className="space-y-1.5 sm:space-y-0 sm:flex sm:items-center sm:gap-3">
-        <span className="text-xs font-semibold text-neutral-400 block sm:inline shrink-0">
+        <span className="text-xs font-semibold uppercase tracking-wider selens-filter-label block sm:inline shrink-0">
           Group
         </span>
         <div className="selens-chip-row" role="group" aria-label="Filter by group">
@@ -66,8 +66,8 @@ export default function CommitteeFilter({
 
       {/* Second row: Legislative committees if Legislative is selected */}
       {selectedGroup === 'Legislative' && (
-        <div className="space-y-1.5 sm:space-y-0 sm:flex sm:items-center sm:gap-3 sm:pl-4 sm:border-l-2 sm:border-selens-yellow/60">
-          <span className="text-xs font-semibold text-neutral-400 block sm:inline shrink-0">
+        <div className="space-y-1.5 sm:space-y-0 sm:flex sm:items-center sm:gap-3 sm:pl-4 sm:border-l-2 sm:border-selens-yellow">
+          <span className="text-xs font-semibold uppercase tracking-wider selens-filter-label block sm:inline shrink-0">
             Committees
           </span>
           <div className="selens-chip-row" role="group" aria-label="Filter by committee">

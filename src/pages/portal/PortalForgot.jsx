@@ -35,8 +35,9 @@ export default function PortalForgot() {
   }
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-[75vh]">
+    <div id="main-content" className="selens-paper-page min-h-[75vh]">
       <PageHeader
+        eyebrow="Student Portal"
         title="Reset Password"
         description="Request a password reset link for your SELENS account."
       />
@@ -46,7 +47,7 @@ export default function PortalForgot() {
           {error && (
             <div
               role="alert"
-              className="rounded-[4px] border border-red-500/60 bg-red-950/30 px-4 py-3 text-sm font-sans text-red-200 leading-relaxed"
+              className="rounded-[3px] border border-red-300 bg-red-50 px-4 py-3 text-sm font-sans text-red-800 leading-relaxed"
             >
               {error}
             </div>
@@ -54,20 +55,17 @@ export default function PortalForgot() {
 
           {submitted ? (
             <div className="space-y-4">
-              <div className="rounded-[4px] border border-selens-yellow bg-selens-black px-4 py-4 text-sm font-sans text-selens-yellow leading-relaxed">
+              <div className="rounded-[3px] border-l-4 border-selens-yellow bg-selens-paper-alt px-4 py-4 text-sm font-sans text-selens-paper-ink leading-relaxed">
                 If that email has an account, a reset link was sent.
               </div>
-              <Link
-                to="/portal/signin"
-                className="min-h-[44px] inline-flex items-center justify-center rounded-[4px] border border-selens-line bg-selens-black px-4 py-2 text-sm font-sans font-semibold text-selens-white hover:border-selens-yellow hover:text-selens-yellow transition-colors"
-              >
+              <Link to="/portal/signin" className="selens-btn-paper-outline">
                 Back to Sign in
               </Link>
             </div>
           ) : (
             <form onSubmit={handleSubmit} noValidate className="space-y-5">
               <div>
-                <label htmlFor="forgot-email" className="block text-sm font-sans font-semibold text-selens-white mb-1.5">
+                <label htmlFor="forgot-email" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
                   Email
                 </label>
                 <input
@@ -85,13 +83,16 @@ export default function PortalForgot() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full min-h-[44px] rounded-[4px] bg-selens-yellow px-4 py-2.5 text-sm font-sans font-bold text-selens-black hover:bg-selens-white disabled:opacity-50 transition-colors cursor-pointer"
+                className="selens-btn-ink w-full disabled:opacity-50"
               >
                 {submitting ? 'Sending link...' : 'Send reset link'}
               </button>
 
-              <p className="text-center text-sm font-sans text-neutral-300 pt-1">
-                <Link to="/portal/signin" className="text-selens-yellow hover:underline font-semibold">
+              <p className="text-center text-sm font-sans text-selens-paper-muted pt-1">
+                <Link
+                  to="/portal/signin"
+                  className="text-selens-paper-ink underline decoration-selens-yellow decoration-2 underline-offset-4 font-semibold"
+                >
                   Back to Sign in
                 </Link>
               </p>

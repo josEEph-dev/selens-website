@@ -82,8 +82,9 @@ export default function PortalSignUp() {
   }
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-[75vh]">
+    <div id="main-content" className="selens-paper-page min-h-[75vh]">
       <PageHeader
+        eyebrow="Student Portal"
         title="Create Student Account"
         description="Register with your official MSU-General Santos email and student ID."
       />
@@ -93,7 +94,7 @@ export default function PortalSignUp() {
           {error && (
             <div
               role="alert"
-              className="rounded-[4px] border border-red-500/60 bg-red-950/30 px-4 py-3 text-sm font-sans text-red-200 leading-relaxed"
+              className="rounded-[3px] border border-red-300 bg-red-50 px-4 py-3 text-sm font-sans text-red-800 leading-relaxed"
             >
               {error}
             </div>
@@ -101,20 +102,17 @@ export default function PortalSignUp() {
 
           {confirmationMessage ? (
             <div className="space-y-4">
-              <div className="rounded-[4px] border border-selens-yellow bg-selens-black px-4 py-4 text-sm font-sans text-selens-yellow leading-relaxed">
+              <div className="rounded-[3px] border-l-4 border-selens-yellow bg-selens-paper-alt px-4 py-4 text-sm font-sans text-selens-paper-ink leading-relaxed">
                 {confirmationMessage}
               </div>
-              <Link
-                to="/portal/signin"
-                className="min-h-[44px] inline-flex items-center justify-center rounded-[4px] bg-selens-yellow px-5 py-2.5 text-sm font-sans font-bold text-selens-black hover:bg-selens-white transition-colors"
-              >
+              <Link to="/portal/signin" className="selens-btn-ink">
                 Go to Sign in
               </Link>
             </div>
           ) : (
             <form onSubmit={handleSubmit} noValidate className="space-y-5">
               <div>
-                <label htmlFor="signup-full-name" className="block text-sm font-sans font-semibold text-selens-white mb-1.5">
+                <label htmlFor="signup-full-name" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
                   Full Name
                 </label>
                 <input
@@ -129,7 +127,7 @@ export default function PortalSignUp() {
               </div>
 
               <div>
-                <label htmlFor="signup-email" className="block text-sm font-sans font-semibold text-selens-white mb-1.5">
+                <label htmlFor="signup-email" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
                   School Email
                 </label>
                 <input
@@ -145,7 +143,7 @@ export default function PortalSignUp() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="signup-student-id" className="block text-sm font-sans font-semibold text-selens-white mb-1.5">
+                  <label htmlFor="signup-student-id" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
                     Student ID
                   </label>
                   <input
@@ -157,11 +155,11 @@ export default function PortalSignUp() {
                     placeholder="2023-2774"
                     className="selens-input font-sans"
                   />
-                  <p className="mt-1 text-xs font-sans text-neutral-400">Example: 2023-2774</p>
+                  <p className="mt-1 text-xs font-sans text-selens-paper-muted">Example: 2023-2774</p>
                 </div>
 
                 <div>
-                  <label htmlFor="signup-year-level" className="block text-sm font-sans font-semibold text-selens-white mb-1.5">
+                  <label htmlFor="signup-year-level" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
                     Year Level
                   </label>
                   <select
@@ -171,7 +169,7 @@ export default function PortalSignUp() {
                     className="selens-input font-sans cursor-pointer"
                   >
                     {YEAR_LEVELS.map((level) => (
-                      <option key={level} value={level} className="bg-selens-ink text-selens-white">
+                      <option key={level} value={level}>
                         {level}
                       </option>
                     ))}
@@ -180,7 +178,7 @@ export default function PortalSignUp() {
               </div>
 
               <div>
-                <label htmlFor="signup-password" className="block text-sm font-sans font-semibold text-selens-white mb-1.5">
+                <label htmlFor="signup-password" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
                   Password
                 </label>
                 <input
@@ -195,12 +193,12 @@ export default function PortalSignUp() {
                 />
               </div>
 
-              <label className="flex items-start gap-3 text-xs sm:text-sm font-sans text-neutral-300 leading-relaxed cursor-pointer">
+              <label className="flex items-start gap-3 text-xs sm:text-sm font-sans text-selens-paper-muted leading-relaxed cursor-pointer">
                 <input
                   type="checkbox"
                   checked={agreed}
                   onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-1 h-4 w-4 shrink-0 rounded-[2px] border border-selens-line bg-selens-black accent-selens-yellow"
+                  className="mt-1 h-4 w-4 shrink-0 rounded-[2px] border border-selens-paper-rule accent-selens-paper-ink"
                 />
                 <span className="break-words">
                   I agree that SELENS may use my name, school email, student ID, and year level to run student services. {'Questions about your data? Contact SELENS at iieeasteeg@msugensan.edu.ph or through facebook at https://www.facebook.com/selensmsugsc.'}
@@ -210,14 +208,17 @@ export default function PortalSignUp() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full min-h-[44px] rounded-[4px] bg-selens-yellow px-4 py-2.5 text-sm font-sans font-bold text-selens-black hover:bg-selens-white disabled:opacity-50 transition-colors cursor-pointer"
+                className="selens-btn-ink w-full disabled:opacity-50"
               >
                 {submitting ? 'Creating account...' : 'Create account'}
               </button>
 
-              <p className="text-center text-sm font-sans text-neutral-300 pt-1">
+              <p className="text-center text-sm font-sans text-selens-paper-muted pt-1">
                 Already have an account?{' '}
-                <Link to="/portal/signin" className="text-selens-yellow hover:underline font-semibold">
+                <Link
+                  to="/portal/signin"
+                  className="text-selens-paper-ink underline decoration-selens-yellow decoration-2 underline-offset-4 font-semibold"
+                >
                   Sign in
                 </Link>
               </p>

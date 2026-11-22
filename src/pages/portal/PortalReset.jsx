@@ -41,8 +41,9 @@ export default function PortalReset() {
   }
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-[75vh]">
+    <div id="main-content" className="selens-paper-page min-h-[75vh]">
       <PageHeader
+        eyebrow="Student Portal"
         title="Set New Password"
         description="Choose a new password for your SELENS account."
       />
@@ -51,18 +52,15 @@ export default function PortalReset() {
         <Card hover={false} className="max-w-md w-full p-6 sm:p-8 space-y-6">
           {loading ? (
             <div className="flex flex-col items-center gap-3 py-6">
-              <div className="h-8 w-8 animate-spin rounded-[4px] border-2 border-selens-line border-t-selens-yellow" />
-              <p className="text-sm font-sans text-neutral-300">Verifying recovery link...</p>
+              <div className="h-8 w-8 animate-spin rounded-[3px] border-2 border-selens-paper-rule border-t-selens-paper-ink" />
+              <p className="text-sm font-sans text-selens-paper-muted">Verifying recovery link...</p>
             </div>
           ) : !canReset ? (
             <div className="space-y-4">
-              <div className="rounded-[4px] border border-selens-yellow bg-selens-black px-4 py-4 text-sm font-sans text-selens-yellow leading-relaxed">
+              <div className="rounded-[3px] border-l-4 border-selens-yellow bg-selens-paper-alt px-4 py-4 text-sm font-sans text-selens-paper-ink leading-relaxed">
                 This password reset link is invalid or has expired. Request a new reset link to continue.
               </div>
-              <Link
-                to="/portal/forgot"
-                className="min-h-[44px] inline-flex items-center justify-center rounded-[4px] bg-selens-yellow px-4 py-2.5 text-sm font-sans font-bold text-selens-black hover:bg-selens-white transition-colors"
-              >
+              <Link to="/portal/forgot" className="selens-btn-ink">
                 Request reset link
               </Link>
             </div>
@@ -71,7 +69,7 @@ export default function PortalReset() {
               {error && (
                 <div
                   role="alert"
-                  className="rounded-[4px] border border-red-500/60 bg-red-950/30 px-4 py-3 text-sm font-sans text-red-200 leading-relaxed"
+                  className="rounded-[3px] border border-red-300 bg-red-50 px-4 py-3 text-sm font-sans text-red-800 leading-relaxed"
                 >
                   {error}
                 </div>
@@ -79,7 +77,7 @@ export default function PortalReset() {
 
               <form onSubmit={handleSubmit} noValidate className="space-y-5">
                 <div>
-                  <label htmlFor="reset-password" className="block text-sm font-sans font-semibold text-selens-white mb-1.5">
+                  <label htmlFor="reset-password" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
                     New Password
                   </label>
                   <input
@@ -96,7 +94,7 @@ export default function PortalReset() {
                 </div>
 
                 <div>
-                  <label htmlFor="reset-confirm-password" className="block text-sm font-sans font-semibold text-selens-white mb-1.5">
+                  <label htmlFor="reset-confirm-password" className="block text-sm font-sans font-semibold text-selens-paper-ink mb-1.5">
                     Confirm New Password
                   </label>
                   <input
@@ -115,7 +113,7 @@ export default function PortalReset() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full min-h-[44px] rounded-[4px] bg-selens-yellow px-4 py-2.5 text-sm font-sans font-bold text-selens-black hover:bg-selens-white disabled:opacity-50 transition-colors cursor-pointer"
+                  className="selens-btn-ink w-full disabled:opacity-50"
                 >
                   {submitting ? 'Updating password...' : 'Update password'}
                 </button>

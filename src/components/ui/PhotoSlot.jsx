@@ -17,13 +17,19 @@ export default function PhotoSlot({
   alt = '',
   aspect = '4/3',
   caption,
+  tone = 'paper',
   className = '',
 }) {
   const aspectClass = ASPECT_CLASSES[aspect] || aspect
+  const isPaper = tone === 'paper'
 
   return (
     <figure
-      className={`relative w-full overflow-hidden rounded-[4px] bg-selens-ink border border-selens-line ${aspectClass} ${className}`}
+      className={`relative w-full overflow-hidden rounded-[3px] border ${
+        isPaper
+          ? 'bg-selens-paper-alt border-selens-paper-rule'
+          : 'bg-selens-ink border-selens-line'
+      } ${aspectClass} ${className}`}
     >
       {src ? (
         <img
@@ -33,15 +39,25 @@ export default function PhotoSlot({
           className="w-full h-full object-cover object-top"
         />
       ) : (
-        <div className="w-full h-full flex flex-col items-center justify-center p-6 select-none bg-selens-ink">
+        <div
+          className={`w-full h-full flex flex-col items-center justify-center p-6 select-none ${
+            isPaper ? 'bg-selens-paper-alt' : 'bg-selens-ink'
+          }`}
+        >
           <img
             src="/website-assets/selens-logo.png"
             alt=""
             aria-hidden="true"
-            className="w-20 h-20 sm:w-24 sm:h-24 object-contain opacity-15 grayscale"
+            className={`w-16 h-16 sm:w-20 sm:h-20 object-contain grayscale ${
+              isPaper ? 'opacity-20' : 'opacity-15'
+            }`}
           />
           {caption && (
-            <span className="mt-3 text-xs text-neutral-500 font-sans text-center">
+            <span
+              className={`mt-3 text-xs font-sans text-center max-w-xs ${
+                isPaper ? 'text-selens-paper-muted' : 'text-neutral-400'
+              }`}
+            >
               {caption}
             </span>
           )}

@@ -4,12 +4,26 @@ import { useState } from 'react'
  * ImageFrame: 16:9 image area used by list cards.
  * Shows the image (object-cover) or a neutral dark placeholder with a faint SELENS logo.
  */
-export default function ImageFrame({ src, alt = '', aspect = 'aspect-[16/9]', fit = 'cover', className = '' }) {
+export default function ImageFrame({
+  src,
+  alt = '',
+  aspect = 'aspect-[16/9]',
+  fit = 'cover',
+  tone = 'paper',
+  className = '',
+}) {
   const [failed, setFailed] = useState(false)
   const showImage = src && !failed
+  const isPaper = tone === 'paper'
 
   return (
-    <div className={`relative w-full ${aspect} overflow-hidden bg-neutral-950 border-b border-selens-line ${className}`}>
+    <div
+      className={`relative w-full ${aspect} overflow-hidden ${
+        isPaper
+          ? 'bg-selens-paper-alt border border-selens-paper-rule'
+          : 'bg-neutral-950 border-b border-selens-line'
+      } ${className}`}
+    >
       {showImage ? (
         <img
           src={src}
@@ -23,7 +37,7 @@ export default function ImageFrame({ src, alt = '', aspect = 'aspect-[16/9]', fi
           <img
             src="/website-assets/selens-logo.png"
             alt=""
-            className="w-12 h-12 object-contain opacity-10 grayscale"
+            className={`w-12 h-12 object-contain grayscale ${isPaper ? 'opacity-20' : 'opacity-10'}`}
           />
         </div>
       )}

@@ -49,7 +49,9 @@ export default function Accomplishments() {
       }
     }
     loadYears()
-    return () => { ignore = true }
+    return () => {
+      ignore = true
+    }
   }, [])
 
   useEffect(() => {
@@ -82,7 +84,9 @@ export default function Accomplishments() {
       }
     }
     load()
-    return () => { ignore = true }
+    return () => {
+      ignore = true
+    }
   }, [category, selectedYear])
 
   // Reset group and committee filters when switching category or year
@@ -114,15 +118,16 @@ export default function Accomplishments() {
   }
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-screen">
+    <div id="main-content" className="selens-paper-page min-h-screen">
       <PageHeader
-        title="Accomplishments & Milestones"
+        eyebrow="Chapter Milestones"
+        title="Accomplishments &amp; Milestones"
         description="Celebrating student milestones, competition wins, community outreach initiatives, and organizational achievements."
       />
 
       <div className="selens-container py-12 sm:py-16 space-y-8">
         {/* Category filters & Year selector */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-selens-line pb-5">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-selens-paper-rule pb-5">
           <div className="selens-chip-row" role="group" aria-label="Filter by category">
             {CATEGORIES.map((tab) => {
               const isActive = category === tab.id
@@ -157,14 +162,17 @@ export default function Accomplishments() {
         />
 
         {isArchive && (
-          <div className="p-3.5 bg-selens-ink border border-selens-line rounded-[4px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-neutral-300">
+          <div className="p-4 bg-selens-paper-alt border border-selens-paper-rule rounded-[3px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-selens-paper-ink">
             <span className="flex items-center gap-2">
-              <Archive className="w-4 h-4 text-selens-yellow shrink-0" />
-              <span>Viewing accomplishments archive for <strong>A.Y. {selectedYear}</strong></span>
+              <Archive className="w-4 h-4 text-selens-yellow-ink shrink-0" />
+              <span>
+                Viewing accomplishments archive for <strong>A.Y. {selectedYear}</strong>
+              </span>
             </span>
             <button
+              type="button"
               onClick={() => setSelectedYear(CURRENT_ACADEMIC_YEAR)}
-              className="text-selens-yellow hover:underline font-semibold"
+              className="font-bold underline decoration-selens-yellow decoration-2 underline-offset-4 hover:text-selens-paper-muted cursor-pointer"
             >
               Back to current A.Y. {CURRENT_ACADEMIC_YEAR}
             </button>
@@ -172,17 +180,17 @@ export default function Accomplishments() {
         )}
 
         {loading ? (
-          <div className="space-y-4">
-            <div className="h-24 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
-            <div className="h-24 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
-            <div className="h-24 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
+          <div className="divide-y divide-selens-paper-rule border-t-2 border-selens-paper-ink">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="h-24 bg-selens-paper-alt/70 my-3 rounded-[2px] animate-pulse" />
+            ))}
           </div>
         ) : error ? (
-          <div className="bg-selens-ink border border-selens-line rounded-[4px] p-12 text-center text-sm text-red-400">
+          <div className="border-y border-red-300 bg-red-50 p-8 text-center text-sm text-red-800">
             {error}
           </div>
         ) : items.length === 0 ? (
-          <div className="bg-selens-ink border border-selens-line rounded-[4px] p-12 text-center text-sm text-neutral-400 space-y-3">
+          <div className="border-y border-selens-paper-rule py-12 text-center text-sm text-selens-paper-muted space-y-3">
             <p>
               {selectedYear === CURRENT_ACADEMIC_YEAR
                 ? `New updates for A.Y. ${CURRENT_ACADEMIC_YEAR} are coming soon.`
@@ -191,8 +199,9 @@ export default function Accomplishments() {
             {selectedYear === CURRENT_ACADEMIC_YEAR && pastYear && (
               <div>
                 <button
+                  type="button"
                   onClick={() => setSelectedYear(pastYear)}
-                  className="text-xs font-semibold text-selens-yellow hover:text-selens-white underline underline-offset-4"
+                  className="selens-editorial-link text-xs"
                 >
                   View archive for A.Y. {pastYear}
                 </button>
@@ -200,63 +209,66 @@ export default function Accomplishments() {
             )}
           </div>
         ) : filteredItems.length === 0 ? (
-          <div className="bg-selens-ink border border-selens-line rounded-[4px] p-12 text-center text-sm text-neutral-400">
+          <div className="border-y border-selens-paper-rule py-12 text-center text-sm text-selens-paper-muted">
             No accomplishments matching the selected committee filter.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-5 sm:gap-6">
+          <div className="divide-y divide-selens-paper-rule border-t-2 border-b border-selens-paper-ink">
             {filteredItems.map((item, idx) => (
-              <Reveal key={item.id} index={idx} className="h-full">
-                <Link
-                  to={`/accomplishments/${item.slug}`}
-                  className="selens-card h-full overflow-hidden flex flex-col group"
-                >
-                <ImageFrame src={item.image_url} />
+              <Reveal
+                key={item.id}
+                index={idx}
+                className="py-6 sm:py-8 px-2 sm:px-3 hover:bg-selens-paper-alt/70 transition-colors grid grid-cols-1 md:grid-cols-12 gap-5 items-start md:items-center group"
+              >
+                {item.image_url && (
+                  <Link
+                    to={`/accomplishments/${item.slug}`}
+                    tabIndex={-1}
+                    aria-hidden="true"
+                    className="md:col-span-3 rounded-[3px] overflow-hidden block"
+                  >
+                    <ImageFrame tone="paper" src={item.image_url} aspect="aspect-[16/10]" />
+                  </Link>
+                )}
 
-                <div className="flex-1 p-5 flex flex-col gap-3">
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-400 font-sans min-h-[1.375rem]">
-                    <span className="text-selens-yellow text-[11px] font-semibold">
+                <div className={`${item.image_url ? 'md:col-span-7' : 'md:col-span-10'} min-w-0 space-y-2`}>
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-selens-paper-muted font-mono">
+                    <span className="font-mono text-[11px] font-bold uppercase tracking-wider bg-selens-yellow text-selens-black px-2 py-0.5 rounded-[2px]">
                       {formatCategoryLabel(item.category)}
                     </span>
                     {item.committee && (
-                      <span className="text-[11px] font-semibold text-neutral-300 bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px] truncate max-w-full">
+                      <span className="font-sans text-[11px] font-bold bg-selens-paper-ink text-selens-yellow px-2 py-0.5 rounded-[2px]">
                         {formatCommitteeLabel(item.committee)}
                       </span>
                     )}
-                    {item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR && (
-                      <span className="text-[11px] font-semibold text-neutral-400 bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px]">
-                        Archive: A.Y. {item.academic_year}
-                      </span>
-                    )}
-                  </div>
-
-                  <h2 className="font-serif selens-fluid-h3 font-bold text-selens-white group-hover:text-selens-yellow transition-colors line-clamp-2 min-h-[2.7em] break-words">
-                    {item.title}
-                  </h2>
-
-                  <p className="text-sm text-neutral-300 line-clamp-3 leading-relaxed">
-                    {item.summary}
-                  </p>
-
-                  <div className="mt-auto pt-3 border-t border-selens-line flex items-center justify-between gap-3 text-xs">
-                    {item.accomplished_on ? (
-                      <time dateTime={item.accomplished_on} className="text-neutral-400">
+                    {item.accomplished_on && (
+                      <time dateTime={item.accomplished_on}>
                         {new Date(item.accomplished_on).toLocaleDateString('en-US', {
                           month: 'long',
                           day: 'numeric',
                           year: 'numeric',
                         })}
                       </time>
-                    ) : (
-                      <span />
                     )}
-                    <span className="font-semibold text-selens-yellow inline-flex items-center gap-1 shrink-0">
-                      <span>Read details</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
                   </div>
+
+                  <h2 className="font-serif text-lg sm:text-xl font-bold text-selens-paper-ink group-hover:underline decoration-selens-yellow decoration-2 underline-offset-4 line-clamp-2 break-words leading-snug">
+                    <Link to={`/accomplishments/${item.slug}`}>{item.title}</Link>
+                  </h2>
+
+                  {item.summary && (
+                    <p className="text-sm sm:text-base text-selens-paper-muted line-clamp-2 leading-relaxed">
+                      {item.summary}
+                    </p>
+                  )}
                 </div>
-                </Link>
+
+                <div className="md:col-span-2 md:text-right shrink-0">
+                  <Link to={`/accomplishments/${item.slug}`} className="selens-editorial-link text-xs">
+                    <span>Read details</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </Reveal>
             ))}
           </div>

@@ -10,20 +10,32 @@ export default function SectionHeading({
   title,
   description,
   action,
+  eyebrow,
   align = 'left',
+  tone = 'dark',
   reveal = true,
   className = '',
 }) {
   const isCentered = align === 'center'
+  const isPaper = tone === 'paper'
+  const headingColor = isPaper ? 'text-selens-paper-ink' : 'text-selens-white'
+  const descColor = isPaper ? 'text-selens-paper-muted' : 'text-neutral-300'
+  const eyebrowColor = isPaper ? 'text-selens-paper-muted' : 'text-selens-yellow'
+  const ruleColor = isPaper ? 'border-selens-paper-rule' : 'border-selens-line'
 
   const content = isCentered ? (
     <div className={`text-center max-w-2xl mx-auto space-y-3 ${className}`}>
-      <h2 className="font-serif selens-fluid-h2 font-bold text-selens-white">
+      {eyebrow && (
+        <p className={`font-mono text-xs uppercase tracking-[0.2em] ${eyebrowColor}`}>
+          {eyebrow}
+        </p>
+      )}
+      <h2 className={`font-serif selens-fluid-h2 font-bold ${headingColor}`}>
         {title}
       </h2>
       <div className="w-12 h-1 bg-selens-yellow mx-auto" aria-hidden="true" />
       {description && (
-        <p className="text-sm sm:text-base text-neutral-300 font-sans leading-relaxed pt-1">
+        <p className={`text-sm sm:text-base ${descColor} font-sans leading-relaxed pt-1`}>
           {description}
         </p>
       )}
@@ -31,15 +43,20 @@ export default function SectionHeading({
     </div>
   ) : (
     <div
-      className={`flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-selens-line pb-4 ${className}`}
+      className={`flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b ${ruleColor} pb-5 ${className}`}
     >
       <div className="max-w-2xl">
-        <h2 className="font-serif selens-fluid-h2 font-bold text-selens-white">
+        {eyebrow && (
+          <p className={`font-mono text-xs uppercase tracking-[0.2em] mb-2 ${eyebrowColor}`}>
+            {eyebrow}
+          </p>
+        )}
+        <h2 className={`font-serif selens-fluid-h2 font-bold ${headingColor}`}>
           {title}
         </h2>
-        <div className="w-12 h-1 bg-selens-yellow mt-2.5" aria-hidden="true" />
+        <div className="w-12 h-1 bg-selens-yellow mt-3" aria-hidden="true" />
         {description && (
-          <p className="text-sm sm:text-base text-neutral-300 font-sans leading-relaxed mt-3">
+          <p className={`text-sm sm:text-base ${descColor} font-sans leading-relaxed mt-3`}>
             {description}
           </p>
         )}

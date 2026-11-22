@@ -38,7 +38,9 @@ export default function Projects() {
       }
     }
     loadYears()
-    return () => { ignore = true }
+    return () => {
+      ignore = true
+    }
   }, [])
 
   useEffect(() => {
@@ -69,7 +71,9 @@ export default function Projects() {
       }
     }
     load()
-    return () => { ignore = true }
+    return () => {
+      ignore = true
+    }
   }, [selectedYear])
 
   // Reset group and committee filters when year changes
@@ -96,16 +100,17 @@ export default function Projects() {
   const pastYear = availableYears.find((y) => y !== CURRENT_ACADEMIC_YEAR)
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-screen">
+    <div id="main-content" className="selens-paper-page min-h-screen">
       <PageHeader
+        eyebrow="Engineering Programs & Services"
         title="Projects &amp; Initiatives"
         description="Explore the programs, resources, and community activities created and managed by the Society of Electrical Engineering Students."
       />
 
       <div className="selens-container py-12 sm:py-16 space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-selens-line pb-5">
-          <span className="text-sm text-neutral-400 font-serif">
-            Initiatives Registry
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-selens-paper-rule pb-5">
+          <span className="font-mono text-xs uppercase tracking-[0.2em] text-selens-paper-muted">
+            Initiatives Registry · A.Y. {selectedYear}
           </span>
           <YearSelector
             years={availableYears}
@@ -124,14 +129,17 @@ export default function Projects() {
         />
 
         {isArchive && (
-          <div className="p-3.5 bg-selens-ink border border-selens-line rounded-[4px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-neutral-300">
+          <div className="p-4 bg-selens-paper-alt border border-selens-paper-rule rounded-[3px] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-selens-paper-ink">
             <span className="flex items-center gap-2">
-              <Archive className="w-4 h-4 text-selens-yellow shrink-0" />
-              <span>Viewing projects archive for <strong>A.Y. {selectedYear}</strong></span>
+              <Archive className="w-4 h-4 text-selens-yellow-ink shrink-0" />
+              <span>
+                Viewing projects archive for <strong>A.Y. {selectedYear}</strong>
+              </span>
             </span>
             <button
+              type="button"
               onClick={() => setSelectedYear(CURRENT_ACADEMIC_YEAR)}
-              className="text-selens-yellow hover:underline font-semibold"
+              className="font-bold underline decoration-selens-yellow decoration-2 underline-offset-4 hover:text-selens-paper-muted cursor-pointer"
             >
               Back to current A.Y. {CURRENT_ACADEMIC_YEAR}
             </button>
@@ -143,16 +151,16 @@ export default function Projects() {
             {[1, 2, 3].map((n) => (
               <div
                 key={n}
-                className="h-48 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse"
+                className="h-36 bg-selens-paper-alt rounded-[3px] animate-pulse"
               />
             ))}
           </div>
         ) : error ? (
-          <div className="bg-selens-ink border border-selens-line rounded-[4px] p-12 text-center text-sm text-red-400">
+          <div className="border-y border-red-300 bg-red-50 p-8 text-center text-sm text-red-800">
             {error}
           </div>
         ) : projects.length === 0 ? (
-          <div className="bg-selens-ink border border-selens-line rounded-[4px] p-12 text-center text-sm text-neutral-400 space-y-3">
+          <div className="border-y border-selens-paper-rule py-12 text-center text-sm text-selens-paper-muted space-y-3">
             <p>
               {selectedYear === CURRENT_ACADEMIC_YEAR
                 ? `New updates for A.Y. ${CURRENT_ACADEMIC_YEAR} are coming soon.`
@@ -161,8 +169,9 @@ export default function Projects() {
             {selectedYear === CURRENT_ACADEMIC_YEAR && pastYear && (
               <div>
                 <button
+                  type="button"
                   onClick={() => setSelectedYear(pastYear)}
-                  className="text-xs font-semibold text-selens-yellow hover:text-selens-white underline underline-offset-4"
+                  className="selens-editorial-link text-xs"
                 >
                   View archive for A.Y. {pastYear}
                 </button>
@@ -170,53 +179,60 @@ export default function Projects() {
             )}
           </div>
         ) : filteredProjects.length === 0 ? (
-          <div className="bg-selens-ink border border-selens-line rounded-[4px] p-12 text-center text-sm text-neutral-400">
+          <div className="border-y border-selens-paper-rule py-12 text-center text-sm text-selens-paper-muted">
             No projects matching the selected committee filter.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 auto-rows-fr gap-5 sm:gap-6">
+          <div className="divide-y divide-selens-paper-rule border-t-2 border-b border-selens-paper-ink">
             {filteredProjects.map((item, idx) => (
-              <Reveal as="article" key={item.id} index={idx} className="selens-card h-full overflow-hidden flex flex-col">
-                <ImageFrame src={item.cover_image_url} alt={item.name} />
+              <Reveal
+                key={item.id}
+                index={idx}
+                className="py-8 sm:py-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start"
+              >
+                {/* Monospace Spec Number + Metadata */}
+                <div className="lg:col-span-2 space-y-2.5">
+                  <span className="font-mono text-2xl sm:text-3xl font-bold text-selens-paper-ink block leading-none">
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {item.status && item.status !== 'active' && (
+                      <span className="font-mono text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-[2px] bg-selens-yellow text-selens-black">
+                        {item.status}
+                      </span>
+                    )}
+                    {item.committee && (
+                      <span className="font-sans text-[11px] font-bold px-2 py-0.5 rounded-[2px] bg-selens-paper-ink text-selens-yellow">
+                        {formatCommitteeLabel(item.committee)}
+                      </span>
+                    )}
+                    {item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR && (
+                      <span className="font-mono text-[11px] font-semibold px-2 py-0.5 rounded-[2px] border border-selens-paper-rule text-selens-paper-muted">
+                        A.Y. {item.academic_year}
+                      </span>
+                    )}
+                  </div>
+                </div>
 
-                <div className="flex-1 p-5 sm:p-6 flex flex-col gap-3">
-                  {(item.committee || item.status && item.status !== 'active' || (item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR)) && (
-                    <div className="flex flex-wrap items-center gap-2">
-                      {item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR && (
-                        <span className="text-[11px] font-semibold text-neutral-400 bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px]">
-                          Archive: A.Y. {item.academic_year}
-                        </span>
-                      )}
-                      {item.committee && (
-                        <span className="text-[11px] font-semibold text-selens-yellow bg-selens-black border border-selens-line px-2 py-0.5 rounded-[2px]">
-                          {formatCommitteeLabel(item.committee)}
-                        </span>
-                      )}
-                      {item.status && item.status !== 'active' && (
-                        <span className="text-[11px] font-semibold capitalize px-2 py-0.5 rounded-[2px] border border-selens-line text-neutral-400">
-                          {item.status}
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  <h2 className="font-serif selens-fluid-h3 font-bold text-selens-white line-clamp-2 break-words">
+                {/* Project Title, Description & Action */}
+                <div className={`${item.cover_image_url ? 'lg:col-span-6' : 'lg:col-span-10'} space-y-3`}>
+                  <h2 className="font-serif text-xl sm:text-2xl font-bold text-selens-paper-ink break-words leading-snug">
                     {item.name}
                   </h2>
 
                   {item.description && (
-                    <p className="text-sm sm:text-base text-neutral-300 leading-relaxed font-sans">
+                    <p className="text-sm sm:text-base text-selens-paper-muted leading-relaxed font-sans max-w-2xl">
                       {item.description}
                     </p>
                   )}
 
                   {item.link_url && (
-                    <div className="mt-auto pt-3 border-t border-selens-line">
+                    <div className="pt-1">
                       <a
                         href={item.link_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="min-h-[44px] inline-flex items-center gap-2 text-sm font-semibold text-selens-yellow hover:text-selens-white transition-colors"
+                        className="selens-editorial-link"
                       >
                         <ExternalLink className="w-4 h-4" />
                         <span>Learn more</span>
@@ -224,6 +240,19 @@ export default function Projects() {
                     </div>
                   )}
                 </div>
+
+                {/* Optional Cover Image (only rendered if present) */}
+                {item.cover_image_url && (
+                  <div className="lg:col-span-4">
+                    <ImageFrame
+                      tone="paper"
+                      src={item.cover_image_url}
+                      alt={item.name}
+                      aspect="aspect-[16/10]"
+                      className="rounded-[3px]"
+                    />
+                  </div>
+                )}
               </Reveal>
             ))}
           </div>

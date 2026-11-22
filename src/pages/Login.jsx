@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
-import { PageHeader, Card, PrimaryButton, SecondaryButton } from '../components/SharedUI'
+import { PageHeader, Card, PrimaryButton } from '../components/SharedUI'
 import { LogIn, AlertCircle, CheckCircle2 } from 'lucide-react'
 
 export default function Login() {
@@ -40,8 +40,9 @@ export default function Login() {
   }
 
   return (
-    <div className="bg-selens-black text-selens-white min-h-[80vh]">
+    <div id="main-content" className="selens-paper-page min-h-[80vh]">
       <PageHeader
+        eyebrow="Administration"
         title="Officer Login"
         description="Sign in with your officer credentials to manage organization content and records."
       />
@@ -51,22 +52,22 @@ export default function Login() {
           <Card className="p-6 sm:p-8 space-y-6" hover={false}>
             {user ? (
               <div className="space-y-6 text-center">
-                <div className="w-12 h-12 rounded-[4px] bg-selens-black border border-selens-line text-selens-yellow flex items-center justify-center mx-auto">
+                <div className="w-12 h-12 rounded-[3px] bg-selens-paper-ink text-selens-yellow flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
-                  <h2 className="font-serif font-bold text-xl text-selens-white">
+                  <h2 className="font-serif font-bold text-xl text-selens-paper-ink">
                     Signed in as {profile?.full_name || 'Officer'}
                   </h2>
-                  <p className="text-sm text-neutral-300 font-sans break-all">
+                  <p className="text-sm text-selens-paper-muted font-sans break-all">
                     {profile?.email}
                   </p>
                 </div>
 
-                <div className="p-4 bg-selens-black border border-selens-line rounded-[4px] space-y-2 text-left text-sm">
+                <div className="p-4 bg-selens-paper-alt border border-selens-paper-rule rounded-[3px] space-y-2 text-left text-sm">
                   <div className="flex justify-between">
-                    <span className="text-neutral-400">Role</span>
-                    <span className="font-semibold text-selens-yellow capitalize">{profile?.role}</span>
+                    <span className="text-selens-paper-muted">Role</span>
+                    <span className="font-bold text-selens-paper-ink capitalize">{profile?.role}</span>
                   </div>
                 </div>
 
@@ -77,12 +78,13 @@ export default function Login() {
                   >
                     Go to Dashboard
                   </PrimaryButton>
-                  <SecondaryButton
+                  <button
+                    type="button"
                     onClick={signOut}
-                    className="w-full min-h-[44px] text-red-400 border-red-500/40 hover:border-red-400 hover:text-red-300"
+                    className="w-full min-h-[44px] rounded-[3px] border border-red-300 bg-red-50 text-red-700 font-semibold text-sm hover:bg-red-100 transition-colors cursor-pointer"
                   >
                     Sign out
-                  </SecondaryButton>
+                  </button>
                 </div>
               </div>
             ) : (
@@ -90,16 +92,16 @@ export default function Login() {
                 {error && (
                   <div
                     role="alert"
-                    className="p-4 bg-red-950/30 border border-red-500/60 rounded-[4px] flex items-start gap-3 text-sm text-red-200 leading-relaxed"
+                    className="p-4 bg-red-50 border border-red-300 rounded-[3px] flex items-start gap-3 text-sm text-red-800 leading-relaxed"
                   >
-                    <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-red-400" />
+                    <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-red-600" />
                     <span>{error}</span>
                   </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-1.5">
-                    <label htmlFor="officer-email" className="block text-sm font-semibold text-selens-white">
+                    <label htmlFor="officer-email" className="block text-sm font-semibold text-selens-paper-ink">
                       Officer email address
                     </label>
                     <input
@@ -115,7 +117,7 @@ export default function Login() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label htmlFor="officer-password" className="block text-sm font-semibold text-selens-white">
+                    <label htmlFor="officer-password" className="block text-sm font-semibold text-selens-paper-ink">
                       Password
                     </label>
                     <input

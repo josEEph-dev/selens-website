@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { CURRENT_ACADEMIC_YEAR, formatCommitteeLabel } from '../lib/config'
-import { SectionBadge, SectionHeading, FeatureCard, PhotoSlot, Waveform, Reveal, TeamLanyardRail } from '../components/ui'
+import { SectionBadge, SectionHeading, Waveform, Reveal, TeamLanyardRail } from '../components/ui'
 import {
   ArrowRight,
   MapPin,
@@ -233,37 +233,42 @@ export default function Home() {
   )
 
   return (
-    <div className="bg-selens-black text-selens-white">
-      {/* 2. HERO */}
-      <section className="relative lg:min-h-[80vh] flex items-center overflow-hidden border-b border-selens-line bg-selens-black">
+    <div id="main-content" className="selens-paper-page">
+      {/* 1. HERO: Matte Black Academic-Editorial Showcase Band */}
+      <section className="relative overflow-hidden border-b-2 border-selens-yellow bg-selens-black text-selens-white">
         <HeroWaveformBackground />
 
-        <div className="relative z-10 selens-container py-14 sm:py-20 lg:py-24">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            {/* Left Column: Pill Badge, Existing Headline & Subtext, Primary & Secondary Buttons */}
-            <div className="lg:col-span-7 space-y-6 text-left">
-              <div className="selens-hero-item" style={{ animationDelay: '0ms' }}>
-                <SectionBadge>WELCOME TO SELENS</SectionBadge>
-              </div>
+        <div className="relative z-10 selens-container pt-14 pb-14 sm:pt-20 sm:pb-20 lg:pt-24 lg:pb-24 space-y-10 sm:space-y-12">
+          {/* Top Eyebrow & Academic Issue Line */}
+          <div
+            className="flex flex-wrap items-center justify-between gap-4 selens-hero-item"
+            style={{ animationDelay: '0ms' }}
+          >
+            <SectionBadge>WELCOME TO SELENS</SectionBadge>
+            <span className="font-mono text-xs uppercase tracking-[0.18em] text-neutral-400">
+              MSU-General Santos · College of Engineering · A.Y. {CURRENT_ACADEMIC_YEAR}
+            </span>
+          </div>
 
-              <h1
-                className="font-serif selens-fluid-hero font-bold text-selens-white max-w-2xl selens-hero-item"
-                style={{ animationDelay: '70ms' }}
-              >
-                Society of Electrical Engineering Students
-              </h1>
+          {/* Authoritative Editorial Headline */}
+          <h1
+            className="font-serif selens-fluid-hero font-bold text-selens-white max-w-4xl selens-hero-item"
+            style={{ animationDelay: '70ms' }}
+          >
+            Society of Electrical Engineering Students
+          </h1>
 
-              <p
-                className="text-base sm:text-lg text-neutral-300 max-w-2xl leading-relaxed font-sans selens-hero-item"
-                style={{ animationDelay: '140ms' }}
-              >
+          {/* 12-Col Editorial Base Split: Copy + CTAs on left, Official Affiliations on right */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 pt-8 border-t border-selens-line items-start">
+            <div
+              className="lg:col-span-7 space-y-6 selens-hero-item"
+              style={{ animationDelay: '140ms' }}
+            >
+              <p className="text-base sm:text-lg text-neutral-300 max-w-2xl leading-relaxed font-sans">
                 SELENS is the official student organization of Electrical Engineering students at MSU-General Santos. We organize academic events, build practical tools for our members, and celebrate our board exam topnotchers. Together, we empower students to excel in technical innovation and community leadership.
               </p>
 
-              <div
-                className="flex flex-wrap items-center gap-4 pt-2 selens-hero-item"
-                style={{ animationDelay: '210ms' }}
-              >
+              <div className="flex flex-wrap items-center gap-3.5 pt-1">
                 <Link to="/portal" className="selens-btn-primary text-base px-6 py-3">
                   Student Portal
                 </Link>
@@ -273,234 +278,200 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Column: Large PhotoSlot (4:3 on mobile, 16:10 on desktop) */}
-            <div className="lg:col-span-5 selens-hero-item" style={{ animationDelay: '280ms' }}>
-              <PhotoSlot
-                aspect="4/3"
-                className="lg:aspect-[16/10]"
-                caption="[CONFIRM: Hero photo of SELENS officers, general assembly, or College of Engineering]"
-              />
+            <div
+              className="lg:col-span-5 lg:border-l lg:border-selens-line lg:pl-8 space-y-4 selens-hero-item"
+              style={{ animationDelay: '210ms' }}
+            >
+              <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-neutral-400 block">
+                Institutional Affiliations
+              </span>
+              <div className="space-y-3">
+                {AFFILIATION_LOGOS.map((logo) => (
+                  <div key={logo.src} className="flex items-center gap-3.5">
+                    <img
+                      src={logo.src}
+                      alt={logo.alt}
+                      className="h-9 w-9 object-contain shrink-0"
+                    />
+                    <span className="text-sm font-sans font-medium text-neutral-200 leading-snug">
+                      {logo.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* AFFILIATIONS ROW */}
+      {/* 2. ABOUT SELENS & INSTITUTIONAL INDEX (Warm Paper-White, Borderless Hairlines) */}
+      <section className="selens-section bg-selens-paper text-selens-paper-ink">
+        <div className="selens-container">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+            {/* Left 5 cols: Editorial Intro */}
+            <div className="lg:col-span-5 space-y-6">
+              <div className="space-y-3">
+                <p className="font-mono text-xs uppercase tracking-[0.2em] text-selens-paper-muted">
+                  01 / Overview
+                </p>
+                <h2 className="font-serif selens-fluid-h2 font-bold text-selens-paper-ink">
+                  About SELENS
+                </h2>
+                <div className="w-12 h-1 bg-selens-yellow" aria-hidden="true" />
+              </div>
+
+              <p className="text-base text-selens-paper-muted font-sans leading-relaxed">
+                Empowering Electrical Engineering students at MSU-General Santos through academic support, technical services, and student leadership.
+              </p>
+
+              <div className="pt-1">
+                <Link to="/about" className="selens-editorial-link">
+                  <span>About the organization</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Right 7 cols: Hairline-Ruled Key Pillars Index */}
+            <Reveal
+              index={0}
+              className="lg:col-span-7 border-t-2 border-selens-paper-ink divide-y divide-selens-paper-rule"
+            >
+              {/* (a) Student Portal */}
+              <div className="py-6 flex flex-col sm:flex-row sm:items-baseline justify-between gap-4">
+                <div className="space-y-1.5 max-w-lg">
+                  <div className="flex flex-wrap items-baseline gap-3">
+                    <span className="font-mono text-xs font-bold uppercase tracking-wider px-2 py-0.5 bg-selens-yellow text-selens-black rounded-[2px]">
+                      A.Y. {CURRENT_ACADEMIC_YEAR}
+                    </span>
+                    <h3 className="font-serif font-bold text-lg text-selens-paper-ink">
+                      Student Portal
+                    </h3>
+                  </div>
+                  <p className="text-sm text-selens-paper-muted leading-relaxed font-sans">
+                    Access online student services, TEEchPoints tracking, and digital document requests.
+                  </p>
+                </div>
+                <Link to="/portal" className="selens-editorial-link shrink-0">
+                  <span>Access Student Portal</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+
+              {/* (b) Legion of Topnotchers */}
+              <div className="py-6 flex flex-col sm:flex-row sm:items-baseline justify-between gap-4">
+                <div className="space-y-1.5 max-w-lg">
+                  <div className="flex flex-wrap items-baseline gap-3">
+                    <span className="font-mono text-xs font-bold uppercase tracking-wider px-2 py-0.5 bg-selens-paper-ink text-selens-yellow rounded-[2px]">
+                      {topnotchersCount > 0 ? `${topnotchersCount} Honorees` : 'PRC Honors'}
+                    </span>
+                    <h3 className="font-serif font-bold text-lg text-selens-paper-ink">
+                      Legion of Topnotchers
+                    </h3>
+                  </div>
+                  <p className="text-sm text-selens-paper-muted leading-relaxed font-sans">
+                    MSU-GSC Electrical Engineering alumni who ranked in the national Top 10 of the PRC Licensure Exams.
+                  </p>
+                </div>
+                <Link to="/topnotchers" className="selens-editorial-link shrink-0">
+                  <span>View Hall of Topnotchers</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+
+              {/* (c) Programs & Initiatives */}
+              <div className="py-6 flex flex-col sm:flex-row sm:items-baseline justify-between gap-4">
+                <div className="space-y-1.5 max-w-lg">
+                  <div className="flex flex-wrap items-baseline gap-3">
+                    <span className="font-mono text-xs font-bold uppercase tracking-wider px-2 py-0.5 bg-selens-paper-alt border border-selens-paper-rule text-selens-paper-ink rounded-[2px]">
+                      {programsCount > 0 ? `${programsCount} Active` : `A.Y. ${CURRENT_ACADEMIC_YEAR}`}
+                    </span>
+                    <h3 className="font-serif font-bold text-lg text-selens-paper-ink">
+                      Programs &amp; Initiatives
+                    </h3>
+                  </div>
+                  <p className="text-sm text-selens-paper-muted leading-relaxed font-sans">
+                    Flagship academic, hardware lending, and community outreach projects led by student members.
+                  </p>
+                </div>
+                <Link to="/projects" className="selens-editorial-link shrink-0">
+                  <span>Explore All Programs</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. NEWS & UPDATES (Stone Paper Broadsheet Rows) */}
       <section
-        aria-label="Institutional affiliations"
-        className="border-b border-selens-line bg-selens-surface py-6 sm:py-8"
+        id="news-updates"
+        className="border-t border-selens-paper-rule selens-section bg-selens-paper-alt text-selens-paper-ink"
       >
-        <div className="selens-container flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-0.5">
-            <span className="text-xs font-sans font-semibold uppercase tracking-wider text-neutral-400 block">
-              Institutional Affiliations
-            </span>
-            <span className="text-xs text-neutral-500 font-sans block">
-              [CONFIRM: which affiliations to show]
-            </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-6 sm:gap-10">
-            {AFFILIATION_LOGOS.map((logo) => (
-              <div
-                key={logo.src}
-                className="group flex items-center gap-3 grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition duration-200"
-              >
-                <img
-                  src={logo.src}
-                  alt={logo.alt}
-                  className="h-9 w-9 sm:h-10 sm:w-10 object-contain shrink-0"
-                />
-                <span className="text-xs sm:text-sm font-sans font-medium text-neutral-400 group-hover:text-selens-white transition-colors">
-                  {logo.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 3. ABOUT INTRO & KEY HIGHLIGHTS (Two columns: text/highlights + PhotoSlot) */}
-      <section className="selens-section bg-selens-black">
-        <div className="selens-container space-y-12">
-          <SectionHeading
-            title="About SELENS"
-            description="Empowering Electrical Engineering students at MSU-General Santos through academic support, technical services, and student leadership."
-            action={
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-1.5 text-sm font-semibold text-selens-yellow hover:text-selens-white transition-colors"
-              >
-                <span>About the organization</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            }
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            {/* Left Column: Editorial Intro & Key Organization Pillars */}
-            <Reveal index={0} className="lg:col-span-7 space-y-6">
-              <div className="divide-y divide-selens-line border border-selens-line rounded-[4px] bg-selens-ink">
-                {/* (a) Student Portal */}
-                <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="space-y-1.5 max-w-lg">
-                    <div className="flex items-baseline gap-3">
-                      <span className="font-serif font-bold text-xl sm:text-2xl text-selens-yellow">
-                        A.Y. {CURRENT_ACADEMIC_YEAR}
-                      </span>
-                      <h3 className="font-serif font-bold text-lg text-selens-white">
-                        Student Portal
-                      </h3>
-                    </div>
-                    <p className="text-sm text-neutral-300 leading-relaxed font-sans">
-                      Access online student services, TEEchPoints tracking, and digital document requests.
-                    </p>
-                  </div>
-                  <Link
-                    to="/portal"
-                    className="text-sm font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1.5 transition-colors shrink-0"
-                  >
-                    <span>Access Student Portal</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-
-                {/* (b) Legion of Topnotchers */}
-                <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="space-y-1.5 max-w-lg">
-                    <div className="flex items-baseline gap-3">
-                      <span className="font-serif font-bold text-xl sm:text-2xl text-selens-yellow">
-                        {topnotchersCount}
-                      </span>
-                      <h3 className="font-serif font-bold text-lg text-selens-white">
-                        Legion of Topnotchers
-                      </h3>
-                    </div>
-                    <p className="text-sm text-neutral-300 leading-relaxed font-sans">
-                      MSU-GSC Electrical Engineering alumni who ranked in the national Top 10 of the PRC Licensure Exams.
-                    </p>
-                  </div>
-                  <Link
-                    to="/topnotchers"
-                    className="text-sm font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1.5 transition-colors shrink-0"
-                  >
-                    <span>View Hall of Topnotchers</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-
-                {/* (c) Programs & Initiatives */}
-                <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="space-y-1.5 max-w-lg">
-                    <div className="flex items-baseline gap-3">
-                      <span className="font-serif font-bold text-xl sm:text-2xl text-selens-yellow">
-                        {programsCount > 0 ? `${programsCount} Active` : '0 Active'}
-                      </span>
-                      <h3 className="font-serif font-bold text-lg text-selens-white">
-                        Programs &amp; Initiatives
-                      </h3>
-                    </div>
-                    <p className="text-sm text-neutral-300 leading-relaxed font-sans">
-                      Flagship academic, hardware lending, and community outreach projects led by student members.
-                    </p>
-                  </div>
-                  <Link
-                    to="/projects"
-                    className="text-sm font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1.5 transition-colors shrink-0"
-                  >
-                    <span>Explore All Programs</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Right Column: PhotoSlot */}
-            <Reveal index={1} className="lg:col-span-5">
-              <PhotoSlot
-                aspect="4/3"
-                caption="[CONFIRM: Department of Electrical Engineering or student activity photo]"
-              />
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. NEWS & UPDATES (List rows: date, headline, one-line excerpt) */}
-      <section id="news-updates" className="border-t border-selens-line selens-section bg-selens-surface">
         <div className="selens-container space-y-10">
           <SectionHeading
+            tone="paper"
+            eyebrow="02 / Dispatches"
             title="News & Updates"
             description={`Recent announcements, event advisories, and activities for A.Y. ${CURRENT_ACADEMIC_YEAR}.`}
             action={
-              <Link
-                to="/news"
-                className="inline-flex items-center gap-1.5 text-sm font-semibold text-selens-yellow hover:text-selens-white transition-colors"
-              >
+              <Link to="/news" className="selens-editorial-link">
                 <span>Check out all news here</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             }
           />
 
-          <div className="divide-y divide-selens-line border-y border-selens-line">
+          <div className="divide-y divide-selens-paper-rule border-t-2 border-b border-selens-paper-ink/80">
             {loadingNews ? (
               <div className="py-6 space-y-4">
-                <div className="h-16 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
-                <div className="h-16 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
+                <div className="h-14 bg-selens-paper-card/70 rounded-[3px] animate-pulse" />
+                <div className="h-14 bg-selens-paper-card/70 rounded-[3px] animate-pulse" />
               </div>
             ) : newsError ? (
-              <div className="text-center py-10 px-4 text-sm text-red-400 bg-selens-ink rounded-[4px]">
+              <div className="py-8 text-sm text-red-700 font-medium">
                 {newsError}
               </div>
             ) : news.length > 0 ? (
               news.map((item, idx) => (
                 <Reveal
-                  as="article"
                   index={idx}
                   key={item.id}
-                  className="py-5 sm:py-6 px-2 sm:px-4 hover:bg-selens-ink/70 transition-colors flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-8 group"
+                  className="py-6 sm:py-7 hover:bg-selens-paper-card/65 transition-colors px-2 sm:px-3 flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-8 group"
                 >
-                  {/* Date & Committee column */}
-                  <div className="md:w-56 shrink-0 flex flex-wrap items-center gap-2 text-xs text-neutral-400 font-sans">
+                  <div className="md:w-56 shrink-0 flex flex-wrap items-center gap-2 text-xs text-selens-paper-muted font-mono">
                     {item.published_at ? (
                       <time dateTime={item.published_at}>
                         {new Date(item.published_at).toLocaleDateString('en-US', {
-                          month: 'long',
+                          month: 'short',
                           day: 'numeric',
                           year: 'numeric',
                         })}
                       </time>
                     ) : (
-                      <span>Recent announcement</span>
+                      <span>Recent</span>
                     )}
                     {item.committee && (
-                      <span className="text-[11px] font-semibold text-selens-yellow bg-selens-black border border-selens-line px-1.5 py-0.5 rounded-[2px]">
+                      <span className="font-sans text-[11px] font-bold bg-selens-paper-ink text-selens-yellow px-2 py-0.5 rounded-[2px]">
                         {formatCommitteeLabel(item.committee)}
                       </span>
                     )}
                   </div>
 
-                  {/* Headline & one-line excerpt */}
-                  <div className="flex-grow min-w-0 space-y-1">
-                    <h3 className="font-serif selens-fluid-h3 font-bold text-selens-white group-hover:text-selens-yellow transition-colors">
-                      <Link to={`/news/${item.slug}`}>
-                        {item.title}
-                      </Link>
+                  <div className="flex-grow min-w-0 space-y-1.5">
+                    <h3 className="font-serif selens-fluid-h3 font-bold text-selens-paper-ink group-hover:underline decoration-selens-yellow decoration-2 underline-offset-4">
+                      <Link to={`/news/${item.slug}`}>{item.title}</Link>
                     </h3>
                     {item.excerpt && (
-                      <p className="text-sm text-neutral-300 line-clamp-1 leading-relaxed">
+                      <p className="text-sm text-selens-paper-muted line-clamp-2 leading-relaxed">
                         {item.excerpt}
                       </p>
                     )}
                   </div>
 
-                  {/* Action link */}
                   <div className="shrink-0">
-                    <Link
-                      to={`/news/${item.slug}`}
-                      className="text-xs font-semibold text-selens-yellow group-hover:text-selens-white inline-flex items-center gap-1 transition-colors"
-                    >
+                    <Link to={`/news/${item.slug}`} className="selens-editorial-link text-xs">
                       <span>Read update</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
@@ -508,7 +479,7 @@ export default function Home() {
                 </Reveal>
               ))
             ) : (
-              <div className="text-center py-10 text-neutral-400">
+              <div className="py-10 text-sm text-selens-paper-muted font-sans">
                 New updates for A.Y. {CURRENT_ACADEMIC_YEAR} are coming soon.
               </div>
             )}
@@ -516,17 +487,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* LATEST ACCOMPLISHMENTS BLOCK (3-column equal-height cards with line-clamp) */}
-      <section className="selens-section border-t border-selens-line bg-selens-black">
+      {/* 4. LATEST ACCOMPLISHMENTS (Warm Paper Borderless 3-Col Strip) */}
+      <section className="selens-section border-t border-selens-paper-rule bg-selens-paper text-selens-paper-ink">
         <div className="selens-container space-y-10">
           <SectionHeading
+            tone="paper"
+            eyebrow="03 / Record"
             title="Latest accomplishments"
             description={`Student achievements, competition honors, and chapter milestones for A.Y. ${CURRENT_ACADEMIC_YEAR}.`}
             action={
-              <Link
-                to="/accomplishments"
-                className="text-sm font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1.5 transition-colors"
-              >
+              <Link to="/accomplishments" className="selens-editorial-link">
                 <span>View all accomplishments</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -536,35 +506,28 @@ export default function Home() {
           {loadingAccomplishments ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-48 bg-selens-ink border border-selens-line rounded-[4px] animate-pulse" />
+                <div key={i} className="h-44 bg-selens-paper-alt rounded-[3px] animate-pulse" />
               ))}
             </div>
           ) : accomplishmentsError ? (
-            <div className="p-6 text-center text-sm text-red-400 bg-selens-ink border border-selens-line rounded-[4px]">
+            <div className="py-6 text-sm text-red-700 font-medium">
               {accomplishmentsError}
             </div>
           ) : accomplishments.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-selens-paper-rule border-t-2 border-selens-paper-ink">
               {accomplishments.map((item, idx) => (
                 <Reveal key={item.id} index={idx} className="h-full">
                   <Link
                     to={`/accomplishments/${item.slug}`}
-                    className="selens-card p-6 h-full flex flex-col justify-between group space-y-4"
+                    className="py-6 md:px-6 first:md:pl-0 last:md:pr-0 h-full flex flex-col justify-between group space-y-5"
                   >
                     <div className="space-y-3">
-                      <div className="flex flex-wrap items-center justify-between text-xs text-neutral-400 gap-2">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="text-[11px] font-semibold text-selens-yellow uppercase tracking-wider">
-                            {item.category?.replace('_', ' ')}
-                          </span>
-                          {item.committee && (
-                            <span className="text-[11px] text-neutral-400">
-                              • {formatCommitteeLabel(item.committee)}
-                            </span>
-                          )}
-                        </div>
+                      <div className="flex flex-wrap items-center justify-between text-xs text-selens-paper-muted gap-2">
+                        <span className="font-mono text-[11px] font-bold uppercase tracking-wider bg-selens-yellow text-selens-black px-2 py-0.5 rounded-[2px]">
+                          {item.category?.replace('_', ' ')}
+                        </span>
                         {item.accomplished_on && (
-                          <span>
+                          <span className="font-mono">
                             {new Date(item.accomplished_on).toLocaleDateString('en-US', {
                               month: 'short',
                               year: 'numeric',
@@ -572,123 +535,142 @@ export default function Home() {
                           </span>
                         )}
                       </div>
-                      <h3 className="font-serif selens-fluid-h3 font-bold text-selens-white group-hover:text-selens-yellow transition-colors line-clamp-2">
+                      <h3 className="font-serif selens-fluid-h3 font-bold text-selens-paper-ink group-hover:underline decoration-selens-yellow decoration-2 underline-offset-4 line-clamp-2">
                         {item.title}
                       </h3>
-                      <p className="text-sm text-neutral-300 line-clamp-3 leading-relaxed">
+                      <p className="text-sm text-selens-paper-muted line-clamp-3 leading-relaxed">
                         {item.summary}
                       </p>
                     </div>
 
-                    <div className="pt-3 border-t border-selens-line text-xs font-semibold text-selens-yellow flex items-center justify-between">
+                    <div className="pt-2 text-xs font-bold text-selens-paper-ink inline-flex items-center gap-1.5 min-h-[28px]">
                       <span>Read milestone</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
                     </div>
                   </Link>
                 </Reveal>
               ))}
             </div>
           ) : (
-            <div className="text-center py-10 text-neutral-400 bg-selens-ink border border-selens-line rounded-[4px]">
+            <div className="py-10 border-t border-selens-paper-rule text-sm text-selens-paper-muted">
               New accomplishments for A.Y. {CURRENT_ACADEMIC_YEAR} will be posted here soon.
             </div>
           )}
         </div>
       </section>
 
-      {/* 5. PROJECTS & INITIATIVES (2-column grid of equal-height FeatureCards, distinct from 3-col Accomplishments) */}
-      <section className="selens-section border-t border-selens-line bg-selens-surface">
+      {/* 5. PROJECTS & INITIATIVES (Numbered Engineering Specification Index, Zero Card Boxes) */}
+      <section className="selens-section border-t border-selens-paper-rule bg-selens-paper-alt text-selens-paper-ink">
         <div className="selens-container space-y-10">
           <SectionHeading
+            tone="paper"
+            eyebrow="04 / Flagship Programs"
             title="Projects & Initiatives"
             description={`Student-driven initiatives supporting academic problem-solving, laboratory exploration, and technical outreach for A.Y. ${CURRENT_ACADEMIC_YEAR}.`}
             action={
-              <Link
-                to="/projects"
-                className="text-sm font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1.5 transition-colors"
-              >
+              <Link to="/projects" className="selens-editorial-link">
                 <span>Explore all initiatives</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             }
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-            <Reveal index={0} className="h-full">
-              <FeatureCard
-                title="ElectroStock"
-                text="A hardware lending library providing multimeters, oscilloscope probes, microcontrollers, and circuit modules for laboratory experiments and capstone design projects."
-                to="/projects#electrostock"
-                linkText="Learn about ElectroStock"
-              />
-            </Reveal>
-
-            <Reveal index={1} className="h-full">
-              <FeatureCard
-                title="EEngiquest"
-                text="The annual flagship academic showdown where students across all year levels test their problem-solving skills in circuits, mathematics, power systems, and engineering design."
-                to="/projects#eengiquest"
-                linkText="Learn about EEngiquest"
-              />
-            </Reveal>
-
-            <Reveal index={2} className="h-full">
-              <FeatureCard
-                title="TEEchPoints"
-                text="Our digital recognition system tracking active membership. Earn points by attending technical seminars, volunteering for community drives, and representing the department."
-                to="/projects#teechpoints"
-                linkText="Learn about TEEchPoints"
-              />
-            </Reveal>
-
-            <Reveal index={3} className="h-full">
-              <FeatureCard
-                title="Community outreach"
-                text="Extending engineering beyond the campus through rural electrification assistance, energy conservation campaigns, and STEM workshops for local high schools."
-                to="/projects#outreach"
-                linkText="Learn about outreach"
-              />
-            </Reveal>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+            {[
+              {
+                num: '01',
+                title: 'ElectroStock',
+                text: 'A hardware lending library providing multimeters, oscilloscope probes, microcontrollers, and circuit modules for laboratory experiments and capstone design projects.',
+                to: '/projects#electrostock',
+                linkText: 'Learn about ElectroStock',
+              },
+              {
+                num: '02',
+                title: 'EEngiquest',
+                text: 'The annual flagship academic showdown where students across all year levels test their problem-solving skills in circuits, mathematics, power systems, and engineering design.',
+                to: '/projects#eengiquest',
+                linkText: 'Learn about EEngiquest',
+              },
+              {
+                num: '03',
+                title: 'TEEchPoints',
+                text: 'Our digital recognition system tracking active membership. Earn points by attending technical seminars, volunteering for community drives, and representing the department.',
+                to: '/projects#teechpoints',
+                linkText: 'Learn about TEEchPoints',
+              },
+              {
+                num: '04',
+                title: 'Community outreach',
+                text: 'Extending engineering beyond the campus through rural electrification assistance, energy conservation campaigns, and STEM workshops for local high schools.',
+                to: '/projects#outreach',
+                linkText: 'Learn about outreach',
+              },
+            ].map((prog, idx) => (
+              <Reveal
+                key={prog.num}
+                index={idx}
+                className="border-t-2 border-selens-paper-ink hover:border-selens-yellow pt-5 flex flex-col justify-between gap-4 transition-colors group"
+              >
+                <div className="space-y-2.5">
+                  <div className="flex items-baseline gap-3">
+                    <span className="font-mono text-xs font-bold tracking-widest text-selens-paper-muted">
+                      {prog.num}
+                    </span>
+                    <h3 className="font-serif text-xl font-bold text-selens-paper-ink">
+                      {prog.title}
+                    </h3>
+                  </div>
+                  <p className="text-sm sm:text-base text-selens-paper-muted font-sans leading-relaxed">
+                    {prog.text}
+                  </p>
+                </div>
+                <div>
+                  <Link to={prog.to} className="selens-editorial-link">
+                    <span>{prog.linkText}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* HIGHLIGHTS FROM PAST ACADEMIC YEAR (Quiet Archive Strip) */}
+      {/* HIGHLIGHTS FROM PAST ACADEMIC YEAR (Quiet Archival Strip) */}
       {pastYearHighlights && pastYearHighlights.items?.length > 0 && (
-        <section className="bg-selens-black border-t border-selens-line py-12 sm:py-16">
+        <section className="bg-selens-paper border-t border-selens-paper-rule py-12 sm:py-16 text-selens-paper-ink">
           <div className="selens-container space-y-8">
             <SectionHeading
+              tone="paper"
+              eyebrow="Archive"
               title={`Highlights from A.Y. ${pastYearHighlights.year}`}
               description="Archived Milestones"
               action={
-                <Link
-                  to="/news"
-                  className="text-xs font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1 transition-colors"
-                >
+                <Link to="/news" className="selens-editorial-link text-xs">
                   <span>See the archive</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               }
             />
 
-            <Reveal className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-selens-line border border-selens-line rounded-[4px] bg-selens-ink">
+            <Reveal className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-selens-paper-rule border-t-2 border-selens-paper-ink">
               {pastYearHighlights.items.map((item) => (
                 <Link
                   key={item.id}
                   to={item.link}
-                  className="p-5 hover:bg-selens-elevated transition-colors flex flex-col justify-between group space-y-3"
+                  className="py-5 md:px-6 first:md:pl-0 last:md:pr-0 transition-colors flex flex-col justify-between group space-y-3"
                 >
                   <div className="space-y-1.5">
-                    <span className="text-[11px] font-semibold text-selens-yellow uppercase tracking-wider block">
+                    <span className="font-mono text-[11px] font-bold text-selens-paper-muted uppercase tracking-wider block">
                       {item.type}
                     </span>
-                    <h3 className="font-serif font-bold text-base text-selens-white group-hover:text-selens-yellow transition-colors line-clamp-2 leading-snug">
+                    <h3 className="font-serif font-bold text-base text-selens-paper-ink group-hover:underline decoration-selens-yellow decoration-2 underline-offset-4 line-clamp-2 leading-snug">
                       {item.title}
                     </h3>
                   </div>
-                  <div className="text-xs text-neutral-400 flex items-center justify-between pt-2">
-                    <span>Archive: A.Y. {pastYearHighlights.year}</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-selens-yellow" />
+                  <div className="text-xs font-mono text-selens-paper-muted flex items-center justify-between pt-2">
+                    <span>A.Y. {pastYearHighlights.year}</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-selens-paper-ink transition-transform group-hover:translate-x-1" />
                   </div>
                 </Link>
               ))}
@@ -697,17 +679,16 @@ export default function Home() {
         </section>
       )}
 
-      {/* 6. MEET YOUR OFFICERS (Full-width band showing the Executive Board compactly) */}
-      <section className="w-full bg-selens-black border-t border-selens-line selens-section">
+      {/* 6. MEET YOUR OFFICERS (Matte Black Gallery Band with Interactive TeamLanyardRail) */}
+      <section className="w-full bg-selens-black text-selens-white border-y-2 border-selens-yellow selens-section">
         <div className="selens-container space-y-10">
           <SectionHeading
+            tone="dark"
+            eyebrow="05 / Leadership"
             title="Meet your officers"
             description={`The Executive Board leading the organization for A.Y. ${CURRENT_ACADEMIC_YEAR}.`}
             action={
-              <Link
-                to="/people"
-                className="text-sm font-semibold text-selens-yellow hover:text-selens-white inline-flex items-center gap-1.5 transition-colors"
-              >
+              <Link to="/people" className="selens-editorial-link-dark">
                 <span>See full officer directory</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -733,110 +714,111 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 7. FIND US */}
-      <section className="bg-selens-surface border-t border-selens-line selens-section">
+      {/* 7. FIND US (Warm Paper Architectural Split) */}
+      <section className="bg-selens-paper text-selens-paper-ink selens-section">
         <div className="selens-container space-y-10">
           <SectionHeading
+            tone="paper"
+            eyebrow="06 / Campus Headquarters"
             title="Find us"
             description="Visit our headquarters at the College of Engineering complex on the MSU-General Santos campus."
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            <Reveal index={0} className="lg:col-span-5 bg-selens-ink border border-selens-line rounded-[4px] p-6 sm:p-8 space-y-6 flex flex-col justify-between">
-              <div className="space-y-5">
-                <div className="flex items-start gap-3.5">
-                  <div className="p-2.5 rounded-[4px] bg-selens-black border border-selens-line text-selens-yellow shrink-0">
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="font-serif font-bold text-base text-selens-white">
-                      Organization Headquarters
-                    </h3>
-                    <p className="text-sm text-neutral-300 leading-relaxed">
-                      DEE Office, College of Engineering Building<br />
-                      Mindanao State University - General Santos<br />
-                      Fatima, General Santos City, 9500 Philippines
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3.5">
-                  <div className="p-2.5 rounded-[4px] bg-selens-black border border-selens-line text-selens-yellow shrink-0">
-                    <Clock className="w-5 h-5" />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="font-serif font-bold text-base text-selens-white">
-                      Officer Consultation Hours
-                    </h3>
-                    <p className="text-sm text-neutral-300 leading-relaxed">
-                      Monday to Friday: 8:00 AM – 5:00 PM<br />
-                      During regular academic semester periods.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3.5">
-                  <div className="p-2.5 rounded-[4px] bg-selens-black border border-selens-line text-selens-yellow shrink-0">
-                    <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="font-serif font-bold text-base text-selens-white">
-                      Inquiries &amp; Communications
-                    </h3>
-                    <p className="text-sm text-neutral-300">
-                      <a href="mailto:iieeasteeg@msugensan.edu.ph" className="text-selens-yellow hover:underline">
-                        iieeasteeg@msugensan.edu.ph
-                      </a>
-                    </p>
-                  </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+            <Reveal
+              index={0}
+              className="lg:col-span-5 border-t-2 border-selens-paper-ink divide-y divide-selens-paper-rule"
+            >
+              <div className="py-5 flex items-start gap-3.5">
+                <MapPin className="w-5 h-5 text-selens-paper-ink shrink-0 mt-0.5" aria-hidden="true" />
+                <div className="space-y-1">
+                  <h3 className="font-serif font-bold text-base text-selens-paper-ink">
+                    Organization Headquarters
+                  </h3>
+                  <p className="text-sm text-selens-paper-muted leading-relaxed">
+                    DEE Office, College of Engineering Building<br />
+                    Mindanao State University - General Santos<br />
+                    Fatima, General Santos City, 9500 Philippines
+                  </p>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-selens-line">
+              <div className="py-5 flex items-start gap-3.5">
+                <Clock className="w-5 h-5 text-selens-paper-ink shrink-0 mt-0.5" aria-hidden="true" />
+                <div className="space-y-1">
+                  <h3 className="font-serif font-bold text-base text-selens-paper-ink">
+                    Officer Consultation Hours
+                  </h3>
+                  <p className="text-sm text-selens-paper-muted leading-relaxed">
+                    Monday to Friday: 8:00 AM – 5:00 PM<br />
+                    During regular academic semester periods.
+                  </p>
+                </div>
+              </div>
+
+              <div className="py-5 flex items-start gap-3.5">
+                <Mail className="w-5 h-5 text-selens-paper-ink shrink-0 mt-0.5" aria-hidden="true" />
+                <div className="space-y-1">
+                  <h3 className="font-serif font-bold text-base text-selens-paper-ink">
+                    Inquiries &amp; Communications
+                  </h3>
+                  <p className="text-sm">
+                    <a
+                      href="mailto:iieeasteeg@msugensan.edu.ph"
+                      className="selens-editorial-link font-semibold"
+                    >
+                      iieeasteeg@msugensan.edu.ph
+                    </a>
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-5">
                 <a
                   href="https://msugensan.edu.ph"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 text-xs font-bold text-selens-white hover:text-selens-yellow transition-colors"
+                  className="selens-editorial-link text-xs"
                 >
                   <span>Visit MSU-General Santos Main Campus Portal</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-selens-yellow" />
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
             </Reveal>
 
-            <Reveal index={1} className="lg:col-span-7 bg-selens-ink border border-selens-line rounded-[4px] p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
-              <div className="space-y-2 relative z-10">
-                <span className="text-xs uppercase font-bold text-selens-yellow tracking-wider block">
+            <Reveal
+              index={1}
+              className="lg:col-span-7 bg-selens-paper-alt border border-selens-paper-rule rounded-[3px] p-6 sm:p-8 flex flex-col justify-between space-y-6"
+            >
+              <div className="space-y-2">
+                <span className="font-mono text-xs uppercase font-bold text-selens-paper-muted tracking-[0.18em] block">
                   Campus Location
                 </span>
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-selens-white">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-selens-paper-ink">
                   College of Engineering Complex
                 </h3>
-                <p className="text-sm text-neutral-300 max-w-lg leading-relaxed">
+                <p className="text-sm text-selens-paper-muted max-w-lg leading-relaxed">
                   Located along the northern quadrangle of the MSU-General Santos Fatima campus, adjacent to the University Science Complex and Library.
                 </p>
               </div>
 
-              <div className="my-6 aspect-[16/9] w-full rounded-[4px] border border-selens-line bg-selens-black flex flex-col items-center justify-center p-6 relative overflow-hidden">
-                <div className="relative z-10 text-center space-y-3">
-                  <div className="w-11 h-11 rounded-[4px] bg-selens-ink border border-selens-line text-selens-yellow flex items-center justify-center mx-auto">
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="font-serif font-bold text-sm text-selens-white block">
-                      Engineering Building • DEE Office
-                    </span>
-                    <span className="text-xs text-neutral-400">
-                      6°05&apos;42&quot;N 125°07&apos;18&quot;E • Fatima Campus
-                    </span>
-                  </div>
+              <div className="aspect-[16/9] w-full rounded-[3px] border border-selens-paper-rule bg-selens-paper flex flex-col items-center justify-center p-6 text-center space-y-3">
+                <div className="w-11 h-11 rounded-[3px] bg-selens-paper-ink text-selens-yellow flex items-center justify-center">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="font-serif font-bold text-sm sm:text-base text-selens-paper-ink block">
+                    Engineering Building · DEE Office
+                  </span>
+                  <span className="font-mono text-xs text-selens-paper-muted">
+                    6°05&apos;42&quot;N 125°07&apos;18&quot;E · Fatima Campus
+                  </span>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-xs text-neutral-400 relative z-10 border-t border-selens-line pt-3">
+              <div className="flex items-center justify-between text-xs text-selens-paper-muted border-t border-selens-paper-rule pt-3 font-mono">
                 <span>Mindanao State University - General Santos</span>
-                <span className="text-selens-yellow font-semibold">COE Hub</span>
+                <span className="font-sans font-bold text-selens-paper-ink">COE Hub</span>
               </div>
             </Reveal>
           </div>

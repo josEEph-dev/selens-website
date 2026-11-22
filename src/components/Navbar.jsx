@@ -54,31 +54,37 @@ export default function Navbar() {
 
   return (
     <header
-      className="sticky top-0 z-50 w-full bg-selens-black/85 backdrop-blur-md border-b border-selens-line"
+      className="sticky top-0 z-50 w-full bg-selens-black/95 backdrop-blur-md border-b border-selens-line"
       ref={dropdownRef}
     >
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:bg-selens-yellow focus:text-selens-black focus:font-bold focus:text-sm focus:px-4 focus:py-2.5 focus:rounded-[3px]"
+      >
+        Skip to main content
+      </a>
       <div className="selens-container">
-        <div className="flex items-center justify-between h-20 gap-3">
-          {/* Left: MSU-GSC seal + SELENS logo (plain, no glass tile) + org name */}
-          <Link to="/" className="flex items-center gap-3 group min-w-0">
+        <div className="flex items-center justify-between h-[76px] gap-4">
+          {/* Left: MSU-GSC seal + SELENS logo (plain, no glass tile) + clean org masthead */}
+          <Link to="/" className="flex items-center gap-3 group shrink-0">
             <div className="flex items-center gap-2 shrink-0">
               <img
                 src="/website-assets/university-seal.png"
                 alt="MSU-GSC Seal"
-                className="h-9 w-9 sm:h-10 sm:w-10 object-contain"
+                className="h-9 w-9 object-contain"
               />
               <img
                 src="/website-assets/selens-logo.png"
                 alt="SELENS Logo"
-                className="h-9 w-9 sm:h-10 sm:w-10 object-contain"
+                className="h-9 w-9 object-contain"
               />
             </div>
-            <div className="flex flex-col min-w-0">
-              <span className="font-serif text-sm sm:text-base lg:text-lg font-bold text-selens-white tracking-tight group-hover:text-selens-yellow transition-colors duration-150 leading-snug truncate">
-                Society of Electrical Engineering Students
+            <div className="flex flex-col">
+              <span className="font-serif text-base sm:text-lg font-bold text-selens-white tracking-tight group-hover:text-selens-yellow transition-colors duration-150 leading-none">
+                SELENS
               </span>
-              <span className="text-xs text-neutral-400 font-sans hidden sm:block truncate">
-                Mindanao State University - General Santos
+              <span className="text-[11px] sm:text-xs text-neutral-400 font-sans leading-tight mt-0.5">
+                MSU-General Santos
               </span>
             </div>
           </Link>
