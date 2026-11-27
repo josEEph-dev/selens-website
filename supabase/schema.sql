@@ -387,7 +387,24 @@ CREATE TABLE IF NOT EXISTS public.news_posts (
   published_at timestamptz NOT NULL DEFAULT now(),
   author_id uuid REFERENCES public.profiles(id),
   academic_year text NOT NULL DEFAULT '2026-2027',
-  committee text NOT NULL DEFAULT 'General',
+  committee text NOT NULL DEFAULT 'General'
+    CHECK (committee = ANY (ARRAY[
+      'Academic Affairs'::text,
+      'Administrative Affairs'::text,
+      'Projects and Development'::text,
+      'Public Relations and Media'::text,
+      'Culture, Sports, and Recreation'::text,
+      'Students'' Rights and Welfare'::text,
+      'Ways and Means'::text,
+      '1st Year Representative'::text,
+      '2nd Year Representative'::text,
+      '3rd Year Representative'::text,
+      '4th Year Representative'::text,
+      'Executive Board'::text,
+      'Judiciary'::text,
+      'COMELEC'::text,
+      'General'::text
+    ])),
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
@@ -402,7 +419,24 @@ CREATE TABLE IF NOT EXISTS public.accomplishments (
   accomplished_on date,
   image_url text,
   academic_year text NOT NULL DEFAULT '2026-2027',
-  committee text NOT NULL DEFAULT 'General',
+  committee text NOT NULL DEFAULT 'General'
+    CHECK (committee = ANY (ARRAY[
+      'Academic Affairs'::text,
+      'Administrative Affairs'::text,
+      'Projects and Development'::text,
+      'Public Relations and Media'::text,
+      'Culture, Sports, and Recreation'::text,
+      'Students'' Rights and Welfare'::text,
+      'Ways and Means'::text,
+      '1st Year Representative'::text,
+      '2nd Year Representative'::text,
+      '3rd Year Representative'::text,
+      '4th Year Representative'::text,
+      'Executive Board'::text,
+      'Judiciary'::text,
+      'COMELEC'::text,
+      'General'::text
+    ])),
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
@@ -415,7 +449,24 @@ CREATE TABLE IF NOT EXISTS public.projects (
   cover_image_url text,
   link_url text,
   academic_year text NOT NULL DEFAULT '2026-2027',
-  committee text NOT NULL DEFAULT 'General',
+  committee text NOT NULL DEFAULT 'General'
+    CHECK (committee = ANY (ARRAY[
+      'Academic Affairs'::text,
+      'Administrative Affairs'::text,
+      'Projects and Development'::text,
+      'Public Relations and Media'::text,
+      'Culture, Sports, and Recreation'::text,
+      'Students'' Rights and Welfare'::text,
+      'Ways and Means'::text,
+      '1st Year Representative'::text,
+      '2nd Year Representative'::text,
+      '3rd Year Representative'::text,
+      '4th Year Representative'::text,
+      'Executive Board'::text,
+      'Judiciary'::text,
+      'COMELEC'::text,
+      'General'::text
+    ])),
   show_in_portal boolean NOT NULL DEFAULT false,
   portal_order integer NOT NULL DEFAULT 0,
   created_at timestamptz NOT NULL DEFAULT now()
