@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { PageHeader } from '../components/SharedUI'
 import { ImageFrame, Reveal } from '../components/ui'
@@ -6,8 +7,10 @@ import YearSelector from '../components/YearSelector'
 import CommitteeFilter from '../components/CommitteeFilter'
 import { ArrowUpRight, Archive } from 'lucide-react'
 import { CURRENT_ACADEMIC_YEAR, getGroupForCommittee, formatCommitteeLabel } from '../lib/config'
+import { getSafeAppHref, slugifyProjectId } from '../lib/portalApps'
 
 export default function Projects() {
+  const location = useLocation()
   const [projects, setProjects] = useState([])
   const [availableYears, setAvailableYears] = useState([CURRENT_ACADEMIC_YEAR])
   const [selectedYear, setSelectedYear] = useState(CURRENT_ACADEMIC_YEAR)
@@ -50,7 +53,7 @@ export default function Projects() {
       try {
         let query = supabase
           .from('projects')
-          .select('id, name, description, status, cover_image_url, link_url, academic_year, committee')
+          .select('id, name, description, status, cover_image_url, link_url, academic_year, committee, show_in_portal')
           .order('created_at', { ascending: false })
 
         if (selectedYear) {
@@ -79,6 +82,15 @@ export default function Projects() {
     setSelectedGroup('all')
     setSelectedCommittee('all')
   }, [selectedYear])
+
+  useEffect(() => {
+    if (loading || !location.hash) return
+    const targetId = location.hash.replace(/^#/, '')
+    const targetEl = document.getElementById(targetId)
+    if (targetEl) {
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [loading, location.hash])
 
   const filteredProjects = useMemo(() => {
     return projects.filter((item) => {
@@ -179,11 +191,19 @@ export default function Projects() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4">
-            {filteredProjects.map((item, idx) => (
+            {filteredProjects.map((item, idx) => {
+              const safeLink = getSafeAppHref(item.link_url)
+              const ctaLabel =
+                item.show_in_portal && item.status !== 'upcoming'
+                  ? 'Open app'
+                  : 'Learn more'
+
+              return (
               <Reveal
                 key={item.id}
+                id={slugifyProjectId(item.name)}
                 index={idx}
-                className="m-panel-light p-6 sm:p-9 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center"
+                className="m-panel-light p-6 sm:p-9 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center scroll-mt-28"
               >
                 <div className={`${item.cover_image_url ? 'lg:col-span-8' : 'lg:col-span-12'} space-y-3`}>
                   <div className="flex flex-wrap items-center gap-2">
@@ -195,6 +215,11 @@ export default function Projects() {
                     {item.status && item.status !== 'active' && (
                       <span className="px-3 py-1 rounded-full bg-[#FFD100] text-[#121315] text-xs font-medium capitalize">
                         {item.status}
+                      </span>
+                    )}
+                    {item.show_in_portal && (
+                      <span className="px-3 py-1 rounded-full bg-[#121315] text-[#FFD100] text-xs font-medium">
+                        Student Portal
                       </span>
                     )}
                     {item.academic_year && item.academic_year !== CURRENT_ACADEMIC_YEAR && (
@@ -214,15 +239,15 @@ export default function Projects() {
                     </p>
                   )}
 
-                  {item.link_url && (
+                  {safeLink && (
                     <div className="pt-2">
                       <a
-                        href={item.link_url}
-                        target="_blank"
-                        rel="noreferrer"
+                        href={safeLink.href}
+                        target={safeLink.external ? '_blank' : undefined}
+                        rel={safeLink.external ? 'noopener noreferrer' : undefined}
                         className="m-btn-2 m-btn-2--mist"
                       >
-                        <span className="m-btn-2__label">Learn more</span>
+                        <span className="m-btn-2__label">{ctaLabel}</span>
                         <span className="m-btn-2__icon" aria-hidden="true">
                           <ArrowUpRight className="w-4 h-4" />
                         </span>
@@ -242,7 +267,8 @@ export default function Projects() {
                   </div>
                 )}
               </Reveal>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>

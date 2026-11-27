@@ -416,6 +416,8 @@ CREATE TABLE IF NOT EXISTS public.projects (
   link_url text,
   academic_year text NOT NULL DEFAULT '2026-2027',
   committee text NOT NULL DEFAULT 'General',
+  show_in_portal boolean NOT NULL DEFAULT false,
+  portal_order integer NOT NULL DEFAULT 0,
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
@@ -505,6 +507,7 @@ CREATE INDEX IF NOT EXISTS idx_document_requests_user_id ON public.document_requ
 CREATE INDEX IF NOT EXISTS idx_news_posts_author_id ON public.news_posts (author_id);
 CREATE INDEX IF NOT EXISTS idx_teechpoints_ledger_awarded_by ON public.teechpoints_ledger (awarded_by);
 CREATE INDEX IF NOT EXISTS idx_teechpoints_ledger_student_id ON public.teechpoints_ledger (student_id);
+CREATE INDEX IF NOT EXISTS idx_projects_portal ON public.projects (portal_order, created_at) WHERE show_in_portal = true;
 
 -- =============================================================================
 -- 5. STORAGE BUCKET CONFIGURATION

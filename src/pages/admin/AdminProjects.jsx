@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../../context/useAuth'
 import { useNoIndex } from '../portal/useNoIndex'
 import { dataApi } from '../../lib/supabase'
-import { Plus, Edit2, Trash2, Layers } from 'lucide-react'
+import { Plus, Edit2, Trash2, Layers, ExternalLink } from 'lucide-react'
 import { PageHeader, PrimaryButton, SecondaryButton } from '../../components/SharedUI'
 import AcademicYearInput from '../../components/AcademicYearInput'
 import PostedBySelect from '../../components/PostedBySelect'
 import ImageUploader from '../../components/ImageUploader'
 import { CURRENT_ACADEMIC_YEAR, formatCommitteeLabel } from '../../lib/config'
+import { getSafeAppHref } from '../../lib/portalApps'
 
 export default function AdminProjects() {
   useNoIndex()
@@ -60,7 +61,14 @@ export default function AdminProjects() {
     e.preventDefault()
     setFeedback(null)
     try {
-      await dataApi.upsert('projects', editingItem)
+      const parsedOrder = Number.parseInt(editingItem.portal_order, 10)
+      const payload = {
+        ...editingItem,
+        link_url: (editingItem.link_url || '').trim(),
+        show_in_portal: Boolean(editingItem.show_in_portal),
+        portal_order: Number.isNaN(parsedOrder) ? 0 : parsedOrder,
+      }
+      await dataApi.upsert('projects', payload)
       setFeedback({ type: 'success', message: 'Project saved successfully.' })
       setEditingItem(null)
       reloadData()
@@ -107,6 +115,8 @@ export default function AdminProjects() {
                 link_url: '',
                 academic_year: CURRENT_ACADEMIC_YEAR,
                 committee: 'General',
+                show_in_portal: false,
+                portal_order: 0,
               })
             }
             className="inline-flex items-center gap-2"
@@ -174,14 +184,52 @@ export default function AdminProjects() {
                   onChange={(val) => setEditingItem({ ...editingItem, committee: val })}
                 />
                 <div className="m-field sm:col-span-2">
-                  <label className="m-field__label">External Link URL</label>
+                  <label className="m-field__label">Project / App Link URL</label>
                   <input
                     type="url"
                     value={editingItem.link_url || ''}
                     onChange={(e) => setEditingItem({ ...editingItem, link_url: e.target.value })}
                     className="m-field__control"
-                    placeholder="https://... (optional external info link)"
+                    placeholder="https://... (GitHub Pages, Vercel, or external web app URL)"
                   />
+                </div>
+                <div className="sm:col-span-2 rounded-[16px] border border-[#cdd0d4] bg-[#e7e8ea]/60 p-4 sm:p-5 space-y-4">
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(editingItem.show_in_portal)}
+                      onChange={(e) =>
+                        setEditingItem({ ...editingItem, show_in_portal: e.target.checked })
+                      }
+                      className="mt-1 h-4 w-4 rounded border-[#cdd0d4] accent-[#121315] cursor-pointer"
+                    />
+                    <span className="space-y-1">
+                      <span className="block text-sm font-medium text-[#121315]">
+                        Show in Student Portal (/portal)
+                      </span>
+                      <span className="block text-xs text-[#4d5158]">
+                        Pins this project as a launch card in the Student Portal across academic years. Add a Link URL and set Status to Ongoing or Completed to make it live; otherwise it displays as Coming soon.
+                      </span>
+                    </span>
+                  </label>
+
+                  {editingItem.show_in_portal && (
+                    <div className="m-field max-w-xs">
+                      <label className="m-field__label">Portal Display Order</label>
+                      <input
+                        type="number"
+                        value={editingItem.portal_order ?? 0}
+                        onChange={(e) =>
+                          setEditingItem({ ...editingItem, portal_order: e.target.value })
+                        }
+                        className="m-field__control !bg-white"
+                        placeholder="0"
+                      />
+                      <span className="text-xs text-[#4d5158]">
+                        Lower numbers appear earlier in the Student Portal grid.
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="sm:col-span-2">
                   <ImageUploader
@@ -244,12 +292,33 @@ export default function AdminProjects() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#cdd0d4]">
-                  {projects.map((item) => (
+                  {projects.map((item) => {
+                    const safeLink = getSafeAppHref(item.link_url)
+                    return (
                     <tr key={item.id} className="hover:bg-[#e7e8ea]/40 transition-colors">
                       <td className="px-5 py-4">
-                        <span className="font-medium text-[#121315] text-base block">
-                          {item.name}
-                        </span>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-medium text-[#121315] text-base">
+                            {item.name}
+                          </span>
+                          {item.show_in_portal && (
+                            <span className="inline-block px-2 py-0.5 rounded-full bg-[#FFD100] text-[#121315] text-[11px] font-medium">
+                              Student Portal
+                            </span>
+                          )}
+                          {safeLink && (
+                            <a
+                              href={safeLink.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-xs text-[#4d5158] hover:text-[#121315] underline underline-offset-2"
+                              title={safeLink.href}
+                            >
+                              <span>Link</span>
+                              <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                            </a>
+                          )}
+                        </div>
                         <p className="text-xs text-[#4d5158] line-clamp-1 mt-0.5">
                           {item.description}
                         </p>
@@ -271,7 +340,13 @@ export default function AdminProjects() {
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             type="button"
-                            onClick={() => setEditingItem(item)}
+                            onClick={() =>
+                              setEditingItem({
+                                ...item,
+                                show_in_portal: Boolean(item.show_in_portal),
+                                portal_order: item.portal_order ?? 0,
+                              })
+                            }
                             className="w-9 h-9 rounded-full inline-flex items-center justify-center text-[#121315] hover:bg-[#FFD100] transition cursor-pointer"
                             title="Edit Project"
                             aria-label="Edit Project"
@@ -292,7 +367,8 @@ export default function AdminProjects() {
                         </div>
                       </td>
                     </tr>
-                  ))}
+                    )
+                  })}
                 </tbody>
               </table>
             </div>

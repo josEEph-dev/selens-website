@@ -28,7 +28,7 @@ const ORDERABLE = {
   topnotchers: ['rank', 'exam_year', 'full_name', 'created_at'],
   awards: ['date_awarded', 'title', 'created_at'],
   accomplishments: ['accomplished_on', 'title', 'created_at'],
-  projects: ['created_at', 'name'],
+  projects: ['created_at', 'name', 'portal_order'],
   document_requests: ['requested_at', 'created_at'],
   teechpoints_ledger: ['created_at'],
 }
