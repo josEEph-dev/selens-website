@@ -158,7 +158,7 @@ export default function Navbar() {
           <img
             src="/website-assets/selens-logo.png"
             alt=""
-            className="h-7 w-7 sm:h-8 sm:w-8 object-contain"
+            className="h-7 w-7 sm:h-8 sm:w-8 object-contain shrink-0"
           />
           <span className="hush-nav__word">
             SELENS<span className="text-[#FFD100]">.</span>
@@ -173,7 +173,7 @@ export default function Navbar() {
             title={contrastHigh ? 'Switch to standard contrast' : 'Switch to high contrast'}
             aria-label="Toggle high contrast"
             aria-pressed={contrastHigh}
-            className="m-icon-btn m-icon-btn--light hidden sm:inline-grid"
+            className="m-icon-btn m-icon-btn--light hush-nav__desktop-only"
           >
             <span className="m-icon-btn__icon" aria-hidden="true">
               <Eye className="w-[18px] h-[18px]" />
@@ -189,8 +189,10 @@ export default function Navbar() {
                 to={isOfficer ? '/dashboard' : '/portal'}
                 className="m-btn-2"
               >
-                <span className="m-btn-2__label max-w-[88px] sm:max-w-none truncate">
-                  {isOfficer ? 'Dashboard' : profile?.full_name?.split(' ')[0] || 'Portal'}
+                <span className="m-btn-2__label">
+                  <span className="block max-w-[78px] sm:max-w-none truncate">
+                    {isOfficer ? 'Dashboard' : profile?.full_name?.split(' ')[0] || 'Portal'}
+                  </span>
                 </span>
                 <span className="m-btn-2__icon" aria-hidden="true">
                   <User className="w-4 h-4" />
@@ -201,7 +203,7 @@ export default function Navbar() {
                 onClick={signOut}
                 title="Sign out"
                 aria-label="Sign out"
-                className="m-icon-btn m-icon-btn--light hidden sm:inline-grid"
+                className="m-icon-btn m-icon-btn--light hush-nav__desktop-only"
               >
                 <span className="m-icon-btn__icon" aria-hidden="true">
                   <LogOut className="w-[17px] h-[17px]" />

@@ -604,6 +604,8 @@ html.contrast-high {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
+  white-space: nowrap;
   text-decoration: none;
   color: var(--hush-ink);
 }
@@ -620,6 +622,7 @@ html.contrast-high {
   justify-content: flex-end;
   align-items: center;
   gap: 8px;
+  min-width: 0;
 }
 
 .hush-menu {
@@ -682,6 +685,7 @@ html.contrast-high {
   }
   .hush-nav__bar {
     grid-template-columns: auto 1fr auto;
+    gap: 12px;
     padding: 12px 14px;
   }
   .hush-nav__logo {
@@ -693,6 +697,40 @@ html.contrast-high {
   .hush-menu__list {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+}
+
+@media (max-width: 639px) {
+  .hush-nav__right .hush-nav__desktop-only {
+    display: none;
+  }
+  .hush-nav__bar {
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .hush-nav__logo {
+    gap: 6px;
+  }
+  .hush-nav__word {
+    font-size: 18px;
+  }
+  .hush-nav__bar .m-icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+  .hush-nav__right .m-btn-2 {
+    min-height: 40px;
+    padding: 0 5px 0 13px;
+    gap: 6px;
+    font-size: 13px;
+  }
+  .hush-nav__right .m-btn-2__icon {
+    width: 30px;
+    height: 30px;
+  }
+  .hush-nav__right .m-btn-2__icon svg {
+    width: 15px;
+    height: 15px;
   }
 }
 
