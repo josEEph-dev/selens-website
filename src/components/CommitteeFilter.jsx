@@ -1,5 +1,5 @@
 import React from 'react'
-import { COMMITTEE_GROUPS, getGroupForCommittee } from '../lib/config'
+import { COMMITTEE_GROUPS, SUBFILTER_GROUPS, getGroupForCommittee } from '../lib/config'
 
 export default function CommitteeFilter({
   items = [],
@@ -9,7 +9,7 @@ export default function CommitteeFilter({
   onCommitteeChange,
   className = '',
 }) {
-  const groups = ['Executive / Appointive', 'Legislative', 'Judiciary / COMELEC', 'General']
+  const groups = Object.keys(COMMITTEE_GROUPS)
 
   const groupCounts = groups.reduce((acc, g) => {
     acc[g] = items.filter((item) => getGroupForCommittee(item.committee) === g).length
@@ -22,7 +22,8 @@ export default function CommitteeFilter({
     return null
   }
 
-  const legislativeCommittees = COMMITTEE_GROUPS['Legislative'] || []
+  const subfilterMeta = SUBFILTER_GROUPS[selectedGroup]
+  const subfilterItems = subfilterMeta ? COMMITTEE_GROUPS[selectedGroup] || [] : []
 
   return (
     <div className={`space-y-3 min-w-0 ${className}`}>
@@ -61,22 +62,22 @@ export default function CommitteeFilter({
         </div>
       </div>
 
-      {/* Second row: Legislative committees if Legislative is selected */}
-      {selectedGroup === 'Legislative' && (
+      {/* Second row: Sub-options for Legislative committees or Year Representatives */}
+      {subfilterMeta && (
         <div className="space-y-2 sm:space-y-0 sm:flex sm:items-center sm:gap-3 sm:pl-4 sm:border-l-2 sm:border-[#FFD100]">
           <span className="m-text-6 font-medium selens-filter-label block sm:inline shrink-0">
-            Committees
+            {subfilterMeta.label}
           </span>
-          <div className="selens-chip-row" role="group" aria-label="Filter by committee">
+          <div className="selens-chip-row" role="group" aria-label={`Filter by ${subfilterMeta.label.toLowerCase()}`}>
             <button
               type="button"
               aria-pressed={selectedCommittee === 'all'}
               onClick={() => onCommitteeChange('all')}
               className="selens-chip"
             >
-              All Legislative
+              {subfilterMeta.allLabel}
             </button>
-            {legislativeCommittees.map((comm) => {
+            {subfilterItems.map((comm) => {
               const count = items.filter((item) => item.committee === comm).length
               return (
                 <button

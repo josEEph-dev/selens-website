@@ -6,7 +6,7 @@ import { ImageFrame, Reveal } from '../components/ui'
 import YearSelector from '../components/YearSelector'
 import CommitteeFilter from '../components/CommitteeFilter'
 import { ArrowUpRight, Archive } from 'lucide-react'
-import { CURRENT_ACADEMIC_YEAR, getGroupForCommittee, formatCommitteeLabel } from '../lib/config'
+import { CURRENT_ACADEMIC_YEAR, matchesCommitteeFilter, formatCommitteeLabel } from '../lib/config'
 
 export default function News({ initialCategory } = {}) {
   const [news, setNews] = useState([])
@@ -86,16 +86,9 @@ export default function News({ initialCategory } = {}) {
   }, [currentCategory, selectedYear])
 
   const filteredNews = useMemo(() => {
-    return news.filter((item) => {
-      const itemGroup = getGroupForCommittee(item.committee)
-      if (selectedGroup !== 'all' && itemGroup !== selectedGroup) {
-        return false
-      }
-      if (selectedGroup === 'Legislative' && selectedCommittee !== 'all' && item.committee !== selectedCommittee) {
-        return false
-      }
-      return true
-    })
+    return news.filter((item) =>
+      matchesCommitteeFilter(item.committee, selectedGroup, selectedCommittee)
+    )
   }, [news, selectedGroup, selectedCommittee])
 
   const TABS = [
